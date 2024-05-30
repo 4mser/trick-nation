@@ -53,7 +53,7 @@ const SpotDetails: React.FC = () => {
 
   return (
     <div className="text-white mb-16">
-      {spot.imageUrl && <img src={`http://localhost:3000${spot.imageUrl}`} alt={spot.name} className="w-full h-auto" />}
+      {spot.imageUrl && <img src={`https://trick-nation-backend-production.up.railway.app${spot.imageUrl}`} alt={spot.name} className="w-full h-auto" />}
       <div className='p-4'>
         <h1 className="text-3xl font-bold">{spot.name}</h1>
         <p><strong>Discovered by:</strong> {spot.discoveredByUserId.username}</p>

@@ -148,7 +148,7 @@ const UserProfile: React.FC = () => {
                     <video
                       onClick={() => setSelectedTrick(trick)}
                       className="w-full h-full object-cover cursor-pointer"
-                      src={`http://localhost:3000${trick.videoUrl}`}
+                      src={`https://trick-nation-backend-production.up.railway.app${trick.videoUrl}`}
                       muted
                     />
                   </div>
