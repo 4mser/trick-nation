@@ -53,19 +53,19 @@ const SpotDetails: React.FC = () => {
 
   return (
     <div className="text-white mb-16">
-      {spot.imageUrl && <img src={`https://trick-nation-backend-production.up.railway.app${spot.imageUrl}`} alt={spot.name} className="w-full h-auto" />}
+      {spot.imageUrl && <img src={`${spot.imageUrl}`} alt={spot.name} className="w-full h-auto" />}
       <div className='p-4'>
         <h1 className="text-3xl font-bold">{spot.name}</h1>
-        <p><strong>Discovered by:</strong> {spot.discoveredByUserId.username}</p>
+        <p><strong>Publicado por:</strong> {spot.discoveredByUserId.username}</p>
         
-        <p><strong>Created at:</strong> {new Date(spot.createdAt).toLocaleString()}</p>
+        <p>{new Date(spot.createdAt).toLocaleString()}</p>
         {isCreator && (
             <div className="mt-4">
             <button
                 onClick={handleDelete}
                 className="bg-red-500 text-white px-4 py-2 rounded"
             >
-                Delete Spot
+                Eliminar Spot
             </button>
             </div>
         )}

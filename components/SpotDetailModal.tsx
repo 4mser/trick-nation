@@ -18,7 +18,7 @@ const SpotDetailModal: React.FC<SpotDetailModalProps> = ({ spot, onClose }) => {
       <div className="relative bg-black rounded-xl shadow-lg max-w-sm w-full overflow-hidden" onClick={handleModalClick}>
         <div className='relative'>
           <img
-            src={`https://trick-nation-backend-production.up.railway.app${spot.imageUrl || '/default-spot-image.jpg'}`}
+            src={`${spot.imageUrl || '/default-spot-image.jpg'}`}
             alt={spot.name}
             className="w-full h-40 object-cover mb-4"
           />
