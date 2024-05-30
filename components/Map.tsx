@@ -47,7 +47,7 @@ const Map: React.FC = () => {
     markerElement.style.boxShadow = '0 0 5px rgba(0,0,0,0.5)';
     
     const img = document.createElement('img');
-    img.src = `https://trick-nation-backend-production.up.railway.app${spot.imageUrl || '/default-spot-image.jpg'}`; // Ajusta esta línea
+    img.src = `${spot.imageUrl || '/default-spot-image.jpg'}`; // Ajusta esta línea
     img.style.width = '100%';
     img.style.height = '100%';
     img.style.objectFit = 'cover';
