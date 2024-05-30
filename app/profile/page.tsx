@@ -9,6 +9,7 @@ import VideoModal from '@/components/VideoModal';
 import api from '@/services/api';
 import { useRouter } from 'next/navigation';
 import { UserTrick } from '@/types/usertrick';
+import Loader from '@/components/Loader';
 
 const useUnlockedTricks = (userId: string | undefined) => {
   const [unlockedTricks, setUnlockedTricks] = useState<UserTrick[]>([]);
@@ -83,7 +84,7 @@ const UserProfile: React.FC = () => {
   const totalTricks = 332;
   const progressPercentage = ((unlockedTricks.length / totalTricks) * 100).toFixed(1);
 
-  if (loading) return <div>Loading...</div>;
+  if (loading) return <div className='w-full h-[100dvh] grid place-items-center'><Loader /></div>;
   if (!user) return <div>No user data</div>;
 
   return (

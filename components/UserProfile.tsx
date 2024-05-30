@@ -6,6 +6,7 @@ import { User } from '../types/user';
 import api from '@/services/api';
 import VideoModal from '@/components/VideoModal';
 import { UserTrick } from '@/types/usertrick';
+import Loader from './Loader';
 
 const useUnlockedTricks = (userId: string | undefined) => {
   const [unlockedTricks, setUnlockedTricks] = useState<UserTrick[]>([]);
@@ -52,7 +53,7 @@ const UserProfile: React.FC = () => {
   const progressPercentage = ((unlockedTricks.length / totalTricks) * 100).toFixed(1);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <div className='w-full h-[100dvh] grid place-items-center'><Loader /></div>;
   }
 
   if (!user) {
@@ -105,7 +106,7 @@ const UserProfile: React.FC = () => {
                 <video
                   onClick={() => setSelectedTrick(trick)}
                   className="w-full h-full object-cover cursor-pointer"
-                  src={`${trick.videoUrl}#t=0.1`}
+                  src={`${trick.videoUrl}`}
                   poster=""
                   playsInline
                   controls={false}

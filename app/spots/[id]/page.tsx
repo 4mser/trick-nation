@@ -5,6 +5,7 @@ import { useRouter, useParams } from 'next/navigation';
 import api from '@/services/api';
 import { Spot } from '@/types/spots';
 import { useAuth } from '@/context/auth-context';
+import Loader from '@/components/Loader';
 
 const SpotDetails: React.FC = () => {
   const { user } = useAuth();
@@ -42,7 +43,7 @@ const SpotDetails: React.FC = () => {
   };
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <div className='w-full h-[100dvh] grid place-items-center'><Loader /></div>;
   }
 
   if (!spot) {
