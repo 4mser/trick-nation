@@ -213,4 +213,3 @@ const TrickTree: React.FC = () => {
 };
 
 export default TrickTree;
-``

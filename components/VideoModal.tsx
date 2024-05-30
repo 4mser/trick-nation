@@ -19,8 +19,8 @@ const VideoModal: React.FC<VideoModalProps> = ({ trick, onClose, onDelete, onFil
         <div className="flex flex-col md:flex-row">
           <div className="w-full md:w-2/3 bg-black">
             <video controls autoPlay className="w-full h-full object-cover">
-              <source src={`http://localhost:3000${trick.videoUrl}`} type="video/mp4" />
-              <source src={`http://localhost:3000${trick.videoUrl}`} type="video/mov" />
+              <source src={`${trick.videoUrl}`} type="video/mp4" />
+              <source src={`${trick.videoUrl}`} type="video/mov" />
               Your browser does not support the video tag.
             </video>
           </div>
