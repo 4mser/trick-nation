@@ -148,12 +148,13 @@ const UserProfile: React.FC = () => {
                     </div>
                     <ReactPlayer
                       url={trick.videoUrl}
+                      light={true}
                       playing={false}
-                      controls={true}
+                      controls={false}
                       width="100%"
                       height="100%"
                       onClick={() => setSelectedTrick(trick)}
-                      className="cursor-pointer"
+                      className="cursor-pointer object-cover"
                     />
                   </div>
                 ))}
