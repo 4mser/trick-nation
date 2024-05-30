@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import useCurrentUser from '@/hooks/useCurrentUser';
 import api from '@/services/api';
+import Loader from './Loader';
 
 interface EditProfileFormProps {
   onClose: () => void;
@@ -24,7 +25,7 @@ const EditProfileForm: React.FC<EditProfileFormProps> = ({ onClose, onProfileUpd
   const router = useRouter();
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <div className='w-full h-[100dvh] grid place-items-center'><Loader /></div>;
   }
 
   if (!user) {

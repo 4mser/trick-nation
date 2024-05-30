@@ -91,7 +91,7 @@ const TrickTree: React.FC = () => {
     const sortedNodes = nodes.sort((a, b) => b.unlocked ? 1 : -1);
 
     return (
-      <div className="flex space-x-4 overflow-x-auto px-4 pb-4 pt-2">
+      <div className="flex space-x-4 overflow-x-auto p-2">
         {sortedNodes.map((node) => (
           <div
             key={node._id}
@@ -123,7 +123,7 @@ const TrickTree: React.FC = () => {
   };
 
   return (
-    <div className="trick-tree-container text-white rounded-lg shadow-lg max-w-6xl mx-auto">
+    <div className="trick-tree-container text-white rounded-lg shadow-lg max-w-6xl mx-auto p-5 mb-10">
       <div className="flex flex-col md:flex-row md:items-center mb-4">
         <input
           type="text"
