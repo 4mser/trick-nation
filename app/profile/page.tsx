@@ -9,7 +9,6 @@ import VideoModal from '@/components/VideoModal';
 import api from '@/services/api';
 import { useRouter } from 'next/navigation';
 import { UserTrick } from '@/types/usertrick';
-import ReactPlayer from 'react-player';
 
 const useUnlockedTricks = (userId: string | undefined) => {
   const [unlockedTricks, setUnlockedTricks] = useState<UserTrick[]>([]);
@@ -114,11 +113,11 @@ const UserProfile: React.FC = () => {
             </div>
             <div className="m-6 space-y-2">
               <p className="text-white">Progreso trucos: {progressPercentage}%</p>
-              <div className="w-full h-2 bg-neutral-700 rounded-full">
+              <div className="w-full h-2 bg-neutral-700 rounded-full overflow-hidden">
                 <div className="h-full bg-green-400 rounded-full" style={{ width: `${progressPercentage}%` }} />
               </div>
             </div>
-            <ul className="relative z-10 bg-neutral-950 mx-5 py-2 flex justify-around rounded-full">
+            <ul className="relative z-10 bg-neutral-950 mx-5 py-2 flex justify-around rounded-full ">
               <li className="flex flex-col items-center">
                 <p>{user.level}</p>
                 <p className="text-xs opacity-50">Nivel</p>
@@ -146,15 +145,13 @@ const UserProfile: React.FC = () => {
                     >
                       {trick.trickId.name}
                     </div>
-                    <ReactPlayer
-                      url={trick.videoUrl}
-                      light={true}
-                      playing={false}
-                      controls={false}
-                      width="100%"
-                      height="100%"
+                    <video
                       onClick={() => setSelectedTrick(trick)}
-                      className="cursor-pointer object-cover"
+                      className="w-full h-full object-cover cursor-pointer"
+                      src={`${trick.videoUrl}#t=0.1`}
+                      poster=""
+                      playsInline
+                      controls={false}
                     />
                   </div>
                 ))}
