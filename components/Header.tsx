@@ -33,7 +33,7 @@ const Header: React.FC = () => {
               key={link.label}
               className={`relative flex flex-col items-center gap-[2px]  p-3 py-2 w-16 ${isActive ? "opacity-100" : "opacity-70"}`}
             >
-              <div className={`h-1 absolute top-0 bg-gradient-to-tr rounded-full from-green-500 to-green-800 shadow-custom-2 transition-all duration-300 ease-in-out ${pathname !== link.route ? 'w-0 ' : 'w-full'}`} />
+              <div className={`h-1 absolute top-0 bg-gradient-to-tr rounded-full from-yellow-500 to-yellow-800 shadow-custom-2 transition-all duration-300 ease-in-out ${pathname !== link.route ? 'w-0 ' : 'w-full'}`} />
               <img
                 src={link.imgURL}
                 alt={link.label}
@@ -50,7 +50,7 @@ const Header: React.FC = () => {
         {/* Enlace del perfil en el centro */}
         <Link href="/profile">
           <div className=" relative bg-neutral-950 border border-white/10  -translate-y-6 rounded-full p-2 ">
-            <div className={`transition-all duration-300 ease-in-out ${pathname === '/profile' ? 'p-1 bg-gradient-to-tr from-green-500 to-green-800 rounded-full' : ''}`}>
+            <div className={`transition-all duration-300 ease-in-out ${pathname === '/profile' ? 'p-1 bg-gradient-to-tr from-yellow-500 to-yellow-800 rounded-full' : ''}`}>
               <img
                 src={user.profilePictureUrl ? `${user.profilePictureUrl}` : '/profile.jpeg'}
                 alt="Profile Picture"
@@ -71,7 +71,7 @@ const Header: React.FC = () => {
               key={link.label}
               className={`relative flex flex-col items-center gap-[2px]  p-3 py-2 w-16 ${isActive ? "opacity-100" : "opacity-70"}`}
             >
-              <div className={`h-1 absolute top-0 bg-gradient-to-tr rounded-full from-green-500 to-green-800 shadow-custom-2 transition-all duration-300 ease-in-out ${pathname !== link.route ? 'w-0 ' : 'w-full'}`} />
+              <div className={`h-1 absolute top-0 bg-gradient-to-tr rounded-full from-yellow-500 to-yellow-800 shadow-custom-2 transition-all duration-300 ease-in-out ${pathname !== link.route ? 'w-0 ' : 'w-full'}`} />
               <img
                 src={link.imgURL}
                 alt={link.label}
