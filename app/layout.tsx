@@ -20,7 +20,7 @@ export default function RootLayout({
   return (
     <AuthProvider>
       <html lang="en">
-        <body >
+        <body className="bg-neutral-950">
           <Header />
           <div>
             {children}

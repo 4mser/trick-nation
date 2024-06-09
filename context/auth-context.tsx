@@ -9,7 +9,7 @@ interface AuthContextType {
   loading: boolean;
   login: (token: string) => void;
   logout: () => void;
-  refetch: () => Promise<void>; // Add refetch function
+  refetch: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -42,17 +42,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
   const login = (token: string) => {
     localStorage.setItem('token', token);
-    api.get<User>('/auth/profile', {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
-    .then(response => {
-      setUser(response.data);
-    })
-    .catch(error => {
-      console.error('Failed to fetch current user after login:', error);
-    });
+    fetchCurrentUser();
   };
 
   const logout = () => {

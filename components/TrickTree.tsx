@@ -91,7 +91,7 @@ const TrickTree: React.FC = () => {
     const sortedNodes = nodes.sort((a, b) => b.unlocked ? 1 : -1);
 
     return (
-      <div className="flex space-x-4 overflow-x-auto p-2">
+      <div className="flex space-x-4 overflow-x-scroll p-2 overflow-y-hidden">
         {sortedNodes.map((node) => (
           <div
             key={node._id}
@@ -105,14 +105,14 @@ const TrickTree: React.FC = () => {
               {!node.unlocked && (
                 <button
                   onClick={() => handleUnlock(node)}
-                  className="mt-2 bg-blue-500 hover:bg-blue-600 text-white py-1 px-3 rounded"
+                  className="mt-2 text-xs bg-blue-500 hover:bg-blue-600 text-white py-1 px-3 rounded"
                 >
-                  Unlock
+                  Desbloquear
                 </button>
               )}
               {node.unlocked && (
                 <div className="absolute bottom-0 left-1/2 -translate-x-1/2 bg-white text-green-500 px-2 py-1 text-xs font-bold rounded-tl-lg rounded-tr-lg">
-                  Unlocked
+                  Nike
                 </div>
               )}
             </div>
