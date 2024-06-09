@@ -142,13 +142,13 @@ body {
 
 
 /* Personaliza el color de los puntos de paginación */
-.swiper-pagination-bullet {
-  background-color: #4CAF50; /* Color para los puntos */
+.mySwiper .swiper-pagination-bullet {
+  background-color: #ffffff65; /* Color para los puntos */
   opacity: 1;
 }
 
-.swiper-pagination-bullet-active {
-  background-color: #FFEB3B; /* Color para el punto activo */
+.mySwiper .swiper-pagination-bullet-active {
+  background-color: #ffffff; /* Color para el punto activo */
 }
 
 /* Estilos adicionales para el slider */

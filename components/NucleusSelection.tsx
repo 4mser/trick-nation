@@ -54,14 +54,14 @@ const NucleusSelection: React.FC<NucleusSelectionProps> = ({ onComplete }) => {
         <Swiper
           pagination={{ clickable: true }}
           modules={[Pagination]}
-          className="w-full h-full"
+          className="w-full h-full mySwiper"
           slidesPerView={1.1}
           spaceBetween={20}
           centeredSlides={true}
           onSlideChange={handleSlideChange}
         >
           {nuclei.map((nucleus) => (
-            <SwiperSlide key={nucleus.name} className="flex justify-center items-center h-full py-20">
+            <SwiperSlide key={nucleus.name} className="pb-12">
               <div
                 className={`relative ${nucleus.bgColor} text-white shadow-lg h-full cursor-pointer space-y-3 p-6 rounded-lg`}
               >
