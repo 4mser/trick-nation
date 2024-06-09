@@ -87,7 +87,6 @@ const Test: FC<TestProps> = ({ onComplete }) => {
 
   return (
     <div className="flex flex-col items-center justify-center max-h-[100dvh]">
-      <AnimatePresence mode='wait'>
         {currentQuestionIndex > 0 && (
             <button
               className=" bg-green-500 hover:bg-green-700 text-white py-2 px-4 w-full text-left"
@@ -96,13 +95,14 @@ const Test: FC<TestProps> = ({ onComplete }) => {
               {`< Volver a la pregunta anterior`}
             </button>
           )}
+      <AnimatePresence mode='wait'>
         <motion.div
           key={currentQuestionIndex}
           variants={questionAnimation}
           initial="hidden"
           animate="visible"
           exit="exit"
-          className="w-full max-w-xl p-4"
+          className="w-full max-w-xl p-7"
         >
           <h2 className="text-xl font-bold my-6">{questions[currentQuestionIndex].questionText}</h2>
             
