@@ -3,7 +3,7 @@ export interface User {
   username: string;
   email: string;
   level: number;
-  description: string;
+  description?: string;
   experiencePoints: number;
   skateCoinsBalance: number;
   city?: string;

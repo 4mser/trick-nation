@@ -1,10 +1,11 @@
-// Onboarding.tsx
 'use client'
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import api from '@/services/api';
 import { useAuth } from '@/context/auth-context';
 import TestPsicologico from './TestPsicologico';
+import NucleusSelection from './NucleusSelection';
+import Loader from './Loader';
 
 const Onboarding: React.FC = () => {
   const { user, refetch } = useAuth();
@@ -44,42 +45,16 @@ const Onboarding: React.FC = () => {
   };
 
   if (!user) {
-    return <div>Loading...</div>;
+    return <div className='w-full h-[95dvh] grid place-items-center'>
+        <Loader />
+    </div>;
   }
 
   if (!roleAssigned) {
     return <TestPsicologico onComplete={handleRoleComplete} />;
   }
 
-  return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-900">
-      <h2 className="text-2xl font-bold text-white mb-6">Select Your Nucleus</h2>
-      <button
-        onClick={() => handleNucleusSubmit('Enigma')}
-        className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mb-4"
-      >
-        Enigma
-      </button>
-      <button
-        onClick={() => handleNucleusSubmit('Quantum')}
-        className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mb-4"
-      >
-        Quantum
-      </button>
-      <button
-        onClick={() => handleNucleusSubmit('Arbóreo')}
-        className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mb-4"
-      >
-        Arbóreo
-      </button>
-      <button
-        onClick={() => handleNucleusSubmit('Áureo')}
-        className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mb-4"
-      >
-        Áureo
-      </button>
-    </div>
-  );
+  return <NucleusSelection onComplete={handleNucleusSubmit} />;
 };
 
 export default Onboarding;

@@ -3,6 +3,7 @@ import React, { FC, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { questions } from '@/utils/QuestionsTest';
 import { profileMessages } from '@/utils/profileMessages';
+import Loader from './Loader';
 
 interface TestProps {
   onComplete: (role: string) => void;
@@ -60,9 +61,10 @@ const Test: FC<TestProps> = ({ onComplete }) => {
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        className="flex justify-center items-center max-h-[100dvh]"
+        className="flex justify-center flex-col gap-2 items-center h-[100dvh]"
       >
-        Procesando tu resultado...
+        <Loader />
+        Procesando tu resultado
       </motion.div>
     );
   }

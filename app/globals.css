@@ -140,3 +140,13 @@ body {
     }
   }
 
+
+  /* Personaliza el color de los puntos de paginación */
+.swiper-pagination-bullet {
+  background: #4CAF50; /* Cambia este color al que prefieras */
+  opacity: 1;
+}
+
+.swiper-pagination-bullet-active {
+  background: #FFEB3B; /* Cambia este color al que prefieras */
+}
