@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import 'swiper/css/pagination';
@@ -45,30 +45,30 @@ const NucleusSelection: React.FC<NucleusSelectionProps> = ({ onComplete }) => {
   };
 
   return (
-    <div className="">
-      <h2 className="fixed w-full bg-neutral-950 z-10 px-6 py-3 top-0 left-0 text-xl text-white ">Selecciona tu núcleo</h2>
+    <div className="fixed w-full h-full z-20 top-0 left-0 bg-neutral-950 overflow-hidden ">
+      <h2 className="fixed w-full z-10 px-6 py-3 top-0 left-0 text-xl text-white bg-neutral-950">Selecciona tu núcleo</h2>
       <Swiper
         pagination={{ clickable: true }}
         modules={[Pagination]}
-        className="w-full h-[100dvh] overflow-hidden"
-        slidesPerView={1.2}
-        spaceBetween={20}
+        className="w-full h-full"
+        slidesPerView={1.5}
+        centeredSlides={true}
       >
-        {nuclei.map((nucleus) => (
-          <SwiperSlide key={nucleus.name} className="flex justify-center  items-center h-[100dvh]">
+        {nuclei.map((nucleus, index) => (
+          <SwiperSlide key={nucleus.name} className={`flex justify-center items-center h-full py-20 pl-10 `}>
             <div
-              className={`relative ${nucleus.bgColor} text-white shadow-lg cursor-pointer space-y-3 w-full h-[100dvh] flex flex-col justify-between p-6 pb-32 pt-20 overflow-y-auto`}
+              className={`relative ${nucleus.bgColor} text-white shadow-lg h-full cursor-pointer space-y-3 p-6 rounded-lg`}
             >
-              <img src={nucleus.image} alt={`${nucleus.name} icon`} className="w-full object-contain rounded-lg" />
-              <div className="flex flex-col flex-grow space-y-2">
-                <h3 className="text-xl">{nucleus.name}</h3>
-                <p className="text-sm font-normal opacity-90">{nucleus.description}</p>
+              <img src={nucleus.image} alt={`${nucleus.name} icon`} className="w-full h-64 object-cover rounded-lg mb-4" />
+              <div className="flex flex-col space-y-2 flex-grow">
+                <h3 className="text-2xl font-bold">{nucleus.name}</h3>
+                <p className="text-sm font-light opacity-90">{nucleus.description}</p>
                 <p className="text-xs italic opacity-70">Roles Recomendados: {nucleus.profiles}</p>
               </div>
-              <div className="">
+              <div className="pt-3">
                 <button
                   onClick={() => handleNucleusSelect(nucleus.name)}
-                  className="border text-white font-bold py-2 px-4 rounded"
+                  className="border border-white text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out hover:bg-white hover:text-neutral-950"
                 >
                   Seleccionar Núcleo
                 </button>

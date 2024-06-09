@@ -51,10 +51,18 @@ const Onboarding: React.FC = () => {
   }
 
   if (!roleAssigned) {
-    return <TestPsicologico onComplete={handleRoleComplete} />;
+    return (
+        <main className='w-full h-[100dvh] z-20 fixed top-0 left-0 bg-neutral-950'>
+            <TestPsicologico onComplete={handleRoleComplete} />
+        </main>
+    ) 
   }
 
-  return <NucleusSelection onComplete={handleNucleusSubmit} />;
+  return (
+    <main className='w-full h-[100dvh] z-20 fixed top-0 left-0 bg-neutral-950'>
+        <NucleusSelection onComplete={handleNucleusSubmit} />
+    </main>
+) ;
 };
 
 export default Onboarding;

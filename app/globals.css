@@ -141,12 +141,19 @@ body {
   }
 
 
-  /* Personaliza el color de los puntos de paginación */
+/* Personaliza el color de los puntos de paginación */
 .swiper-pagination-bullet {
-  background: #4CAF50; /* Cambia este color al que prefieras */
+  background-color: #4CAF50; /* Color para los puntos */
   opacity: 1;
 }
 
 .swiper-pagination-bullet-active {
-  background: #FFEB3B; /* Cambia este color al que prefieras */
+  background-color: #FFEB3B; /* Color para el punto activo */
+}
+
+/* Estilos adicionales para el slider */
+.mySwiper .swiper-slide {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
