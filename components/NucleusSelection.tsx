@@ -9,35 +9,35 @@ type NucleusSelectionProps = {
 };
 
 const nuclei = [
-  {
-    name: 'Enigma',
-    description: 'Rodeado de misterios y conocimientos ocultos, el Núcleo Enigma es un refugio para los curiosos del mundo esotérico y paranormal. Es ideal para aquellos que buscan descubrir los secretos más profundos de la existencia.',
-    bgColor: 'bg-gradient-to-br from-indigo-950 to-neutral-950',
-    image: '/images/enigma.jpeg',
-    profiles: 'Sabio, Visionario, Aventurero'
-  },
-  {
-    name: 'Quantum',
-    description: 'Inspirado en la frontera de la ciencia y la tecnología, el Núcleo Quantum se dedica a la innovación y al descubrimiento científico. Es el hogar de los pioneros del mañana, aquellos comprometidos con los misterios de la realidad y el avance de la humanidad a través de la ciencia y tecnología.',
-    bgColor: 'bg-gradient-to-br from-cyan-700 to-cyan-950',
-    image: '/images/quantum.jpeg',
-    profiles: 'Creador, Guardián, Conector'
-  },
-  {
-    name: 'Arbóreo',
-    description: 'Enraizada en el amor y el respeto por la naturaleza, el Núcleo Arbóreo valora la conservación del medio ambiente y la biodiversidad. Sus miembros se esfuerzan por vivir en armonía con el planeta, promoviendo un futuro sostenible para todas las formas de vida.',
-    bgColor: 'bg-gradient-to-br from-lime-800 to-lime-950',
-    image: '/images/arboreo.jpeg',
-    profiles: 'Guardián, Aventurero, Sabio'
-  },
-  {
-    name: 'Áureo',
-    description: 'Un santuario de la creatividad y la expresión, el Núcleo Áureo celebra las artes en todas sus manifestaciones. Desde la pintura y la música hasta la escritura y el diseño, es un lugar para los que sueñan con inspirar al mundo a través de su arte.',
-    bgColor: 'bg-gradient-to-br from-yellow-600 to-orange-950',
-    image: '/images/aureo.jpeg',
-    profiles: 'Creador, Conector, Visionario'
-  },
-];
+    {
+      name: 'Enigma',
+      description: 'Rodeado de misterios y conocimientos ocultos, el Núcleo Enigma es un refugio para los curiosos del mundo esotérico y paranormal. Es ideal para aquellos que buscan descubrir los secretos más profundos de la existencia, explorando enigmas que desafían la lógica.',
+      bgColor: 'bg-gradient-to-br from-indigo-950 to-neutral-950',
+      image: '/images/enigma.jpeg',
+      profiles: 'Sabio, Visionario, Aventurero'
+    },
+    {
+      name: 'Quantum',
+      description: 'Inspirado en la frontera de la ciencia y la tecnología, el Núcleo Quantum se dedica a la innovación y al descubrimiento científico. Es el hogar de pioneros comprometidos con los misterios de la realidad y el avance de la humanidad mediante la tecnología moderna.',
+      bgColor: 'bg-gradient-to-br from-cyan-700 to-cyan-950',
+      image: '/images/quantum.jpeg',
+      profiles: 'Creador, Guardián, Conector'
+    },
+    {
+      name: 'Arbóreo',
+      description: 'Enraizada en el amor y el respeto por la naturaleza, el Núcleo Arbóreo valora la conservación del medio ambiente y la biodiversidad. Sus miembros se esfuerzan por vivir en armonía con el planeta, promoviendo un futuro sostenible para todas las formas de vida.',
+      bgColor: 'bg-gradient-to-br from-lime-800 to-lime-950',
+      image: '/images/arboreo.jpeg',
+      profiles: 'Guardián, Aventurero, Sabio'
+    },
+    {
+      name: 'Áureo',
+      description: 'Un santuario de la creatividad y la expresión, el Núcleo Áureo celebra las artes en todas sus manifestaciones. Desde la pintura hasta la música y el diseño, es un lugar para aquellos que sueñan con inspirar al mundo a través de su arte y creatividad única.',
+      bgColor: 'bg-gradient-to-br from-yellow-600 to-orange-950',
+      image: '/images/aureo.jpeg',
+      profiles: 'Creador, Conector, Visionario'
+    },
+  ];
 
 const NucleusSelection: React.FC<NucleusSelectionProps> = ({ onComplete }) => {
   const [selectedNucleus, setSelectedNucleus] = useState(nuclei[0].name);
