@@ -51,6 +51,8 @@ const NucleusSelection: React.FC<NucleusSelectionProps> = ({ onComplete }) => {
         pagination={{ clickable: true }}
         modules={[Pagination]}
         className="w-full h-[100dvh] overflow-hidden"
+        slidesPerView={1.2}
+        spaceBetween={20}
       >
         {nuclei.map((nucleus) => (
           <SwiperSlide key={nucleus.name} className="flex justify-center  items-center h-[100dvh]">
