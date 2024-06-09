@@ -46,7 +46,7 @@ const LoginForm: React.FC = () => {
   }
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-neutral-900">
+    <div className="flex items-center justify-center min-h-screen bg-neutral-950">
       <form onSubmit={handleSubmit} className="bg-neutral-950 p-8 rounded-lg shadow-lg w-full max-w-md mx-auto">
         <h2 className="text-2xl font-bold text-white mb-6 text-center">Inicio de Sesión</h2>
         {error && <div className="mb-4 text-red-500 text-center">{error}</div>}
@@ -88,7 +88,7 @@ const LoginForm: React.FC = () => {
         </button>
         <div className="text-center text-white mt-4">
           ¿No tienes una cuenta?{' '}
-          <Link href="/Auth/register" className='text-blue-500 hover:underline'>
+          <Link href="/Auth/register" className='text-green-500 hover:underline'>
             Regístrate
           </Link>
         </div>

@@ -29,8 +29,8 @@ const Map: React.FC = () => {
       markerElement.style.height = `${markerSize}px`;
       markerElement.style.borderRadius = '50%';
       markerElement.style.backgroundColor = isExplorationRadio
-        ? 'rgba(211, 202, 76, 0.233)'
-        : '#DD981D';
+        ? 'rgba(34, 197, 94, 0.233)'
+        : 'rgb(34, 197, 94)';
       return markerElement;
     },
     []
@@ -188,7 +188,7 @@ const Map: React.FC = () => {
       <div ref={mapNode} style={{ width: '100%', height: '100dvh' }} />
       <section className='fixed z-50 bottom-14 w-fit right-3 h-fit'>
         <button
-          className='absolute right-0 bottom-3 w-14 h-14 rounded-full overflow-hidden flex justify-center items-center bg-gradient-to-tr from-amber-500 to-amber-800 p-[2px]'
+          className='absolute right-0 bottom-3 w-14 h-14 rounded-full overflow-hidden flex justify-center items-center bg-gradient-to-tr from-green-500 to-green-800 p-[2px]'
           onClick={handleMarkSpot}
         >
           <div className='flex justify-center items-center w-full h-full p-2.5 bg-black/30 backdrop-blur-3xl rounded-full'>

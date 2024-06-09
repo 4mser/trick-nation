@@ -44,12 +44,12 @@ const RegisterForm: React.FC = () => {
   }
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-900">
+    <div className="flex items-center justify-center min-h-screen bg-neutral-950">
       <form onSubmit={handleSubmit} className="bg-neutral-950 p-8 rounded-lg shadow-lg w-full max-w-md mx-auto">
-        <h2 className="text-2xl font-bold text-white mb-6 text-center">Register</h2>
+        <h2 className="text-2xl font-bold text-white mb-6 text-center">Registro</h2>
         {error && <p className="text-red-600 mb-4">{error}</p>}
         <div className="mb-4">
-          <label className="block text-white mb-2">Username:</label>
+          <label className="block text-white mb-2">Nombre de Usuario:</label>
           <input
             type="text"
             value={username}
@@ -69,7 +69,7 @@ const RegisterForm: React.FC = () => {
           />
         </div>
         <div className="mb-4">
-          <label className="block text-white mb-2">Password:</label>
+          <label className="block text-white mb-2">Contraseña:</label>
           <input
             type="password"
             value={password}
@@ -82,11 +82,11 @@ const RegisterForm: React.FC = () => {
           type="submit"
           className="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
         >
-          Register
+          Registrarme
         </button>
         <div className="text-center text-white mt-4">
           ¿Ya tienes una cuenta?{' '}
-          <Link href="/Auth/login" className='text-blue-500 hover:underline'>Inicia sesión</Link>
+          <Link href="/Auth/login" className='text-green-500 hover:underline'>Inicia sesión</Link>
         </div>
       </form>
     </div>

@@ -8,6 +8,7 @@
 
 body {
   color: white;
+  background: rgb(10,10,10);
 }
 
 @layer utilities {
@@ -18,7 +19,7 @@ body {
 
   .container {
     --uib-size: 40px;
-    --uib-color: rgb(224, 122, 43);
+    --uib-color: rgb(34 197 94);
     --uib-speed: .9s;
     --uib-center: calc(var(--uib-size) / 2 - var(--uib-size) / 5 / 2);
     position: relative;

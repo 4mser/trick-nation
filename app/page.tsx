@@ -4,6 +4,7 @@ import { useAuth } from '@/context/auth-context';
 import OnboardingModal from '@/components/OnboardingModal';
 import api from '@/services/api';
 import { User } from '@/types/user';
+import Loader from '@/components/Loader';
 
 const Home: React.FC = () => {
   const { user } = useAuth();
@@ -37,7 +38,9 @@ const Home: React.FC = () => {
   };
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <div className='w-full h-[95dvh] grid place-items-center'>
+      <Loader />
+    </div>;
   }
 
   return (
