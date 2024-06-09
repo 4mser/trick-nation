@@ -50,9 +50,9 @@ const Test: FC<TestProps> = ({ onComplete }) => {
   };
 
   const questionAnimation = {
-    hidden: { x: -200, opacity: 0 },
+    hidden: { x: 100, opacity: 0 },
     visible: { x: 0, opacity: 1, transition: { duration: 0.2 } },
-    exit: { x: 200, opacity: 0, transition: { duration: 0.2 } },
+    exit: { x: -100, opacity: 0, transition: { duration: 0.2 } },
   };
 
   if (loading) {
@@ -86,36 +86,38 @@ const Test: FC<TestProps> = ({ onComplete }) => {
   }
 
   return (
-    <div className="flex flex-col items-center justify-center max-h-[100dvh] p-4">
+    <div className="flex flex-col items-center justify-center max-h-[100dvh]">
       <AnimatePresence mode='wait'>
-          <h2 className="text-2xl font-bold mb-6">{questions[currentQuestionIndex].questionText}</h2>
+        {currentQuestionIndex > 0 && (
+            <button
+              className=" bg-green-500 hover:bg-green-700 text-white py-2 px-4 w-full text-left"
+              onClick={goBackToPreviousQuestion}
+            >
+              {`< Volver a la pregunta anterior`}
+            </button>
+          )}
         <motion.div
           key={currentQuestionIndex}
           variants={questionAnimation}
           initial="hidden"
           animate="visible"
           exit="exit"
-          className="w-full max-w-xl"
+          className="w-full max-w-xl p-4"
         >
+          <h2 className="text-xl font-bold my-6">{questions[currentQuestionIndex].questionText}</h2>
+            
           {questions[currentQuestionIndex].options.map((option, index) => (
             <motion.button
               key={index}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="text-white border border-green-500 hover:bg-green-500 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 w-full "
+              className="text-white border border-green-500 hover:bg-green-500 focus:outline-none font-medium rounded-lg text-xs px-5 py-2.5 text-center mr-2 mb-2 w-full "
               onClick={() => handleAnswer(option.points)}
             >
               {option.text}
             </motion.button>
           ))}
-          {currentQuestionIndex > 0 && (
-            <button
-              className="mt-4 bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-lg"
-              onClick={goBackToPreviousQuestion}
-            >
-              Volver a la pregunta anterior
-            </button>
-          )}
+          
         </motion.div>
       </AnimatePresence>
     </div>
