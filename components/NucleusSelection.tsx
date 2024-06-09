@@ -58,7 +58,7 @@ const NucleusSelection: React.FC<NucleusSelectionProps> = ({ onComplete }) => {
           onClick={() => onComplete(selectedNucleus!)}
           disabled={!selectedNucleus}
           className={`border border-white bg-neutral-950 text-white py-2 px-4 rounded transition duration-300 ease-in-out ${
-            selectedNucleus ? 'hover:bg-white hover:text-neutral-950' : 'opacity-50 cursor-not-allowed'
+            selectedNucleus ? 'hover:scale-95' : 'opacity-50 cursor-not-allowed'
           }`}
         >
           Continuar
@@ -82,7 +82,7 @@ const NucleusSelection: React.FC<NucleusSelectionProps> = ({ onComplete }) => {
                 <div className="absolute top-4 left-4">
                   <div
                     className={`w-8 h-8 rounded-full border-[3px] ${
-                      selectedNucleus === nucleus.backendName ? 'bg-green-500/80 border-green-500 shadow-xl shadow-green-500/70' : 'border-white bg-white/30'
+                      selectedNucleus === nucleus.backendName ? 'bg-yellow-500/80 border-yellow-500 shadow-xl shadow-yellow-500/70' : 'border-white bg-white/30'
                     }`}
                   ></div>
                 </div>

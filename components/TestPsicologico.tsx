@@ -131,7 +131,7 @@ const Test: FC<TestProps> = ({ onComplete }) => {
               {questions[currentQuestionIndex].options.map((option, index) => (
                 <SwiperSlide key={index} className="flex h-44 justify-center items-center pb-12 pt-8">
                   <div
-                    className={`relative text-white border  ${selectedOption === index ? 'bg-gradient-to-br from-yellow-500/20 to-transparent border-yellow-500 scale-105' : 'border-white/10'} focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 w-full h-44 transition flex justify-center items-center duration-300 ease-in-out cursor-pointer`}
+                    className={`relative text-white border ${selectedOption === index ? 'bg-gradient-to-br from-yellow-500/20 to-transparent border-yellow-500 scale-105' : 'border-white/10'} focus:outline-none font-medium rounded-2xl text-sm px-5 py-2.5 text-center mr-2 mb-2 w-full h-44 transition flex justify-center items-center duration-300 ease-in-out cursor-pointer`}
                   >
                     {option.text}
                   </div>
@@ -140,20 +140,22 @@ const Test: FC<TestProps> = ({ onComplete }) => {
             </Swiper>
           </motion.div>
         </AnimatePresence>
-        <div className="flex justify-between flex-col gap-2 p-7 mt-4">
+        <div className="flex justify-between flex-col items-center p-7 mt-4 font-light w-full">
           <button
             onClick={handleAnswer}
             disabled={selectedOption === null}
-            className={`bg-yellow-500/90 text-white py-2 px-4 rounded transition duration-300 ease-in-out ${selectedOption === null ? 'opacity-50 cursor-not-allowed' : 'hover:scale-95'}`}
-          >
+            className={`border mb-2 border-white/40 text-white py-2 px-6 rounded-md transition duration-300 ease-in-out ${selectedOption === null ? 'opacity-50 cursor-not-allowed' : 'hover:scale-95'}`}
+            >
             Continuar
           </button>
-          <button
-            onClick={goBackToPreviousQuestion}
-            className=" text-white py-2 px-4 rounded transition duration-300 ease-in-out  hover:scale-95"
-          >
-            Volver a la pregunta anterior
-          </button>
+            {currentQuestionIndex > 0 && (
+              <button
+                onClick={goBackToPreviousQuestion}
+                className=" text-white py-2 px-6 rounded-md transition duration-300 ease-in-out hover:scale-95"
+              >
+                Volver a la pregunta anterior
+              </button>
+            )}
         </div>
       </div>
     </div>
