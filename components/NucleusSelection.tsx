@@ -12,21 +12,21 @@ const nuclei = [
     {
       name: 'Enigma',
       description: 'Rodeado de misterios y conocimientos ocultos, el Núcleo Enigma es un refugio para los curiosos del mundo esotérico y paranormal. Es ideal para aquellos que buscan descubrir los secretos más profundos de la existencia, explorando enigmas que desafían la lógica.',
-      bgColor: 'bg-gradient-to-br from-indigo-600/20 to-transparent border border-indigo-400/60',
+      bgColor: 'bg-gradient-to-br from-indigo-600/20 to-transparent border border-indigo-400/40',
       image: '/images/enigma.jpeg',
       profiles: 'Sabio, Visionario, Aventurero'
     },
     {
       name: 'Quantum',
       description: 'Inspirado en la frontera de la ciencia y la tecnología, el Núcleo Quantum se dedica a la innovación y al descubrimiento científico. Es el hogar de pioneros comprometidos con los misterios de la realidad y el avance de la humanidad mediante la tecnología moderna.',
-      bgColor: 'bg-gradient-to-br from-cyan-600/20 to-transparent border border-cyan-400/60',
+      bgColor: 'bg-gradient-to-br from-cyan-600/20 to-transparent border border-cyan-700',
       image: '/images/quantum.jpeg',
       profiles: 'Creador, Guardián, Conector'
     },
     {
       name: 'Arbóreo',
       description: 'Enraizada en el amor y el respeto por la naturaleza, el Núcleo Arbóreo valora la conservación del medio ambiente y la biodiversidad. Sus miembros se esfuerzan por vivir en armonía con el planeta, promoviendo un futuro sostenible para todas las formas de vida.',
-      bgColor: 'bg-gradient-to-br from-lime-600/20 to-transparent border border-lime-400/40',
+      bgColor: 'bg-gradient-to-br from-lime-600/20 to-transparent border border-lime-700',
       image: '/images/arboreo.jpeg',
       profiles: 'Guardián, Aventurero, Sabio'
     },
@@ -55,7 +55,7 @@ const NucleusSelection: React.FC<NucleusSelectionProps> = ({ onComplete }) => {
           pagination={{ clickable: true }}
           modules={[Pagination]}
           className="w-full h-full mySwiper"
-          slidesPerView={1.1}
+          slidesPerView={1.5}
           spaceBetween={20}
           centeredSlides={true}
           onSlideChange={handleSlideChange}
@@ -65,7 +65,7 @@ const NucleusSelection: React.FC<NucleusSelectionProps> = ({ onComplete }) => {
               <div
                 className={`relative ${nucleus.bgColor}  text-white shadow-lg h-full cursor-pointer space-y-3 p-6 rounded-lg`}
               >
-                <img src={nucleus.image} alt={`${nucleus.name} icon`} className="w-full h-64 object-cover rounded-lg mb-4" />
+                <img src={nucleus.image} alt={`${nucleus.name} icon`} className=" w-full object-cover rounded-lg mb-4" />
                 <div className="flex flex-col space-y-2 flex-grow">
                   <h3 className="text-2xl">{nucleus.name}</h3>
                   <p className="text-sm font-light opacity-90">{nucleus.description}</p>
