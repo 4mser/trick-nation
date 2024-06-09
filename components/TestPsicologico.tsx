@@ -111,7 +111,7 @@ const Test: FC<TestProps> = ({ onComplete }) => {
           {questions[currentQuestionIndex].options.map((option, index) => (
             <motion.button
               key={index}
-              whileHover={{ scale: 1.05 }}
+              whileHover={{ scale: 1.03 }}
               whileTap={{ scale: 0.95 }}
               className="text-white border border-green-500 hover:bg-green-500 focus:outline-none font-medium rounded-lg text-xs px-5 py-2.5 text-center mr-2 mb-2 w-full "
               onClick={() => handleAnswer(option.points)}
