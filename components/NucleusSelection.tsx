@@ -57,7 +57,6 @@ const NucleusSelection: React.FC<NucleusSelectionProps> = ({ onComplete }) => {
           className="w-full h-full mySwiper"
           slidesPerView={1.5}
           spaceBetween={20}
-          centeredSlides={true}
           onSlideChange={handleSlideChange}
         >
           {nuclei.map((nucleus) => (
