@@ -11,7 +11,7 @@ const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) =
 
   useEffect(() => {
     if (!loading && !user) {
-      router.push('/Auth/login');
+      router.push('/Auth/welcome');
     }
   }, [user, loading, router]);
 

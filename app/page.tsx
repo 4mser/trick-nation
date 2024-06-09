@@ -5,6 +5,7 @@ import OnboardingModal from '@/components/OnboardingModal';
 import api from '@/services/api';
 import { User } from '@/types/user';
 import Loader from '@/components/Loader';
+import ProtectedRoute from '@/components/ProtectedRoute';
 
 const Home: React.FC = () => {
   const { user } = useAuth();
@@ -44,7 +45,8 @@ const Home: React.FC = () => {
   }
 
   return (
-    <div>
+    <ProtectedRoute>
+      <div>
       <h1>Hola Xplorers</h1>
       {showOnboardingModal && user && (
         <OnboardingModal
@@ -54,7 +56,8 @@ const Home: React.FC = () => {
         />
       )}
       {/* El resto de tu código */}
-    </div>
+    </div>  
+    </ProtectedRoute>
   );
 };
 

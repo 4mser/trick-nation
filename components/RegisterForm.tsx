@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import api from '@/services/api';
 import { useAuth } from '@/context/auth-context';
+import Image from 'next/image';
 
 const RegisterForm: React.FC = () => {
   const { user } = useAuth();
@@ -44,9 +45,15 @@ const RegisterForm: React.FC = () => {
   }
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-neutral-950">
+    <div className="flex items-center justify-center flex-col h-[100dvh] bg-neutral-950">
+      <Image 
+        src="/images/isotipoXplorers.png"
+        width={130}
+        height={130}
+        alt='isotipo xplorers'
+      />
       <form onSubmit={handleSubmit} className="bg-neutral-950 p-8 rounded-lg shadow-lg w-full max-w-md mx-auto">
-        <h2 className="text-2xl font-bold text-white mb-6 text-center">Registro</h2>
+        <h2 className="text-2xl font-bold text-white mb-6">Registro</h2>
         {error && <p className="text-red-600 mb-4">{error}</p>}
         <div className="mb-4">
           <label className="block text-white mb-2">Nombre de Usuario:</label>
@@ -55,7 +62,7 @@ const RegisterForm: React.FC = () => {
             value={username}
             onChange={(e) => setUsername(e.target.value)}
             required
-            className="w-full p-2 bg-neutral-800 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-green-400"
+            className="w-full p-2 bg-neutral-800 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-400"
           />
         </div>
         <div className="mb-4">
@@ -65,7 +72,7 @@ const RegisterForm: React.FC = () => {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
-            className="w-full p-2 bg-neutral-800 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-green-400"
+            className="w-full p-2 bg-neutral-800 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-400"
           />
         </div>
         <div className="mb-4">
@@ -75,18 +82,18 @@ const RegisterForm: React.FC = () => {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
-            className="w-full p-2 bg-neutral-800 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-green-400"
+            className="w-full p-2 bg-neutral-800 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-400"
           />
         </div>
         <button
           type="submit"
-          className="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+          className="w-full bg-yellow-500 hover:scale-105 text-white font-bold py-2 px-4 rounded focus:outline-none "
         >
           Registrarme
         </button>
         <div className="text-center text-white mt-4">
           ¿Ya tienes una cuenta?{' '}
-          <Link href="/Auth/login" className='text-green-500 hover:underline'>Inicia sesión</Link>
+          <Link href="/Auth/login" className='text-yellow-500 hover:underline'>Inicia sesión</Link>
         </div>
       </form>
     </div>

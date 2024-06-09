@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import api from '@/services/api';
 import { useAuth } from '@/context/auth-context';
+import Image from 'next/image';
 
 const LoginForm: React.FC = () => {
   const { user, login } = useAuth();
@@ -46,10 +47,16 @@ const LoginForm: React.FC = () => {
   }
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-neutral-950">
+    <div className="flex items-center justify-center flex-col h-[100dvh]  bg-neutral-950">
+      <Image 
+        src="/images/isotipoXplorers.png"
+        width={130}
+        height={130}
+        alt='isotipo xplorers'
+      />
       <form onSubmit={handleSubmit} className="bg-neutral-950 p-8 rounded-lg shadow-lg w-full max-w-md mx-auto">
-        <h2 className="text-2xl font-bold text-white mb-6 text-center">Inicio de Sesión</h2>
-        {error && <div className="mb-4 text-red-500 text-center">{error}</div>}
+        <h2 className="text-2xl font-bold text-white mb-6">Inicia Sesión</h2>
+        {error && <div className="text-red-600 mb-4">{error}</div>}
         <div className="mb-4">
           <label className="block text-white mb-2">Email o Username:</label>
           <input
@@ -57,10 +64,10 @@ const LoginForm: React.FC = () => {
             value={identifier}
             onChange={(e) => setIdentifier(e.target.value)}
             required
-            className="w-full p-2 bg-neutral-800 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-green-400"
+            className="w-full p-2 bg-neutral-800 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-400"
           />
         </div>
-        <div className="mb-6">
+        <div className="mb-4">
           <label className="block text-white mb-2">Contraseña:</label>
           <div className="relative">
             <input
@@ -69,7 +76,7 @@ const LoginForm: React.FC = () => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
-              className="w-full p-2 bg-neutral-800 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-green-400"
+              className="w-full p-2 bg-neutral-800 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-400"
             />
             <button
               type="button"
@@ -82,13 +89,13 @@ const LoginForm: React.FC = () => {
         </div>
         <button
           type="submit"
-          className="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+          className="w-full bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
         >
           Iniciar Sesión
         </button>
         <div className="text-center text-white mt-4">
           ¿No tienes una cuenta?{' '}
-          <Link href="/Auth/register" className='text-green-500 hover:underline'>
+          <Link href="/Auth/register" className='text-yellow-500 hover:underline'>
             Regístrate
           </Link>
         </div>
