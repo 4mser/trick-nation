@@ -95,7 +95,7 @@ const Test: FC<TestProps> = ({ onComplete }) => {
           initial="hidden"
           animate="visible"
           exit="exit"
-          className="w-full max-w-xl grid grid-cols-2 gap-2"
+          className="w-full max-w-xl"
         >
           {questions[currentQuestionIndex].options.map((option, index) => (
             <motion.button
