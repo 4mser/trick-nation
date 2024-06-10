@@ -39,7 +39,7 @@ const Home: React.FC = () => {
   };
 
   if (loading) {
-    return <div className='w-full h-[95dvh] grid place-items-center'>
+    return <div className='w-full h-[95dvh] grid place-items-center text-yellow-500'>
       <Loader />
     </div>;
   }

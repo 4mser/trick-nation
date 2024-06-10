@@ -10,7 +10,7 @@ export interface User {
   country?: string;
   profilePictureUrl?: string;
   roles:string[];
-  nucleus?:string;
+  nucleus:string;
   currentCrewId?: string;
   unlockedTricks?: { _id: string; name: string }[]; // Agregar los trucos desbloqueados
   onboardingCompleted: boolean;

@@ -102,6 +102,8 @@ const UserProfile: React.FC = () => {
               />
               <h2 className="text-2xl font-bold">{user.username}</h2>
               <p className="px-5 opacity-70 font-light">{user.description}</p>
+              <p className="px-5 opacity-70 font-light">{user.roles.length > 0 ? user.roles[0] : 'Sin rol'}</p>
+              <p className="px-5 opacity-70 font-light">{user.nucleus ? user.nucleus : 'Sin núcleo'}</p>
               <div className="flex gap-3">
                 <button
                   onClick={() => setIsEditing(true)}

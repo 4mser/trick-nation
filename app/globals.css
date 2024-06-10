@@ -19,7 +19,7 @@ body {
 
   .container {
     --uib-size: 40px;
-    --uib-color: rgb(213, 173, 13);
+    --uib-color: rgb(234, 179, 8);
     --uib-speed: .9s;
     --uib-center: calc(var(--uib-size) / 2 - var(--uib-size) / 5 / 2);
     position: relative;
