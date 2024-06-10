@@ -55,7 +55,7 @@ const LoginForm: React.FC = () => {
         alt='isotipo xplorers'
       />
       <form onSubmit={handleSubmit} className="bg-neutral-950 p-8 rounded-lg shadow-lg w-full max-w-md mx-auto">
-        <h2 className="text-2xl font-bold text-white mb-6">Inicia Sesión</h2>
+        <h2 className="text-2xl font-bold text-white mb-3">Inicia Sesión</h2>
         {error && <div className="text-red-600 mb-4">{error}</div>}
         <div className="mb-4">
           <label className="block text-white mb-2">Email o Username:</label>
@@ -89,7 +89,7 @@ const LoginForm: React.FC = () => {
         </div>
         <button
           type="submit"
-          className="w-full bg-yellow-600 hover:bg-yellow-500 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+          className="w-full bg-yellow-600 hover:scale-95 transition text-white py-2 px-4 rounded focus:outline-none focus:shadow-outline"
         >
           Iniciar Sesión
         </button>

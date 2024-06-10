@@ -5,11 +5,66 @@ import { useRouter } from 'next/navigation';
 import useCurrentUser from '@/hooks/useCurrentUser';
 import api from '@/services/api';
 import Loader from './Loader';
+import Select, { StylesConfig } from 'react-select';
+import { Icon } from '@iconify/react';
 
 interface EditProfileFormProps {
   onClose: () => void;
   onProfileUpdate: () => void;
 }
+
+const citiesInChile = [
+  { value: 'Santiago', label: 'Santiago' },
+  { value: 'Valparaíso', label: 'Valparaíso' },
+  { value: 'Concepción', label: 'Concepción' },
+  { value: 'La Serena', label: 'La Serena' },
+  { value: 'Antofagasta', label: 'Antofagasta' },
+  { value: 'Temuco', label: 'Temuco' },
+  { value: 'Rancagua', label: 'Rancagua' },
+  { value: 'Iquique', label: 'Iquique' },
+  { value: 'Puerto Montt', label: 'Puerto Montt' },
+  { value: 'Chillán', label: 'Chillán' },
+  { value: 'Arica', label: 'Arica' },
+  { value: 'Talca', label: 'Talca' },
+  { value: 'Coyhaique', label: 'Coyhaique' },
+  { value: 'Punta Arenas', label: 'Punta Arenas' },
+  { value: 'Valdivia', label: 'Valdivia' },
+  { value: 'Osorno', label: 'Osorno' },
+  { value: 'Calama', label: 'Calama' },
+  { value: 'Copiapó', label: 'Copiapó' },
+  { value: 'Curicó', label: 'Curicó' }
+];
+
+const customSelectStyles: StylesConfig<any, false> = {
+  control: (base) => ({
+    ...base,
+    backgroundColor: '#2d2d2d',
+    borderColor: '#444',
+    color: '#fff',
+    minHeight: '44px',
+    '&:hover': {
+      borderColor: 'var(--primary_color)',
+    },
+    boxShadow: 'none',
+  }),
+  singleValue: (base) => ({
+    ...base,
+    color: '#fff',
+  }),
+  menu: (base) => ({
+    ...base,
+    backgroundColor: '#2d2d2d',
+  }),
+  option: (base, state) => ({
+    ...base,
+    backgroundColor: state.isFocused ? 'var(--primary_color)' : '#2d2d2d',
+    color: state.isFocused ? '#000' : '#fff',
+    '&:hover': {
+      backgroundColor: 'var(--primary_color)',
+      color: '#000',
+    },
+  }),
+};
 
 const EditProfileForm: React.FC<EditProfileFormProps> = ({ onClose, onProfileUpdate }) => {
   const { user, loading } = useCurrentUser();
@@ -18,7 +73,7 @@ const EditProfileForm: React.FC<EditProfileFormProps> = ({ onClose, onProfileUpd
     email: user?.email || '',
     city: user?.city || '',
     description: user?.description || '',
-    country: user?.country || '',
+    country: 'Chile',
     profilePicture: null as File | null,
   });
   const [error, setError] = useState('');
@@ -35,6 +90,10 @@ const EditProfileForm: React.FC<EditProfileFormProps> = ({ onClose, onProfileUpd
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({ ...prevData, [name]: value }));
+  };
+
+  const handleCityChange = (selectedOption: any) => {
+    setFormData((prevData) => ({ ...prevData, city: selectedOption.value }));
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -68,7 +127,7 @@ const EditProfileForm: React.FC<EditProfileFormProps> = ({ onClose, onProfileUpd
       });
       onProfileUpdate();
       onClose();
-    } catch (error:any) {
+    } catch (error: any) {
       if (error.response && error.response.data.message === 'Username already exists') {
         setError('Este nombre de usuario ya está en uso. Por favor, elige otro.');
       } else {
@@ -90,7 +149,7 @@ const EditProfileForm: React.FC<EditProfileFormProps> = ({ onClose, onProfileUpd
           value={formData.username}
           onChange={handleChange}
           required
-          className="w-full p-2 bg-neutral-800 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-green-400"
+          className="w-full p-2 bg-neutral-800 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-400"
         />
       </div>
       <div className="mb-4">
@@ -101,7 +160,7 @@ const EditProfileForm: React.FC<EditProfileFormProps> = ({ onClose, onProfileUpd
           value={formData.description}
           onChange={handleChange}
           required
-          className="w-full p-2 bg-neutral-800 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-green-400"
+          className="w-full p-2 bg-neutral-800 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-400"
         />
       </div>
       <div className="mb-4">
@@ -112,45 +171,56 @@ const EditProfileForm: React.FC<EditProfileFormProps> = ({ onClose, onProfileUpd
           value={formData.email}
           onChange={handleChange}
           required
-          className="w-full p-2 bg-neutral-800 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-green-400"
+          className="w-full p-2 bg-neutral-800 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-400"
         />
       </div>
       <div className="mb-4">
         <label className="block text-white mb-2">Ciudad:</label>
-        <input
-          type="text"
-          name="city"
-          value={formData.city}
-          onChange={handleChange}
-          className="w-full p-2 bg-neutral-800 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-green-400"
+        <Select
+          options={citiesInChile}
+          styles={customSelectStyles}
+          value={citiesInChile.find(option => option.value === formData.city)}
+          onChange={handleCityChange}
+          placeholder="Selecciona una ciudad"
         />
       </div>
       <div className="mb-4">
         <label className="block text-white mb-2">País:</label>
-        <input
-          type="text"
-          name="country"
-          value={formData.country}
-          onChange={handleChange}
-          className="w-full p-2 bg-neutral-800 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-green-400"
+        <Select
+          options={[{ value: 'Chile', label: 'Chile' }]}
+          styles={customSelectStyles}
+          value={{ value: 'Chile', label: 'Chile' }}
+          isDisabled
         />
       </div>
       <div className="mb-4">
         <label className="block text-white mb-2">Foto de Perfil:</label>
-        <input
-          type="file"
-          name="profilePicture"
-          onChange={handleFileChange}
-          className="w-full p-2 bg-neutral-800 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-green-400"
-        />
+        <div className="flex items-center">
+          <input
+            type="file"
+            name="profilePicture"
+            id="profilePicture"
+            onChange={handleFileChange}
+            className="hidden"
+          />
+          <label htmlFor="profilePicture" className="cursor-pointerw w-full flex items-center bg-neutral-800 p-2 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-yellow-400">
+            <Icon icon="mdi:camera" className="mr-2 text-2xl" />
+            {formData.profilePicture ? formData.profilePicture.name : 'Subir Imagen'}
+          </label>
+        </div>
+        {formData.profilePicture && (
+          <div className="mt-4 flex justify-center">
+            <img src={URL.createObjectURL(formData.profilePicture)} alt="Profile Preview" className="w-full object-cover  shadow-md" />
+          </div>
+        )}
       </div>
-      <button type="submit" className="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+      <button type="submit" className="w-full bg-yellow-500 hover:scale-95 transition-transform text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
         Actualizar Perfil
       </button>
       <button
         type="button"
         onClick={onClose}
-        className="w-full mt-4 bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+        className="w-full mt-4 hover:scale-95 transition-transform text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
       >
         Cancelar
       </button>

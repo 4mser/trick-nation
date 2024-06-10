@@ -1,6 +1,6 @@
 export const bottombarLinks = [
   {
-    imgURL: "/assets/navbar/tokens.svg",
+    imgURL: "/assets/navbar/home.svg",
     route: "/",
     label: "Inicio",
   },
@@ -8,6 +8,11 @@ export const bottombarLinks = [
       imgURL: "/assets/navbar/map-linear.svg",
       route: "/map",
       label: "Explora",
+    },
+    {
+      imgURL: "/assets/navbar/tokens.svg",
+      route: "/content",
+      label: "Tokens"
     },
     {
       imgURL: "/assets/navbar/misiones.svg",

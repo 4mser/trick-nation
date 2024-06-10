@@ -48,7 +48,7 @@ const Header: React.FC = () => {
           );
         })}
         {/* Enlace del perfil en el centro */}
-        <Link href="/profile">
+        {/* <Link href="/profile">
           <div className=" relative bg-neutral-950 border border-white/10  -translate-y-6 rounded-full p-2 ">
             <div className={`transition-all duration-300 ease-in-out ${pathname === '/profile' ? 'p-1 bg-gradient-to-tr from-yellow-500 to-yellow-800 rounded-full' : ''}`}>
               <img
@@ -58,7 +58,7 @@ const Header: React.FC = () => {
               />
             </div>
           </div>
-        </Link>
+        </Link> */}
         {/* Segundos dos enlaces */}
         {secondHalfLinks.map((link) => {
           const isActive =

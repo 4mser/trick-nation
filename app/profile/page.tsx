@@ -115,7 +115,7 @@ const UserProfile: React.FC = () => {
               </div>
             </div>
             <div className="m-6 space-y-2">
-              <p className="text-white">Progreso trucos: {progressPercentage}%</p>
+              <p className="text-white">Progreso: {progressPercentage}%</p>
               <div className="w-full h-2 bg-neutral-700 rounded-full overflow-hidden">
                 <div className="h-full bg-green-400 rounded-full" style={{ width: `${progressPercentage}%` }} />
               </div>
@@ -137,7 +137,7 @@ const UserProfile: React.FC = () => {
           </div>
 
           <div className="mt-4">
-            <h2 className="text-xl font-bold mb-2 text-center">Trucos</h2>
+            <h2 className="text-xl font-bold mb-2 text-center">Tokens</h2>
             {unlockedTricks.length > 0 ? (
               <div className="grid grid-cols-3 gap-1">
                 {unlockedTricks.map((trick) => (
@@ -160,7 +160,7 @@ const UserProfile: React.FC = () => {
                 ))}
               </div>
             ) : (
-              <p className="px-5">Sin trucos aún.</p>
+              <p className="px-5 text-center opacity-60">Nada de momento.</p>
             )}
           </div>
         </>

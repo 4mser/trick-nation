@@ -53,7 +53,7 @@ const RegisterForm: React.FC = () => {
         alt='isotipo xplorers'
       />
       <form onSubmit={handleSubmit} className="bg-neutral-950 p-8 rounded-lg shadow-lg w-full max-w-md mx-auto">
-        <h2 className="text-2xl font-bold text-white mb-6">Registro</h2>
+        <h2 className="text-2xl font-bold text-white mb-3">Registro</h2>
         {error && <p className="text-red-600 mb-4">{error}</p>}
         <div className="mb-4">
           <label className="block text-white mb-2">Nombre de Usuario:</label>
@@ -87,7 +87,7 @@ const RegisterForm: React.FC = () => {
         </div>
         <button
           type="submit"
-          className="w-full bg-yellow-600 hover:bg-yellow-500 text-white font-bold py-2 px-4 rounded focus:outline-none "
+          className="w-full bg-yellow-600 hover:scale-95 text-white transition py-2 px-4 rounded focus:outline-none "
         >
           Registrarme
         </button>
