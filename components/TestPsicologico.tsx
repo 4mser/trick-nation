@@ -57,18 +57,39 @@ const Test: FC<TestProps> = ({ onComplete }) => {
     setLoading(false);
   };
 
+  const handleRetakeTest = () => {
+    setCurrentQuestionIndex(0);
+    setScores({});
+    setResultMessage(null);
+    setDominantProfile(null);
+    setSelectedOption(null);
+  };
+
   const questionAnimation = {
     hidden: (direction: number) => ({
       x: direction > 0 ? 100 : -100,
       opacity: 0,
     }),
-    visible: { x: 0, opacity: 1, transition: { duration: 0.2 } },
+    visible: { x: 0, opacity: 1, transition: { duration: 0.3, ease: 'easeInOut' } },
     exit: (direction: number) => ({
       x: direction > 0 ? -100 : 100,
       opacity: 0,
-      transition: { duration: 0.2 },
+      transition: { duration: 0.3, ease: 'easeInOut' },
     }),
   };
+
+  const cardAnimation = (index: number) => ({
+    hidden: { opacity: 0},
+    visible: {
+      opacity: 1,
+      transition: { 
+        delay: index * 0.1, 
+        duration: 0.5, 
+      },
+    },
+  });
+
+  const progress = ((currentQuestionIndex + 1) / questions.length) * 100;
 
   if (loading) {
     return (
@@ -91,18 +112,34 @@ const Test: FC<TestProps> = ({ onComplete }) => {
         className="flex flex-col justify-center items-center p-4 bg-neutral-950 text-white"
       >
         <p className="text-lg mb-4">{resultMessage}</p>
-        <button
-          onClick={() => onComplete(dominantProfile)}
-          className="mt-4 bg-gradient-to-br from-yellow-500/10 to-transparent border border-yellow-500/60 text-white font-normal py-2 px-4 rounded focus:outline-none focus:shadow-outline transition duration-300 ease-in-out"
-        >
-          Continuar
-        </button>
+        <div className="flex gap-4">
+          <button
+            onClick={handleRetakeTest}
+            className="bg-gradient-to-br from-red-500/10 to-transparent border border-red-500/60 text-white font-normal py-2 px-4 rounded focus:outline-none focus:shadow-outline transition duration-300 ease-in-out"
+          >
+            Repetir Test
+          </button>
+          <button
+            onClick={() => onComplete(dominantProfile)}
+            className="bg-gradient-to-br from-yellow-500/10 to-transparent border border-yellow-500/60 text-white font-normal py-2 px-4 rounded focus:outline-none focus:shadow-outline transition duration-300 ease-in-out"
+          >
+            Continuar
+          </button>
+        </div>
       </motion.div>
     );
   }
 
   return (
     <div className="flex flex-col items-center justify-center overflow-y-auto bg-neutral-950 text-white">
+      <div className="w-full p-5">
+        <motion.div
+          className="h-2 bg-yellow-500 rounded-full"
+          initial={{ width: 0 }}
+          animate={{ width: `${progress}%` }}
+          transition={{ duration: 0.5, ease: 'easeInOut' }}
+        />
+      </div>
       <div className="w-full">
         <AnimatePresence custom={direction} mode="wait">
           <motion.div
@@ -114,23 +151,26 @@ const Test: FC<TestProps> = ({ onComplete }) => {
             exit="exit"
             className="w-full"
           >
-            <h2 className="text-xl font-semibold p-5 py-6">{questions[currentQuestionIndex].questionText}</h2>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 p-4 ">
+            <h2 className="text-xl font-semibold px-5 pb-6">{questions[currentQuestionIndex].questionText}</h2>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 px-5">
               {questions[currentQuestionIndex].options.map((option, index) => (
-                <div
+                <motion.div
                   key={index}
                   onClick={() => setSelectedOption(index)}
+                  variants={cardAnimation(index)}
+                  initial="hidden"
+                  animate="visible"
                   className={`relative text-white border ${
-                    selectedOption === index ? 'bg-gradient-to-br from-yellow-500/20 to-transparent border-yellow-500 ' : 'border-white/10'
-                  } focus:outline-none font-light rounded-2xl text-sm text-center transition flex justify-center items-center duration-300 ease-in-out cursor-pointer py-7 px-5`}
+                    selectedOption === index ? 'bg-gradient-to-br from-yellow-500/20 to-transparent border-yellow-500' : 'border-white/10'
+                  } focus:outline-none font-light rounded-2xl text-sm px-5 py-5 text-center transition flex justify-center items-center duration-300 ease-in-out cursor-pointer`}
                 >
                   {option.text}
-                </div>
+                </motion.div>
               ))}
             </div>
           </motion.div>
         </AnimatePresence>
-        <div className="flex justify-between flex-col items-center p-7  font-light w-full">
+        <div className="flex justify-between flex-col items-center p-7 mt-4 font-light w-full">
           <button
             onClick={handleAnswer}
             disabled={selectedOption === null}
@@ -143,7 +183,7 @@ const Test: FC<TestProps> = ({ onComplete }) => {
           {currentQuestionIndex > 0 && (
             <button
               onClick={goBackToPreviousQuestion}
-              className=" text-white py-2 px-6 rounded-md transition duration-300 ease-in-out hover:scale-95"
+              className="text-white py-2 px-6 rounded-md transition duration-300 ease-in-out hover:scale-95"
             >
               Volver a la pregunta anterior
             </button>
