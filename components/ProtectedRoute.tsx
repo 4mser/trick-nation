@@ -6,14 +6,18 @@ import { useAuth } from '@/context/auth-context';
 import Loader from './Loader';
 
 const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const { user, loading } = useAuth();
+  const { user, loading, loginAttempted } = useAuth();
   const router = useRouter();
 
   useEffect(() => {
     if (!loading && !user) {
-      router.push('/Auth/welcome');
+      if (loginAttempted) {
+        router.push('/Auth/login');
+      } else {
+        router.push('/Auth/welcome');
+      }
     }
-  }, [user, loading, router]);
+  }, [user, loading, loginAttempted, router]);
 
   if (loading || !user) {
     return <div className='w-full h-[100dvh] grid place-items-center'><Loader /></div>;

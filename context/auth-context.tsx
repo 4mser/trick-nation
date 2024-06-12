@@ -10,6 +10,8 @@ interface AuthContextType {
   login: (token: string) => void;
   logout: () => void;
   refetch: () => Promise<void>;
+  loginAttempted: boolean;
+  setLoginAttempted: (attempted: boolean) => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -17,6 +19,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
+  const [loginAttempted, setLoginAttempted] = useState<boolean>(false);
 
   const fetchCurrentUser = async () => {
     const token = localStorage.getItem('token');
@@ -57,7 +60,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   };
 
   return (
-    <AuthContext.Provider value={{ user, loading, login, logout, refetch }}>
+    <AuthContext.Provider value={{ user, loading, login, logout, refetch, loginAttempted, setLoginAttempted }}>
       {children}
     </AuthContext.Provider>
   );

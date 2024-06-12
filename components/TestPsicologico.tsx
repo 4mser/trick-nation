@@ -136,7 +136,7 @@ const Test: FC<TestProps> = ({ onComplete }) => {
   }
 
   return (
-    <div className="flex flex-col items-center  overflow-y-auto bg-neutral-950 text-white h-[100dvh]">
+    <div className="flex flex-col items-center  overflow-y-auto bg-neutral-950 text-white h-[100dvh] relative xl:px-52">
       <div className="w-full p-5 absolute top-0 left-0 bg-neutral-950 z-10">
         <motion.div
           className="h-2 bg-yellow-500 rounded-full"

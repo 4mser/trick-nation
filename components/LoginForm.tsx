@@ -8,7 +8,7 @@ import { useAuth } from '@/context/auth-context';
 import Image from 'next/image';
 
 const LoginForm: React.FC = () => {
-  const { user, login } = useAuth();
+  const { user, login, setLoginAttempted } = useAuth();
   const [identifier, setIdentifier] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -24,6 +24,7 @@ const LoginForm: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
+    setLoginAttempted(true); // Set loginAttempted to true
     try {
       const response = await api.post('/auth/login', { identifier, password });
       login(response.data.access_token);
