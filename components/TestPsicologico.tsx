@@ -143,7 +143,7 @@ const Test: FC<TestProps> = ({ onComplete }) => {
             </div>
           </motion.div>
         </AnimatePresence>
-        <div className="flex justify-between flex-col items-center p-7 mt-4 font-light w-full">
+        <div className="absolute bottom-0 bg-neutral-950 left-0 flex justify-between flex-col items-center p-7 mt-4 font-light w-full">
           <button
             onClick={handleAnswer}
             disabled={selectedOption === null}
