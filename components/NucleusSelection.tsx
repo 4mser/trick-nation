@@ -95,14 +95,11 @@ const NucleusSelection: React.FC<NucleusSelectionProps> = ({ onComplete }) => {
                 onClick={() => handleNucleusSelect(nucleus.backendName)}
               >
                 <div className="absolute top-4 left-4">
-                  <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ duration: 0.3 }}
+                  <div
                     className={`w-8 h-8 rounded-full border-[3px] transition-all duration-500 ${
                       selectedNucleus === nucleus.backendName ? 'bg-yellow-500/80 border-yellow-500 shadow-xl shadow-yellow-500/70' : 'border-white bg-white/30'
                     }`}
-                  ></motion.div>
+                  ></div>
                 </div>
                 <img src={nucleus.image} alt={`${nucleus.name} icon`} className="w-full h-64 object-cover rounded-lg mb-4" />
                 <div className="flex flex-col space-y-2 flex-grow">
