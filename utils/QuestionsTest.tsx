@@ -11,7 +11,7 @@ export const questions: Question[] = [
         questionText: "Escoge una habilidad",
         options: [
             { text: "Viajar en el tiempo", points: { "Sabio": 3, "Aventurero": 1 } },
-            { text: "Leer la mente", points: { "Conector": 3, "Sabio": 1 } },
+            { text: "Leer mentes", points: { "Conector": 3, "Sabio": 1 } },
             { text: "Super inteligencia", points: { "Sabio": 4 } },
             { text: "Ser invisible", points: { "Creador": 2, "Aventurero": 2 } },
             { text: "Teletransportación", points: { "Aventurero": 4 } },
@@ -46,12 +46,12 @@ export const questions: Question[] = [
         ],
     },
     {
-        questionText: "Si pudieras enseñar algo, ¿qué sería?",
+        questionText: "¿Qué te gustaría aprender?",
         options: [
             { text: "Supervivencia al aire libre", points: { "Aventurero": 4 } },
-            { text: "Cultivar un jardín sostenible", points: { "Guardián": 4 } },
-            { text: "Materias académicas", points: { "Sabio": 4 } },
-            { text: "Taller creativo", points: { "Creador": 4 } },
+            { text: "Ser Autosustentable", points: { "Guardián": 4 } },
+            { text: "Conocimientos Ancestrales", points: { "Sabio": 4 } },
+            { text: "Artes Plásticas", points: { "Creador": 4 } },
             { text: "Habilidades sociales", points: { "Conector": 4 } },
             { text: "Tecnología futura", points: { "Visionario": 4 } },
             { text: "Artes marciales o defensa personal", points: { "Guerrero": 4 } },

@@ -114,15 +114,15 @@ const Test: FC<TestProps> = ({ onComplete }) => {
             exit="exit"
             className="w-full"
           >
-            <h2 className="text-xl font-semibold mb-6 p-5 py-6">{questions[currentQuestionIndex].questionText}</h2>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 p-4">
+            <h2 className="text-xl font-semibold p-5 py-6">{questions[currentQuestionIndex].questionText}</h2>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 p-4 ">
               {questions[currentQuestionIndex].options.map((option, index) => (
                 <div
                   key={index}
                   onClick={() => setSelectedOption(index)}
                   className={`relative text-white border ${
                     selectedOption === index ? 'bg-gradient-to-br from-yellow-500/20 to-transparent border-yellow-500 ' : 'border-white/10'
-                  } focus:outline-none font-medium rounded-2xl text-sm text-center transition flex justify-center items-center duration-300 ease-in-out cursor-pointer py-7 px-5`}
+                  } focus:outline-none font-light rounded-2xl text-sm text-center transition flex justify-center items-center duration-300 ease-in-out cursor-pointer py-7 px-5`}
                 >
                   {option.text}
                 </div>
@@ -130,7 +130,7 @@ const Test: FC<TestProps> = ({ onComplete }) => {
             </div>
           </motion.div>
         </AnimatePresence>
-        <div className="flex justify-between flex-col items-center p-7 mt-4 font-light w-full">
+        <div className="flex justify-between flex-col items-center p-7  font-light w-full">
           <button
             onClick={handleAnswer}
             disabled={selectedOption === null}
