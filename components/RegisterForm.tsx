@@ -62,7 +62,7 @@ const RegisterForm: React.FC = () => {
             value={username}
             onChange={(e) => setUsername(e.target.value)}
             required
-            className="w-full p-2 bg-neutral-800 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-600"
+            className="w-full p-2 bg-neutral-800 text-white rounded-md focus:outline-none focus:ring-1 focus:ring-yellow-600"
           />
         </div>
         <div className="mb-4">
@@ -72,7 +72,7 @@ const RegisterForm: React.FC = () => {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
-            className="w-full p-2 bg-neutral-800 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-600"
+            className="w-full p-2 bg-neutral-800 text-white rounded-md focus:outline-none focus:ring-1 focus:ring-yellow-600"
           />
         </div>
         <div className="mb-4">
@@ -82,12 +82,12 @@ const RegisterForm: React.FC = () => {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
-            className="w-full p-2 bg-neutral-800 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-600"
+            className="w-full p-2 bg-neutral-800 text-white rounded-md focus:outline-none focus:ring-1 focus:ring-yellow-600"
           />
         </div>
         <button
           type="submit"
-          className="w-full border border-yellow-600 bg-gradient-to-br from-yellow-600/20 to-transparent hover:scale-95 text-white transition py-2 px-4 rounded focus:outline-none "
+          className="w-full mt-2 border border-yellow-600 bg-gradient-to-br from-yellow-600/20 to-transparent hover:scale-95 text-white transition py-2 px-4 rounded-md focus:outline-none "
         >
           Registrarme
         </button>

@@ -65,7 +65,7 @@ const LoginForm: React.FC = () => {
             value={identifier}
             onChange={(e) => setIdentifier(e.target.value)}
             required
-            className="w-full p-2 bg-neutral-800 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-500"
+            className="w-full p-2 bg-neutral-800 text-white rounded-md focus:outline-none focus:ring-1 focus:ring-yellow-500"
           />
         </div>
         <div className="mb-4">
@@ -77,7 +77,7 @@ const LoginForm: React.FC = () => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
-              className="w-full p-2 bg-neutral-800 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-500"
+              className="w-full p-2 bg-neutral-800 text-white rounded-md focus:outline-none focus:ring-1 focus:ring-yellow-500"
             />
             <button
               type="button"
@@ -90,7 +90,7 @@ const LoginForm: React.FC = () => {
         </div>
         <button
           type="submit"
-          className="w-full border border-yellow-600 bg-gradient-to-br from-yellow-600/20 to-transparent hover:scale-95 transition text-white py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+          className="w-full mt-2 border border-yellow-600 bg-gradient-to-br from-yellow-600/20 to-transparent hover:scale-95 transition text-white py-2 px-4 rounded-md focus:outline-none focus:shadow-outline"
         >
           Iniciar Sesión
         </button>
