@@ -52,7 +52,7 @@ const Onboarding: React.FC = () => {
 
   if (!roleAssigned) {
     return (
-        <main className='w-full h-[100dvh] z-20 fixed top-0 left-0 bg-neutral-950'>
+        <main className='w-full h-[100dvh] overflow-y-auto z-20 fixed top-0 left-0 bg-neutral-950'>
             <TestPsicologico onComplete={handleRoleComplete} />
         </main>
     ) 

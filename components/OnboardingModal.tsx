@@ -34,7 +34,7 @@ const OnboardingModal: React.FC<OnboardingModalProps> = ({ user, onComplete, onS
           onClick={onSkip}
         >
           <motion.div
-            className="relative text-white p-8 rounded-lg shadow-lg w-full max-w-md bg-gradient-to-br from-neutral-800 to-transparent"
+            className="relative text-white p-8 rounded-lg shadow-2xl w-full max-w-md bg-gradient-to-br from-neutral-800 to-neutral-950 shadow-yellow-500/10"
             initial={{ scale: 0.8, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0.8, opacity: 0 }}
@@ -42,7 +42,7 @@ const OnboardingModal: React.FC<OnboardingModalProps> = ({ user, onComplete, onS
             onClick={(e) => e.stopPropagation()}
           >
             <h2 className="text-2xl font-bold mb-4 text-yellow-500">Completa tu perfil</h2>
-            <p className="mb-4 text-sm">Realiza el test psicologico y elige tu núcleo para obtener una experiencia personalizada.</p>
+            <p className="mb-4 text-sm">Realiza el test psicologico y elige tu núcleo para obtener una experiencia personalizada</p>
             <div className="flex justify-end space-x-3">
               <div className="relative">
                 <button

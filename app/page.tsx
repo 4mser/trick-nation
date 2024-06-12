@@ -9,7 +9,7 @@ import ProtectedRoute from '@/components/ProtectedRoute';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import 'swiper/css/pagination';
-import { Pagination } from 'swiper/modules';
+import { Pagination, Mousewheel } from 'swiper/modules';
 import Link from 'next/link';
 
 const categorias = [
@@ -169,11 +169,12 @@ const Home: React.FC = () => {
             <h2 className="text-2xl font-bold mb-6">Categorías Principales</h2>
             <Swiper
               pagination={{ clickable: true }}
-              modules={[Pagination]}
+              modules={[Pagination, Mousewheel]}
               className="w-full mySwiper"
               slidesPerView={1.5}
               spaceBetween={10}
               centeredSlides={true}
+              mousewheel={true}
             >
               {categorias.map(categoria => (
                 <SwiperSlide key={categoria.id} className="flex flex-col items-center pb-12 pt-8">

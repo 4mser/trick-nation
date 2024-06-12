@@ -11,6 +11,8 @@
   "dependencies": {
     "@iconify-icons/mdi": "^1.2.48",
     "@iconify/react": "^5.0.1",
+    "@react-three/drei": "^9.106.0",
+    "@react-three/fiber": "^8.16.8",
     "@reduxjs/toolkit": "^2.2.5",
     "@types/mongoose": "^5.11.97",
     "axios": "^1.7.2",
@@ -25,7 +27,10 @@
     "react-redux": "^9.1.2",
     "react-select": "^5.8.0",
     "slick-carousel": "^1.8.1",
-    "swiper": "^11.1.4"
+    "swiper": "^11.1.4",
+    "three": "^0.165.0",
+    "three-stdlib": "^2.30.3",
+    "threebox-plugin": "^2.2.7"
   },
   "devDependencies": {
     "@types/node": "^20",

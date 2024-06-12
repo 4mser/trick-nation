@@ -18,17 +18,19 @@ export const questions: Question[] = [
             { text: "Manipular la materia", points: { "Creador": 4, "Visionario": 2 } },
             { text: "Curación instantánea", points: { "Guardián": 4 } },
             { text: "Controlar el clima", points: { "Visionario": 3, "Guardián": 1 } },
+            { text: "Fuerza sobrehumana", points: { "Guerrero": 4 } },
         ],
     },
     {
         questionText: "Cuando te encuentras en una situación difícil, ¿cuál es tu primer instinto?",
         options: [
             { text: "Buscar consejo de amigos o familiares", points: { "Conector": 4 } },
-            { text: "Enfrentar el problema de inmediato", points: { "Aventurero": 4 } },
+            { text: "Emprender la aventura que te hará solucionarlo", points: { "Aventurero": 4, "Guerrero": 2 } },
             { text: "Analizar antes de actuar", points: { "Sabio": 4 } },
             { text: "Imaginar soluciones creativas", points: { "Creador": 4 } },
             { text: "Verlo como una oportunidad de aprendizaje", points: { "Visionario": 3, "Sabio": 1 } },
             { text: "Considerar el impacto en los demás", points: { "Guardián": 4 } },
+            { text: "Enfrentar el desafío con determinación", points: { "Guerrero": 4 } },
         ],
     },
     {
@@ -38,8 +40,9 @@ export const questions: Question[] = [
             { text: "Una oportunidad para colaborar", points: { "Conector": 4 } },
             { text: "Un lienzo en blanco para crear", points: { "Creador": 4 } },
             { text: "Una aventura llena de posibilidades", points: { "Aventurero": 4 } },
-            { text: "Un problema para solucionar de forma sostenible", points: { "Guardián": 4 } },
+            { text: "Un problema para solucionar y ayudar al resto", points: { "Guardián": 4 } },
             { text: "Una chance para innovar", points: { "Visionario": 4 } },
+            { text: "Una batalla que ganar", points: { "Guerrero": 4 } },
         ],
     },
     {
@@ -51,6 +54,7 @@ export const questions: Question[] = [
             { text: "Taller creativo", points: { "Creador": 4 } },
             { text: "Habilidades sociales", points: { "Conector": 4 } },
             { text: "Tecnología futura", points: { "Visionario": 4 } },
+            { text: "Artes marciales o defensa personal", points: { "Guerrero": 4 } },
         ],
     },
     {
@@ -62,6 +66,7 @@ export const questions: Question[] = [
             { text: "Futuro utópico", points: { "Visionario": 3, "Guardián": 1 } },
             { text: "Época de comunidades sostenibles", points: { "Guardián": 4 } },
             { text: "Antigüedad", points: { "Sabio": 4 } },
+            { text: "Edad de los guerreros", points: { "Guerrero": 4 } },
         ],
     },
     {
@@ -73,10 +78,11 @@ export const questions: Question[] = [
             { text: "Guía sobre sostenibilidad", points: { "Guardián": 4 } },
             { text: "Poesía o novela gráfica", points: { "Creador": 4 } },
             { text: "Manual de habilidades sociales", points: { "Conector": 4 } },
+            { text: "Relato de una batalla épica", points: { "Guerrero": 4 } },
         ],
     },
     {
-        questionText: "Si pudieras dedicar un año a cualquier proyecto, ¿en qué te enfocarías?",
+        questionText: "Tienes un año libre, ¿en qué te enfocarías?",
         options: [
             { text: "Desarrollar una nueva tecnología", points: { "Visionario": 4 } },
             { text: "Viajar y documentar culturas", points: { "Aventurero": 4 } },
@@ -84,6 +90,7 @@ export const questions: Question[] = [
             { text: "Iniciar una ONG", points: { "Guardián": 4 } },
             { text: "Investigar y escribir un libro", points: { "Sabio": 4 } },
             { text: "Organizar eventos comunitarios", points: { "Conector": 4 } },
+            { text: "Entrenar y ponerte muy fuerte", points: { "Guerrero": 4 } },
         ],
     },
     {
@@ -95,6 +102,31 @@ export const questions: Question[] = [
             { text: "La creatividad es inteligencia divirtiéndose", points: { "Creador": 4 } },
             { text: "Solo juntos podemos hacer el mañana mejor", points: { "Conector": 4 } },
             { text: "El futuro pertenece a quienes creen en la belleza de sus sueños", points: { "Visionario": 4 } },
+            { text: "Donde hay voluntad, hay un camino", points: { "Guerrero": 4 } },
+        ],
+    },
+    {
+        questionText: "¿Qué actividad te resulta más gratificante?",
+        options: [
+            { text: "Explorar nuevos lugares", points: { "Aventurero": 4 } },
+            { text: "Ayudar a los demás", points: { "Guardián": 4 } },
+            { text: "Aprender cosas nuevas", points: { "Sabio": 4 } },
+            { text: "Crear algo único", points: { "Creador": 4 } },
+            { text: "Conectar con personas", points: { "Conector": 4 } },
+            { text: "Innovar y pensar en el futuro", points: { "Visionario": 4 } },
+            { text: "Participar en deportes extremos", points: { "Guerrero": 4 } },
+        ],
+    },
+    {
+        questionText: "¿Qué te motiva más en la vida?",
+        options: [
+            { text: "Descubrir y experimentar", points: { "Aventurero": 4 } },
+            { text: "Proteger y conservar", points: { "Guardián": 4 } },
+            { text: "Aprender y comprender", points: { "Sabio": 4 } },
+            { text: "Crear e innovar", points: { "Creador": 4 } },
+            { text: "Conectar y colaborar", points: { "Conector": 4 } },
+            { text: "Soñar y planificar", points: { "Visionario": 4 } },
+            { text: "Superar y conquistar", points: { "Guerrero": 4 } },
         ],
     },
 ];

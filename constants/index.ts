@@ -17,7 +17,7 @@ export const bottombarLinks = [
     {
       imgURL: "/assets/navbar/misiones.svg",
       route: "/missions",
-      label: "Desafíos",
+      label: "Misiones",
     },
     // {
     //   imgURL: "/assets/navbar/community.svg",
@@ -26,7 +26,7 @@ export const bottombarLinks = [
     // },
     {
       imgURL: "/assets/navbar/tienda.svg",
-      route: "/market",
+      route: "/store",
       label: "Tienda",
     },
   ];
