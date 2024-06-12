@@ -3,6 +3,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import 'swiper/css/pagination';
 import { Pagination } from 'swiper/modules';
+import { motion } from 'framer-motion';
 
 type NucleusSelectionProps = {
   onComplete: (nucleus: string) => void;
@@ -15,7 +16,7 @@ const nuclei = [
     description: 'Rodeado de misterios y conocimientos ocultos, el Núcleo Enigma es un refugio para los curiosos del mundo esotérico y paranormal. Es ideal para aquellos que buscan descubrir los secretos más profundos de la existencia, explorando enigmas que desafían la lógica.',
     bgColor: 'bg-gradient-to-br from-indigo-600/20 to-transparent border border-indigo-400/40',
     image: '/images/enigma.jpeg',
-    profiles: 'Sabio, Visionario, Aventurero'
+    profiles: 'Sabio, Visionario, Aventurero, Guerrero'
   },
   {
     name: 'Quantum',
@@ -36,10 +37,10 @@ const nuclei = [
   {
     name: 'Áureo',
     backendName:'Aureo',
-    description: 'Un santuario de la creatividad y la expresión, el Núcleo Áureo celebra las artes en todas sus manifestaciones. Desde la pintura hasta la música y el diseño, es un lugar para aquellos que sueñan con inspirar al mundo a través de su arte y creatividad única.',
+    description: 'Un santuario de la creatividad y la expresión, el Núcleo Áureo celebra las artes en todas sus manifestaciones. Desde la pintura hasta la música y el deporte, es un lugar para aquellos que sueñan con inspirar al mundo a través de su arte y creatividad única.',
     bgColor: 'bg-gradient-to-br from-yellow-600/20 to-transparent border border-yellow-700',
     image: '/images/aureo.jpeg',
-    profiles: 'Creador, Conector, Visionario'
+    profiles: 'Creador, Guerrero, Conector, Visionario'
   },
 ];
 
@@ -52,7 +53,12 @@ const NucleusSelection: React.FC<NucleusSelectionProps> = ({ onComplete }) => {
 
   return (
     <div className="fixed w-full h-full z-20 top-0 left-0 bg-neutral-950 overflow-y-auto pb-10">
-      <div className="fixed  w-full z-10 px-6 py-3 top-0 left-0 text-md text-white bg-neutral-950 text-center flex justify-between items-center">
+      <motion.div
+        initial={{ y: -50, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.5, ease: 'easeInOut' }}
+        className="fixed w-full z-10 px-6 py-3 top-0 left-0 text-md text-white bg-neutral-950 text-center flex justify-between items-center"
+      >
         <span>Selecciona tu núcleo</span>
         <button
           onClick={() => onComplete(selectedNucleus!)}
@@ -63,7 +69,7 @@ const NucleusSelection: React.FC<NucleusSelectionProps> = ({ onComplete }) => {
         >
           Continuar
         </button>
-      </div>
+      </motion.div>
       <div className="pt-20">
         <Swiper
           pagination={{ clickable: true }}
@@ -73,10 +79,13 @@ const NucleusSelection: React.FC<NucleusSelectionProps> = ({ onComplete }) => {
           spaceBetween={20}
           centeredSlides={true}
         >
-          {nuclei.map((nucleus) => (
+          {nuclei.map((nucleus, index) => (
             <SwiperSlide key={nucleus.name} className="pb-12">
-              <div
-                className={`relative ${nucleus.bgColor} text-white shadow-lg h-full cursor-pointer  p-6 rounded-lg`}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: index * 0.1, duration: 0.5, ease: 'easeInOut' }}
+                className={`relative ${nucleus.bgColor} text-white shadow-lg h-full cursor-pointer p-6 rounded-lg`}
                 onClick={() => handleNucleusSelect(nucleus.backendName)}
               >
                 <div className="absolute top-4 left-4">
@@ -92,7 +101,7 @@ const NucleusSelection: React.FC<NucleusSelectionProps> = ({ onComplete }) => {
                   <p className="text-sm font-light opacity-90">{nucleus.description}</p>
                   <p className="text-xs italic opacity-70">Roles Recomendados: {nucleus.profiles}</p>
                 </div>
-              </div>
+              </motion.div>
             </SwiperSlide>
           ))}
         </Swiper>
