@@ -17,7 +17,7 @@ const LoginPage: React.FC = () => {
           <Link href='/Auth/login' className='block text-center border border-white/70  text-white w-64 py-2 rounded-md transition duration-300 ease-in-out transform  hover:scale-95'>
               Iniciar Sesión
           </Link>
-          <Link href='/Auth/register' className='block text-center bg-yellow-500 text-white w-64 py-2 rounded-md transition duration-300 ease-in-out transform  hover:scale-95'>
+          <Link href='/Auth/register' className='block text-center border border-yellow-600 bg-gradient-to-br from-yellow-600/20 to-transparent text-white w-64 py-2 rounded-md transition duration-300 ease-in-out transform  hover:scale-95'>
               Regístrate
           </Link>
         </div>

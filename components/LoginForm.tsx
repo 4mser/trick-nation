@@ -90,13 +90,13 @@ const LoginForm: React.FC = () => {
         </div>
         <button
           type="submit"
-          className="w-full bg-yellow-600 hover:scale-95 transition text-white py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+          className="w-full border border-yellow-600 bg-gradient-to-br from-yellow-600/20 to-transparent hover:scale-95 transition text-white py-2 px-4 rounded focus:outline-none focus:shadow-outline"
         >
           Iniciar Sesión
         </button>
         <div className="text-center text-white mt-4">
           ¿No tienes una cuenta?{' '}
-          <Link href="/Auth/register" className='text-yellow-500 hover:underline'>
+          <Link href="/Auth/register" className='text-yellow-600 hover:underline'>
             Regístrate
           </Link>
         </div>
