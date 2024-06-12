@@ -83,32 +83,61 @@ const Test: FC<TestProps> = ({ onComplete }) => {
   if (resultMessage && dominantProfile) {
     return (
       <motion.div
-        initial={{ scale: 0.5, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
-        className="flex flex-col justify-center items-center p-4 bg-neutral-950 text-white"
-      >
-        <p className="text-lg mb-4">{resultMessage}</p>
-        <div className="flex gap-4">
-          <button
-            onClick={handleRetakeTest}
-            className="bg-gradient-to-br from-red-500/10 to-transparent border border-red-500/60 text-white font-normal py-2 px-4 rounded focus:outline-none focus:shadow-outline transition duration-300 ease-in-out"
-          >
-            Repetir Test
-          </button>
-          <button
-            onClick={() => onComplete(dominantProfile)}
-            className="bg-gradient-to-br from-yellow-500/10 to-transparent border border-yellow-500/60 text-white font-normal py-2 px-4 rounded focus:outline-none focus:shadow-outline transition duration-300 ease-in-out"
-          >
-            Continuar
-          </button>
-        </div>
-      </motion.div>
+  initial={{ scale: 0.5, opacity: 0 }}
+  animate={{ scale: 1, opacity: 1 }}
+  className="flex flex-col justify-center items-center p-6 bg-neutral-950 text-white"
+>
+  <motion.p
+    initial={{ y: -20, opacity: 0 }}
+    animate={{ y: 0, opacity: 1 }}
+    transition={{ delay: 0.4, duration: 0.5 }}
+    className="text-xl mb-4"
+  >
+    Tu rol asignado es:
+  </motion.p>
+  <motion.h3
+    initial={{ scale: 0.8, opacity: 0 }}
+    animate={{ scale: 1, opacity: 1 }}
+    transition={{ delay: 0.6, duration: 0.5 }}
+    className="text-2xl font-semibold text-yellow-400 mb-6"
+  >
+    {dominantProfile}
+  </motion.h3>
+  <motion.p
+    initial={{ y: 20, opacity: 0 }}
+    animate={{ y: 0, opacity: 1 }}
+    transition={{ delay: 0.8, duration: 0.5 }}
+    className="text-base mb-8 text-center"
+  >
+    {resultMessage}
+  </motion.p>
+  <motion.div
+    initial={{ opacity: 0 }}
+    animate={{ opacity: 1 }}
+    transition={{ delay: 1, duration: 0.5 }}
+    className="flex gap-4 flex-col"
+  >
+    <button
+      onClick={() => onComplete(dominantProfile)}
+      className="bg-gradient-to-br from-yellow-500/10 to-transparent border border-yellow-500/60 text-white font-normal py-2 px-4 rounded focus:outline-none focus:shadow-outline transition duration-300 ease-in-out hover:bg-yellow-400 hover:shadow-2xl hover:shadow-yellow-400/50"
+    >
+      Continuar
+    </button>
+    <button
+      onClick={handleRetakeTest}
+      className="hover:scale-95 transition-transform"
+    >
+      Repetir Test
+    </button>
+  </motion.div>
+</motion.div>
+
     );
   }
 
   return (
-    <div className="flex flex-col items-center justify-center overflow-y-auto bg-neutral-950 text-white">
-      <div className="w-full p-5">
+    <div className="flex flex-col items-center  overflow-y-auto bg-neutral-950 text-white h-[100dvh]">
+      <div className="w-full p-5 absolute top-0 left-0 bg-neutral-950 z-10">
         <motion.div
           className="h-2 bg-yellow-500 rounded-full"
           initial={{ width: 0 }}
@@ -116,7 +145,7 @@ const Test: FC<TestProps> = ({ onComplete }) => {
           transition={{ duration: 0.5, ease: 'easeInOut' }}
         />
       </div>
-      <div className="w-full">
+      <div className="w-full pt-14 pb-44">
         <AnimatePresence custom={direction} mode="wait">
           <motion.div
             key={currentQuestionIndex}

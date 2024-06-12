@@ -40,7 +40,7 @@ export const questions: Question[] = [
             { text: "Una oportunidad para colaborar", points: { "Conector": 4 } },
             { text: "Un lienzo en blanco para crear", points: { "Creador": 4 } },
             { text: "Una aventura llena de posibilidades", points: { "Aventurero": 4 } },
-            { text: "Un problema para solucionar y ayudar al resto", points: { "Guardián": 4 } },
+            { text: "Una oportunidad para ayudar", points: { "Guardián": 4 } },
             { text: "Una chance para innovar", points: { "Visionario": 4 } },
             { text: "Una batalla que ganar", points: { "Guerrero": 4 } },
         ],
@@ -49,9 +49,9 @@ export const questions: Question[] = [
         questionText: "¿Qué te gustaría aprender?",
         options: [
             { text: "Supervivencia al aire libre", points: { "Aventurero": 4 } },
-            { text: "Ser Autosustentable", points: { "Guardián": 4 } },
-            { text: "Conocimientos Ancestrales", points: { "Sabio": 4 } },
-            { text: "Artes Plásticas", points: { "Creador": 4 } },
+            { text: "Ser autosustentable", points: { "Guardián": 4 } },
+            { text: "Conocimientos ancestrales", points: { "Sabio": 4 } },
+            { text: "Artes plásticas", points: { "Creador": 4 } },
             { text: "Habilidades sociales", points: { "Conector": 4 } },
             { text: "Tecnología futura", points: { "Visionario": 4 } },
             { text: "Artes marciales o defensa personal", points: { "Guerrero": 4 } },
@@ -65,7 +65,7 @@ export const questions: Question[] = [
             { text: "Revolución industrial", points: { "Visionario": 4 } },
             { text: "Futuro utópico", points: { "Visionario": 3, "Guardián": 1 } },
             { text: "Época de comunidades sostenibles", points: { "Guardián": 4 } },
-            { text: "Antigüedad", points: { "Sabio": 4 } },
+            { text: "Antigua Grecia", points: { "Sabio": 4 } },
             { text: "Edad de los guerreros", points: { "Guerrero": 4 } },
         ],
     },
@@ -82,7 +82,7 @@ export const questions: Question[] = [
         ],
     },
     {
-        questionText: "Tienes un año libre, ¿en qué te enfocarías?",
+        questionText: "Tienes un año libre, ¿En qué te enfocarías?",
         options: [
             { text: "Desarrollar una nueva tecnología", points: { "Visionario": 4 } },
             { text: "Viajar y documentar culturas", points: { "Aventurero": 4 } },
@@ -130,3 +130,4 @@ export const questions: Question[] = [
         ],
     },
 ];
+
