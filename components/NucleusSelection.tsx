@@ -84,12 +84,12 @@ const NucleusSelection: React.FC<NucleusSelectionProps> = ({ onComplete }) => {
           centeredSlides={true}
         >
           {nuclei.map((nucleus, index) => (
-            <SwiperSlide key={nucleus.name} className="pb-12">
+            <SwiperSlide key={nucleus.name} className="pb-12 pt-2">
               <motion.div
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.1, duration: 0.5, ease: 'easeInOut' }}
-                className={`relative ${nucleus.bgColor} text-white shadow-lg h-full cursor-pointer p-6 rounded-lg transition-all duration-500 ${
+                transition={{ duration: 0.004, ease: 'easeInOut' }}
+                className={`relative ${nucleus.bgColor} text-white  shadow-lg h-full cursor-pointer p-6 rounded-lg transition-all duration-500 ${
                   selectedNucleus === nucleus.backendName ? `${nucleus.shadowColor} shadow-xl` : 'shadow'
                 }`}
                 onClick={() => handleNucleusSelect(nucleus.backendName)}

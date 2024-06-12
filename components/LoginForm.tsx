@@ -23,7 +23,7 @@ const LoginForm: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError(null); // Clear previous error message
+    setError(null);
     try {
       const response = await api.post('/auth/login', { identifier, password });
       login(response.data.access_token);
@@ -43,11 +43,11 @@ const LoginForm: React.FC = () => {
   };
 
   if (user) {
-    return null; // No renderizar el formulario si el usuario ya está autenticado
+    return null;
   }
 
   return (
-    <div className="flex items-center justify-center flex-col h-[100dvh]  bg-neutral-950">
+    <div className="flex items-center justify-center flex-col h-[100dvh] bg-neutral-950">
       <Image 
         src="/images/isotipoXplorers.png"
         width={130}
