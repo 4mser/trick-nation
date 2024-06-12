@@ -121,9 +121,10 @@ const Test: FC<TestProps> = ({ onComplete }) => {
           <motion.div
             key={currentQuestionIndex}
             custom={direction}
-            initial="hidden"
-            animate="visible"
-            exit="exit"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.5 }}
             className="w-full"
           >
             <h2 className="text-xl font-semibold px-5 pb-6">{questions[currentQuestionIndex].questionText}</h2>
@@ -132,9 +133,6 @@ const Test: FC<TestProps> = ({ onComplete }) => {
                 <motion.div
                   key={index}
                   onClick={() => setSelectedOption(index)}
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ delay: index * 0.1, duration: 0.3 }}
                   className={`relative text-white border ${
                     selectedOption === index ? 'bg-gradient-to-br from-yellow-500/20 to-transparent border-yellow-500' : 'border-white/10'
                   } focus:outline-none font-light rounded-2xl text-sm px-5 py-5 text-center transition flex justify-center items-center duration-300 ease-in-out cursor-pointer`}

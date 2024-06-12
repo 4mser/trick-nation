@@ -161,33 +161,6 @@ const Home: React.FC = () => {
             </nav>
           </div>
         </header>
-        <main className="max-w-screen-xl mx-auto  px-5 mt-24">
-            <p className="text-lg">
-              Cada paso abre la puerta a un tesoro oculto. Explora tu ciudad, descubre historias y gana recompensas por cada actividad cotidiana.
-            </p>
-          <section className="mt-10">
-            <h2 className="text-2xl font-bold mb-6">Categorías Principales</h2>
-            <Swiper
-              pagination={{ clickable: true }}
-              modules={[Pagination, Mousewheel]}
-              className="w-full mySwiper"
-              slidesPerView={1.5}
-              spaceBetween={10}
-              centeredSlides={true}
-              mousewheel={true}
-            >
-              {categorias.map(categoria => (
-                <SwiperSlide key={categoria.id} className="flex flex-col items-center pb-12 pt-8">
-                  <div className="bg-neutral-900 p-5 rounded-lg shadow-lg text-center w-full">
-                    <img src={categoria.icon} alt={categoria.name} className="w-16 h-16 mx-auto mb-4" />
-                    <h4 className="text-2xl font-bold mb-2">{categoria.name}</h4>
-                    <p>{categoria.description}</p>
-                  </div>
-                </SwiperSlide>
-              ))}
-            </Swiper>
-          </section>
-        </main>
         {showOnboardingModal && user && (
           <OnboardingModal
             user={user}

@@ -42,7 +42,7 @@ const OnboardingModal: React.FC<OnboardingModalProps> = ({ user, onComplete, onS
             onClick={(e) => e.stopPropagation()}
           >
             <h2 className="text-2xl font-bold mb-4 text-yellow-500">Completa tu perfil</h2>
-            <p className="mb-4 text-sm">Realiza el test psicologico y elige tu núcleo para obtener una experiencia personalizada</p>
+            <p className="mb-4 text-sm">Realiza el test psicológico y elige tu núcleo para obtener una experiencia personalizada</p>
             <div className="flex justify-end space-x-3">
               <div className="relative">
                 <button
