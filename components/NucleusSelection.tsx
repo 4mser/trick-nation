@@ -89,7 +89,7 @@ const NucleusSelection: React.FC<NucleusSelectionProps> = ({ onComplete }) => {
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.004, ease: 'easeInOut' }}
-                className={`relative ${nucleus.bgColor} text-white  shadow-lg h-full cursor-pointer p-6 rounded-lg transition-all duration-500 ${
+                className={`relative ${nucleus.bgColor} text-white  shadow-lg h-[33rem] cursor-pointer p-6 rounded-lg transition-all duration-500 ${
                   selectedNucleus === nucleus.backendName ? `${nucleus.shadowColor} shadow-xl` : 'shadow'
                 }`}
                 onClick={() => handleNucleusSelect(nucleus.backendName)}
