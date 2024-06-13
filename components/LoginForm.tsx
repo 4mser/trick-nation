@@ -29,11 +29,7 @@ const LoginForm: React.FC = () => {
       const response = await api.post('/auth/login', { identifier, password });
       login(response.data.access_token);
       const { user } = response.data;
-      if (!user.onboardingCompleted) {
-        router.push(`/onboarding?userId=${user._id}`);
-      } else {
-        router.push('/');
-      }
+      router.push('/')
     } catch (error: any) {
       if (error.response && error.response.data) {
         setError(error.response.data.message);
