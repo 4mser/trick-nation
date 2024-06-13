@@ -1,10 +1,11 @@
-'use client'
+'use client';
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import api from '@/services/api';
 import { useAuth } from '@/context/auth-context';
 import RolesExplanation from './RolesExplanation';
 import TestPsicologico from './TestPsicologico';
+import NucleusExplanation from './NucleusExplanation'; // Import the new component
 import NucleusSelection from './NucleusSelection';
 import OnboardingProfileForm from './OnboardingProfileForm';
 import Loader from './Loader';
@@ -37,11 +38,15 @@ const Onboarding: React.FC = () => {
     }
   };
 
+  const handleNucleusExplanationComplete = () => {
+    setStep(3);
+  };
+
   const handleNucleusComplete = async (nucleus: string) => {
     try {
       if (user) {
         await api.put(`/users/${user._id}/nucleus`, { nucleus });
-        setStep(3);
+        setStep(4);
       }
     } catch (error) {
       console.error('Error updating user nucleus:', error);
@@ -81,14 +86,20 @@ const Onboarding: React.FC = () => {
   } else if (step === 2) {
     return (
       <main className='w-full h-[100dvh] z-20 fixed top-0 left-0 bg-neutral-950'>
-          <NucleusSelection onComplete={handleNucleusComplete} />
+        <NucleusExplanation onComplete={handleNucleusExplanationComplete} />
+      </main>
+    );
+  } else if (step === 3) {
+    return (
+      <main className='w-full h-[100dvh] z-20 fixed top-0 left-0 bg-neutral-950'>
+        <NucleusSelection onComplete={handleNucleusComplete} />
       </main>
     );
   }
 
   return (
     <main className='w-full h-[100dvh] z-20 fixed top-0 left-0 bg-neutral-950'>
-        <OnboardingProfileForm onComplete={handleProfileComplete} />
+      <OnboardingProfileForm onComplete={handleProfileComplete} />
     </main>
   );
 };
