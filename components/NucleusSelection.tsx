@@ -13,7 +13,7 @@ const nuclei = [
   {
     name: 'Enigma',
     backendName: 'Enigma',
-    description: 'Rodeado de misterios y conocimientos ocultos, el Núcleo Enigma es un refugio para los curiosos del mundo esotérico y paranormal. Es ideal para aquellos que buscan descubrir los secretos más profundos de la existencia, explorando enigmas que desafían la lógica.',
+    description: 'Rodeado de misterios y conocimientos ocultos, el Núcleo Enigma es un refugio para curiosos del mundo esotérico y paranormal. Es ideal para aquellos que buscan descubrir los secretos más profundos de la existencia, explorando enigmas que desafían la lógica.',
     bgColor: 'bg-gradient-to-br from-indigo-600/20 to-transparent border border-indigo-400/40',
     shadowColor: 'shadow-indigo-400/30',
     image: 'https://image.lexica.art/full_webp/eaa38ff4-ef57-470d-9070-18f6717cd2df',
@@ -31,7 +31,7 @@ const nuclei = [
   {
     name: 'Arbóreo',
     backendName: 'Arboreo',
-    description: 'Enraizada en el amor y el respeto por la naturaleza, el Núcleo Arbóreo valora la conservación del medio ambiente y la biodiversidad. Sus miembros se esfuerzan por vivir en armonía con el planeta, promoviendo un futuro sostenible para todas las formas de vida.',
+    description: 'Enraizado en el amor y el respeto por la naturaleza, el Núcleo Arbóreo valora la conservación del medio ambiente y la biodiversidad. Sus miembros se esfuerzan por vivir en armonía con el planeta, promoviendo un futuro sostenible para todas las formas de vida.',
     bgColor: 'bg-gradient-to-br from-lime-600/20 to-transparent border border-lime-700',
     shadowColor: 'shadow-lime-700/30',
     image: 'https://image.lexica.art/full_webp/15a3113e-bc6b-439c-8c2b-31fde388f29c',
@@ -40,7 +40,7 @@ const nuclei = [
   {
     name: 'Áureo',
     backendName: 'Aureo',
-    description: 'Un santuario de la creatividad y la expresión, el Núcleo Áureo celebra las artes en todas sus manifestaciones. Desde la pintura hasta la música y el deporte, es un lugar para aquellos que sueñan con inspirar al mundo a través de su arte y creatividad única.',
+    description: 'Un santuario de la creatividad, la expresión y la disciplina. El Núcleo Áureo celebra las artes en todas sus manifestaciones. Desde la pintura hasta la música y el deporte, es un lugar para aquellos que sueñan con superarse si mismos e inspirar a el mundo.',
     bgColor: 'bg-gradient-to-br from-yellow-600/20 to-transparent border border-yellow-700',
     shadowColor: 'shadow-yellow-700/30',
     image: 'https://image.lexica.art/full_webp/fe7c5a9a-7430-4420-a877-b8ff1147e20b',
