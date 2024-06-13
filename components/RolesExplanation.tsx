@@ -114,9 +114,9 @@ const RolesExplanation: React.FC<{ onComplete: () => void }> = ({ onComplete }) 
         {currentStep === 0 && (
           <motion.div
             className="text-center"
-            initial={{ opacity: 0, y: 50 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -50 }}
+            initial={{ opacity: 0}}
+            animate={{ opacity: 1}}
+            exit={{ opacity: 0}}
             transition={{ duration: 0.5, ease: 'easeInOut' }}
           >
             <motion.h1 className="text-3xl font-bold mb-4">¿Por qué usamos roles?</motion.h1>
@@ -135,7 +135,7 @@ const RolesExplanation: React.FC<{ onComplete: () => void }> = ({ onComplete }) 
         {currentStep === 1 && (
           <motion.div
             key="roles"
-            className="w-full text-center h-[100dvh] overflow-hidden"
+            className="w-full text-center"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -143,7 +143,7 @@ const RolesExplanation: React.FC<{ onComplete: () => void }> = ({ onComplete }) 
           >
             <motion.h1 className="text-2xl font-bold mb-4 absolute top-0 left-0 py-4 bg-neutral-950 text-center w-full z-10">Presentación de Roles</motion.h1>
             <motion.div
-              className="flex flex-col items-center h-[100dvh] overflow-hidden"
+              className="flex flex-col items-center"
               initial={{ y: '100%' }}
               animate={controls}
               transition={{ duration: roles.length * 2.5, ease: 'linear' }} // Duración más lenta
@@ -160,7 +160,7 @@ const RolesExplanation: React.FC<{ onComplete: () => void }> = ({ onComplete }) 
                 </div>
               ))}
             </motion.div>
-            <div className='w-full absolute py-3 bottom-0 left-0 bg-neutral-950 flex px-5 items-center'>
+            <div className='w-full absolute py-3 top-12 z-10 left-0 bg-neutral-950 flex px-5 items-center'>
               <motion.div
                 className="h-1 bg-yellow-500 rounded-full overflow-hidden"
                 initial={{ width: 0 }}
