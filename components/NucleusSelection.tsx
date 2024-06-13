@@ -22,10 +22,10 @@ const nuclei = [
   {
     name: 'Quantum',
     backendName: 'Quantum',
-    description: 'Inspirado en la frontera de la ciencia y la tecnología, el Núcleo Quantum se dedica a la innovación y al descubrimiento científico. Es el hogar de pioneros comprometidos con los misterios de la realidad y el avance de la humanidad mediante la tecnología moderna.',
+    description: 'En el Núcleo Quantum, la ciencia y la tecnología son la base de todo. Es el hogar de aquellos que se apasionan por la innovación y el descubrimiento, explorando los misterios del universo y desarrollando soluciones que impulsan el futuro.',
     bgColor: 'bg-gradient-to-br from-cyan-600/20 to-transparent border border-cyan-700',
     shadowColor: 'shadow-cyan-700/30',
-    image: '/images/quantum.jpeg',
+    image: 'https://image.lexica.art/full_webp/dd19b683-792e-4182-bf34-6ac9f688dbd5',
     profiles: 'Visionario, Creador, Guardián, Conector'
   },
   {
@@ -89,7 +89,7 @@ const NucleusSelection: React.FC<NucleusSelectionProps> = ({ onComplete }) => {
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.004, ease: 'easeInOut' }}
-                className={`relative ${nucleus.bgColor} text-white  shadow-lg h-[33rem] cursor-pointer p-6 rounded-lg transition-all duration-500 ${
+                className={`relative ${nucleus.bgColor} text-white  shadow-lg h-[32rem] cursor-pointer p-6 rounded-lg transition-all duration-500 ${
                   selectedNucleus === nucleus.backendName ? `${nucleus.shadowColor} shadow-xl` : 'shadow'
                 }`}
                 onClick={() => handleNucleusSelect(nucleus.backendName)}
@@ -105,7 +105,7 @@ const NucleusSelection: React.FC<NucleusSelectionProps> = ({ onComplete }) => {
                 <div className="flex flex-col space-y-2 flex-grow">
                   <h3 className="text-2xl">{nucleus.name}</h3>
                   <p className="text-sm font-light opacity-90">{nucleus.description}</p>
-                  <p className="text-xs italic opacity-70">Roles Recomendados: {nucleus.profiles}</p>
+                  <p className="text-xs italic opacity-70 absolute bottom-6">Roles Recomendados: {nucleus.profiles}</p>
                 </div>
               </motion.div>
             </SwiperSlide>
