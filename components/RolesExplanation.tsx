@@ -71,7 +71,7 @@ const RolesExplanation: React.FC<{ onComplete: () => void }> = ({ onComplete }) 
     } else if (currentStep === 1) {
       startTimer(remainingTime, onComplete);
       controls.start({
-        y: '-120%',
+        y: '-100%',
         transition: { duration: remainingTime / 1000, ease: 'linear' },
       });
       progressControls.start({
