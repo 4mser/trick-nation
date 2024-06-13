@@ -104,7 +104,7 @@ const RolesExplanation: React.FC<{ onComplete: () => void }> = ({ onComplete }) 
 
   return (
     <div
-      className="w-full bg-neutral-950 text-white p-8 h-[100dvh] overflow-hidden flex flex-col justify-center items-center"
+      className="w-full bg-neutral-950 text-white p-8 h-[100dvh] overflow-hidden flex flex-col justify-center items-center select-none"
       onMouseDown={handleMouseDown}
       onMouseUp={handleMouseUp}
       onTouchStart={handleMouseDown}
