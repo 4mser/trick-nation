@@ -161,6 +161,9 @@ const Home: React.FC = () => {
             </nav>
           </div>
         </header>
+        <section className='w-full h-[90dvh] flex justify-center items-center'>
+          Nada de momento, solo para test de roles y nucleos
+        </section>
         {showOnboardingModal && user && (
           <OnboardingModal
             user={user}
