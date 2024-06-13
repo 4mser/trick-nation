@@ -56,7 +56,7 @@ const customSelectStyles: StylesConfig<any, false> = {
     color: state.isFocused ? '#000' : '#fff',
     '&:hover': {
       backgroundColor: 'var(--primary_color)',
-      color: '#000',
+      color: '#ffffff',
     },
   }),
 };
