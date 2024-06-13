@@ -140,10 +140,10 @@ const RolesExplanation: React.FC<{ onComplete: () => void }> = ({ onComplete }) 
           <motion.div
             key="roles"
             className="w-full text-center"
-            initial={{ opacity: 0 }}
+            initial={{ opacity: 0, }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.5, ease: 'easeInOut' }}
+            transition={{ duration: 1, ease: 'easeInOut' }}
           >
             <motion.h1 className="text-2xl font-bold mb-4 absolute top-0 left-0 py-4 bg-neutral-950 text-center w-full z-10">Presentación de Roles</motion.h1>
             <motion.div
