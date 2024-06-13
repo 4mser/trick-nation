@@ -34,7 +34,7 @@ const nuclei = [
     description: 'Enraizada en el amor y el respeto por la naturaleza, el Núcleo Arbóreo valora la conservación del medio ambiente y la biodiversidad. Sus miembros se esfuerzan por vivir en armonía con el planeta, promoviendo un futuro sostenible para todas las formas de vida.',
     bgColor: 'bg-gradient-to-br from-lime-600/20 to-transparent border border-lime-700',
     shadowColor: 'shadow-lime-700/30',
-    image: '/images/arboreo.jpeg',
+    image: 'https://image.lexica.art/full_webp/15a3113e-bc6b-439c-8c2b-31fde388f29c',
     profiles: 'Guardián, Aventurero, Sabio'
   },
   {
@@ -89,7 +89,7 @@ const NucleusSelection: React.FC<NucleusSelectionProps> = ({ onComplete }) => {
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.004, ease: 'easeInOut' }}
-                className={`relative ${nucleus.bgColor} text-white  shadow-lg h-[32rem] cursor-pointer p-6 rounded-lg transition-all duration-500 ${
+                className={`relative ${nucleus.bgColor} text-white  shadow-lg h-[33rem] cursor-pointer p-6 rounded-lg transition-all duration-500 ${
                   selectedNucleus === nucleus.backendName ? `${nucleus.shadowColor} shadow-xl` : 'shadow'
                 }`}
                 onClick={() => handleNucleusSelect(nucleus.backendName)}
