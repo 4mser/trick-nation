@@ -215,8 +215,8 @@ const UserProfile: React.FC = () => {
             <Image
               src={user.profilePictureUrl || '/profile.jpeg'}
               alt="Profile Picture"
-              width={400}
-              height={400}
+              width={500}
+              height={500}
               className="object-cover rounded-lg w-full h-full"
             />
           </motion.div>

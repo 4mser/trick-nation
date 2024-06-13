@@ -7,9 +7,7 @@ import ProtectedRoute from '@/components/ProtectedRoute';
 const MapPage: React.FC = () => {
   return (
     <ProtectedRoute>
-      <main>
         <Map />
-      </main>
     </ProtectedRoute>
   );
 };

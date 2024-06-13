@@ -3,11 +3,15 @@
 import React, { useEffect, useRef, useState, useCallback } from "react";
 import mapboxgl, { LngLatLike, Marker } from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
+import * as THREE from 'three';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import api from '@/services/api';
 import { useAuth } from '@/context/auth-context';
 import SpotFormModal from './SpotFormModal';
 import SpotDetailModal from './SpotDetailModal';
 import { Spot } from '../types/spots';
+
+const MAPBOX_TOKEN = process.env.NEXT_PUBLIC_MAPBOX_TOKEN || '';
 
 const Map: React.FC = () => {
   const { user } = useAuth();
@@ -18,7 +22,7 @@ const Map: React.FC = () => {
   const [spots, setSpots] = useState<Spot[]>([]);
   const [showSpotForm, setShowSpotForm] = useState(false);
   const [isDebugMode, setIsDebugMode] = useState(false);
-  const [selectedSpot, setSelectedSpot] = useState<Spot | null>(null); // Estado para el spot seleccionado
+  const [selectedSpot, setSelectedSpot] = useState<Spot | null>(null);
 
   const createMarkerElement = useCallback(
     (isExplorationRadio = false) => {
@@ -36,7 +40,7 @@ const Map: React.FC = () => {
     []
   );
 
-  const createSpotMarkerElement = (spot: Spot) => {
+  const createSpotMarkerElement = useCallback((spot: Spot) => {
     const markerElement = document.createElement('div');
     markerElement.className = 'spot-marker';
     markerElement.style.width = '40px';
@@ -47,7 +51,7 @@ const Map: React.FC = () => {
     markerElement.style.boxShadow = '0 0 5px rgba(0,0,0,0.5)';
     
     const img = document.createElement('img');
-    img.src = `${spot.imageUrl || '/default-spot-image.jpg'}`; // Ajusta esta línea
+    img.src = `${spot.imageUrl || '/default-spot-image.jpg'}`;
     img.style.width = '100%';
     img.style.height = '100%';
     img.style.objectFit = 'cover';
@@ -55,31 +59,31 @@ const Map: React.FC = () => {
     markerElement.appendChild(img);
     
     markerElement.addEventListener('click', () => {
-      setSelectedSpot(spot); // Abrir modal con los detalles del spot
+      setSelectedSpot(spot);
     });
     
     return markerElement;
-  };
+  }, []);
 
-  const centerMapOnUserLocation = () => {
+  const centerMapOnUserLocation = useCallback(() => {
     if (map && userLocation) {
       map.flyTo({ center: userLocation, zoom: 17 });
     }
-  };
+  }, [map, userLocation]);
 
-  const handleMarkSpot = () => {
+  const handleMarkSpot = useCallback(() => {
     if (!userLocation || !user) return;
     setShowSpotForm(true);
-  };
+  }, [userLocation, user]);
 
-  const fetchSpots = async () => {
+  const fetchSpots = useCallback(async () => {
     try {
       const response = await api.get<Spot[]>('/spots');
       setSpots(response.data);
     } catch (error) {
       console.error('Failed to fetch spots:', error);
     }
-  };
+  }, []);
 
   useEffect(() => {
     const node = mapNode.current;
@@ -90,7 +94,7 @@ const Map: React.FC = () => {
         const { latitude, longitude } = position.coords;
         const mapboxMap = new mapboxgl.Map({
           container: node,
-          accessToken: process.env.NEXT_PUBLIC_MAPBOX_TOKEN || '',
+          accessToken: MAPBOX_TOKEN,
           style: 'mapbox://styles/mapbox/standard',
           center: [longitude, latitude],
           zoom: 17,
@@ -123,6 +127,94 @@ const Map: React.FC = () => {
               setUserLocation([e.lngLat.lng, e.lngLat.lat]);
             }
           });
+
+          // Añadir marcador 3D
+          const modelOrigin: [number, number] = [-73.397417, -39.869354];
+          const modelAltitude = 0;
+          const modelRotate = [Math.PI / 2, 0, 0];
+
+          const modelAsMercatorCoordinate = mapboxgl.MercatorCoordinate.fromLngLat(
+            modelOrigin,
+            modelAltitude
+          );
+
+          const modelTransform = {
+            translateX: modelAsMercatorCoordinate.x,
+            translateY: modelAsMercatorCoordinate.y,
+            translateZ: modelAsMercatorCoordinate.z || 0,
+            rotateX: modelRotate[0],
+            rotateY: modelRotate[1],
+            rotateZ: modelRotate[2],
+            scale: modelAsMercatorCoordinate.meterInMercatorCoordinateUnits() * 40  // Ajusta el valor de escala según sea necesario
+          };
+
+          const scene = new THREE.Scene();
+          const camera = new THREE.Camera();
+          const renderer = new THREE.WebGLRenderer({
+            canvas: mapboxMap.getCanvas(),
+            context: (mapboxMap as any).painter.context.gl,
+            antialias: true
+          });
+
+          renderer.autoClear = false;
+
+          const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
+          scene.add(ambientLight);
+
+          const directionalLight = new THREE.DirectionalLight(0xffffff, 0.6);
+          directionalLight.position.set(0, 70, 100).normalize();
+          scene.add(directionalLight);
+
+          const loader = new GLTFLoader();
+          loader.load('/models/owl/scene.gltf', (gltf: any) => {
+            const model = gltf.scene;
+            model.traverse((child: any) => {
+              if (child.isMesh) {
+                child.material.depthTest = true;
+                child.material.depthWrite = true;
+                child.renderOrder = 999; // Asegura que el modelo se renderice al final
+              }
+            });
+            scene.add(model);
+          });
+
+          mapboxMap.on('render', () => {
+            const rotationX = new THREE.Matrix4().makeRotationAxis(
+              new THREE.Vector3(1, 0, 0),
+              modelTransform.rotateX
+            );
+            const rotationY = new THREE.Matrix4().makeRotationAxis(
+              new THREE.Vector3(0, 1, 0),
+              modelTransform.rotateY
+            );
+            const rotationZ = new THREE.Matrix4().makeRotationAxis(
+              new THREE.Vector3(0, 0, 1),
+              modelTransform.rotateZ
+            );
+
+            const m = new THREE.Matrix4().fromArray((mapboxMap as any).transform.customLayerMatrix());
+            const l = new THREE.Matrix4()
+              .makeTranslation(
+                modelTransform.translateX,
+                modelTransform.translateY,
+                modelTransform.translateZ
+              )
+              .scale(
+                new THREE.Vector3(
+                  modelTransform.scale,
+                  -modelTransform.scale,
+                  modelTransform.scale
+                )
+              )
+              .multiply(rotationX)
+              .multiply(rotationY)
+              .multiply(rotationZ);
+
+            camera.projectionMatrix = m.multiply(l);
+            renderer.state.reset();
+            renderer.render(scene, camera);
+            mapboxMap.triggerRepaint();
+          });
         });
 
         return () => {
@@ -145,7 +237,7 @@ const Map: React.FC = () => {
         element: createMarkerElement(),
         draggable: isDebugMode,
       })
-        .setLngLat(userLocation)
+        .setLngLat(userLocation as [number, number])
         .addTo(map)
         .on('dragend', () => {
           const newLocation = userLocationMarker.getLngLat();
@@ -155,7 +247,7 @@ const Map: React.FC = () => {
       const explorationRadioMarker = new mapboxgl.Marker({
         element: createMarkerElement(true),
       })
-        .setLngLat(userLocation)
+        .setLngLat(userLocation as [number, number])
         .addTo(map);
 
       markerRef.current = explorationRadioMarker;
@@ -173,15 +265,15 @@ const Map: React.FC = () => {
           .addTo(map);
       });
     }
-  }, [map, spots]);
+  }, [map, spots, createSpotMarkerElement]);
 
   useEffect(() => {
     fetchSpots();
-  }, []);
+  }, [fetchSpots]);
 
-  const toggleDebugMode = () => {
-    setIsDebugMode(!isDebugMode);
-  };
+  const toggleDebugMode = useCallback(() => {
+    setIsDebugMode((prev) => !prev);
+  }, []);
 
   return (
     <section className="max-h-[100dvh] overflow-hidden">
