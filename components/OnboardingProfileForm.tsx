@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import { motion } from 'framer-motion';
 import useCurrentUser from '@/hooks/useCurrentUser';
 import api from '@/services/api';
 import Loader from './Loader';
@@ -8,26 +9,26 @@ import Select, { StylesConfig } from 'react-select';
 import { Icon } from '@iconify/react';
 
 const citiesInChile = [
-    { value: 'Santiago', label: 'Santiago' },
-    { value: 'Valparaíso', label: 'Valparaíso' },
-    { value: 'Concepción', label: 'Concepción' },
-    { value: 'La Serena', label: 'La Serena' },
-    { value: 'Antofagasta', label: 'Antofagasta' },
-    { value: 'Temuco', label: 'Temuco' },
-    { value: 'Rancagua', label: 'Rancagua' },
-    { value: 'Iquique', label: 'Iquique' },
-    { value: 'Puerto Montt', label: 'Puerto Montt' },
-    { value: 'Chillán', label: 'Chillán' },
-    { value: 'Arica', label: 'Arica' },
-    { value: 'Talca', label: 'Talca' },
-    { value: 'Coyhaique', label: 'Coyhaique' },
-    { value: 'Punta Arenas', label: 'Punta Arenas' },
-    { value: 'Valdivia', label: 'Valdivia' },
-    { value: 'Osorno', label: 'Osorno' },
-    { value: 'Calama', label: 'Calama' },
-    { value: 'Copiapó', label: 'Copiapó' },
-    { value: 'Curicó', label: 'Curicó' }
-  ];
+  { value: 'Santiago', label: 'Santiago' },
+  { value: 'Valparaíso', label: 'Valparaíso' },
+  { value: 'Concepción', label: 'Concepción' },
+  { value: 'La Serena', label: 'La Serena' },
+  { value: 'Antofagasta', label: 'Antofagasta' },
+  { value: 'Temuco', label: 'Temuco' },
+  { value: 'Rancagua', label: 'Rancagua' },
+  { value: 'Iquique', label: 'Iquique' },
+  { value: 'Puerto Montt', label: 'Puerto Montt' },
+  { value: 'Chillán', label: 'Chillán' },
+  { value: 'Arica', label: 'Arica' },
+  { value: 'Talca', label: 'Talca' },
+  { value: 'Coyhaique', label: 'Coyhaique' },
+  { value: 'Punta Arenas', label: 'Punta Arenas' },
+  { value: 'Valdivia', label: 'Valdivia' },
+  { value: 'Osorno', label: 'Osorno' },
+  { value: 'Calama', label: 'Calama' },
+  { value: 'Copiapó', label: 'Copiapó' },
+  { value: 'Curicó', label: 'Curicó' }
+];
 
 const customSelectStyles: StylesConfig<any, false> = {
   control: (base) => ({
@@ -130,42 +131,17 @@ const OnboardingProfileForm: React.FC<{ onComplete: () => void }> = ({ onComplet
   };
 
   return (
-    <form onSubmit={handleSubmit} className="bg-neutral-950 p-8 rounded-lg shadow-lg w-full max-w-md mx-auto h-[100dvh] overflow-y-auto">
-      <h2 className="text-2xl font-bold text-white mb-6 text-center">Completa tu perfil</h2>
+    <motion.form
+      onSubmit={handleSubmit}
+      className="bg-neutral-950 p-8 rounded-lg shadow-lg w-full max-w-md mx-auto h-[100dvh] overflow-y-auto"
+      initial={{ opacity: 0, y: 50 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -50 }}
+      transition={{ duration: 0.5, ease: 'easeInOut' }}
+    >
+      <h2 className="text-2xl font-bold text-white "><span className='text-yellow-500'>Por último:</span> Completa tu perfil</h2>
+      <p className='mt-2 mb-6 opacity-70'>Podrás editarlo luego.</p>
       {error && <p className="text-red-600 mb-4">{error}</p>}
-      <div className="mb-4">
-        <label className="block text-white mb-2">Nombre de Usuario:</label>
-        <input
-          type="text"
-          name="username"
-          value={formData.username}
-          onChange={handleChange}
-          required
-          className="w-full p-2 bg-neutral-800 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-400"
-        />
-      </div>
-      <div className="mb-4">
-        <label className="block text-white mb-2">Descripción:</label>
-        <input
-          type="text"
-          name="description"
-          value={formData.description}
-          onChange={handleChange}
-          required
-          className="w-full p-2 bg-neutral-800 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-400"
-        />
-      </div>
-      <div className="mb-4">
-        <label className="block text-white mb-2">Correo Electrónico:</label>
-        <input
-          type="email"
-          name="email"
-          value={formData.email}
-          onChange={handleChange}
-          required
-          className="w-full p-2 bg-neutral-800 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-400"
-        />
-      </div>
       <div className="mb-4">
         <label className="block text-white mb-2">Ciudad:</label>
         <Select
@@ -195,7 +171,7 @@ const OnboardingProfileForm: React.FC<{ onComplete: () => void }> = ({ onComplet
             onChange={handleFileChange}
             className="hidden"
           />
-          <label htmlFor="profilePicture" className="cursor-pointerw w-full flex items-center bg-neutral-800 p-2 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-yellow-400">
+          <label htmlFor="profilePicture" className="cursor-pointer w-full flex items-center bg-neutral-800 p-2 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-yellow-400">
             <Icon icon="mdi:camera" className="mr-2 text-2xl" />
             {formData.profilePicture ? formData.profilePicture.name : 'Subir Imagen'}
           </label>
@@ -206,10 +182,15 @@ const OnboardingProfileForm: React.FC<{ onComplete: () => void }> = ({ onComplet
           </div>
         )}
       </div>
-      <button type="submit" className="w-full rounded-md  bg-gradient-to-br from-yellow-500/20 to-transparent border border-yellow-500 hover:scale-95 transition-transform text-white font-bold py-2 px-4 focus:outline-none focus:shadow-outline">
-        Completar Perfil
-      </button>
-    </form>
+      <motion.button
+        type="submit"
+        className="w-full rounded-md  bg-gradient-to-br from-yellow-500/20 to-transparent border border-yellow-500 hover:scale-95 transition-transform text-white font-bold py-2 px-4 focus:outline-none focus:shadow-outline"
+        whileHover={{ scale: 1.05 }}
+        whileTap={{ scale: 0.95 }}
+      >
+        Completar
+      </motion.button>
+    </motion.form>
   );
 };
 
