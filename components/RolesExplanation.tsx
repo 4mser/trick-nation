@@ -71,7 +71,7 @@ const RolesExplanation: React.FC<{ onComplete: () => void }> = ({ onComplete }) 
     } else if (currentStep === 1) {
       startTimer(remainingTime, onComplete);
       controls.start({
-        y: '-100%',
+        y: '-90%',
         transition: { duration: remainingTime / 1000, ease: 'linear' },
       });
       progressControls.start({
@@ -89,7 +89,7 @@ const RolesExplanation: React.FC<{ onComplete: () => void }> = ({ onComplete }) 
     } else if (currentStep === 1) {
       totalDurationRef.current = roles.length * 2500;
       startTimer(roles.length * 2500, onComplete);
-      controls.start({ y: '-100%', transition: { duration: roles.length * 2.5, ease: 'linear' } });
+      controls.start({ y: '-90%', transition: { duration: roles.length * 2.5, ease: 'linear' } });
       progressControls.start({ width: '100%', transition: { duration: roles.length * 2.5, ease: 'linear' } });
     }
     return () => {
