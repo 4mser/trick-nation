@@ -3,15 +3,16 @@ import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import api from '@/services/api';
 import { useAuth } from '@/context/auth-context';
+import RolesExplanation from './RolesExplanation';
 import TestPsicologico from './TestPsicologico';
 import NucleusSelection from './NucleusSelection';
-import Loader from './Loader';
 import OnboardingProfileForm from './OnboardingProfileForm';
+import Loader from './Loader';
 
 const Onboarding: React.FC = () => {
   const { user, refetch } = useAuth();
   const router = useRouter();
-  const [step, setStep] = useState(1);
+  const [step, setStep] = useState(0);
 
   useEffect(() => {
     if (user && user.onboardingCompleted) {
@@ -20,6 +21,10 @@ const Onboarding: React.FC = () => {
       setStep(2);
     }
   }, [user, router]);
+
+  const handleRoleExplanationComplete = () => {
+    setStep(1);
+  };
 
   const handleRoleComplete = async (role: string) => {
     try {
@@ -61,11 +66,17 @@ const Onboarding: React.FC = () => {
     </div>;
   }
 
-  if (step === 1) {
+  if (step === 0) {
     return (
-        <main className='w-full h-[100dvh] overflow-y-auto z-20 fixed top-0 left-0 bg-neutral-950'>
-            <TestPsicologico onComplete={handleRoleComplete} />
-        </main>
+      <main className='w-full h-[100dvh] overflow-y-auto z-20 fixed top-0 left-0 bg-neutral-950'>
+        <RolesExplanation onComplete={handleRoleExplanationComplete} />
+      </main>
+    );
+  } else if (step === 1) {
+    return (
+      <main className='w-full h-[100dvh] overflow-y-auto z-20 fixed top-0 left-0 bg-neutral-950'>
+        <TestPsicologico onComplete={handleRoleComplete} />
+      </main>
     ); 
   } else if (step === 2) {
     return (
