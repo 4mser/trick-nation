@@ -146,7 +146,7 @@ const RolesExplanation: React.FC<{ onComplete: () => void }> = ({ onComplete }) 
               className="flex flex-col items-center"
               initial={{ y: '100%' }}
               animate={controls}
-              transition={{ duration: roles.length * 2.5, ease: 'linear' }} // Duración más lenta
+              transition={{ duration: roles.length * 2, ease: 'linear' }} // Duración más lenta
               style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}
             >
               {roles.map((role) => (
@@ -160,12 +160,12 @@ const RolesExplanation: React.FC<{ onComplete: () => void }> = ({ onComplete }) 
                 </div>
               ))}
             </motion.div>
-            <div className='w-full absolute py-3 top-12 z-10 left-0 bg-neutral-950 flex px-5 items-center'>
+            <div className='w-full absolute py-3 top-12 z-10 left-0 bg-neutral-950 flex px-5 items-center shadow-lg'>
               <motion.div
                 className="h-1 bg-yellow-500 rounded-full overflow-hidden"
                 initial={{ width: 0 }}
                 animate={progressControls}
-                transition={{ duration: roles.length * 2.5, ease: 'linear' }} // Duración de la barra de progreso ajustada
+                transition={{ duration: roles.length * 2, ease: 'linear' }} // Duración de la barra de progreso ajustada
               />
             </div>
           </motion.div>
