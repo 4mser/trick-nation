@@ -42,15 +42,13 @@ const RolesExplanation: React.FC<{ onComplete: () => void }> = ({ onComplete }) 
   const timerRef = useRef<NodeJS.Timeout | null>(null);
   const startTimeRef = useRef<number>(0);
   const elapsedTimeRef = useRef<number>(0);
-  const totalDuration = useRef<number>(7000);
-  const remainingTimeRef = useRef<number>(7000);
+  const totalDurationRef = useRef<number>(7000);
 
   const startTimer = (duration: number, callback: () => void) => {
     if (timerRef.current) {
       clearTimeout(timerRef.current);
     }
     startTimeRef.current = Date.now();
-    remainingTimeRef.current = duration;
     timerRef.current = setTimeout(callback, duration);
   };
 
@@ -62,19 +60,18 @@ const RolesExplanation: React.FC<{ onComplete: () => void }> = ({ onComplete }) 
     controls.stop();
     progressControls.stop();
     elapsedTimeRef.current += Date.now() - startTimeRef.current;
-    remainingTimeRef.current -= elapsedTimeRef.current;
   };
 
   const handleMouseUp = () => {
     setIsPaused(false);
-    const remainingTime = remainingTimeRef.current;
+    const remainingTime = totalDurationRef.current - elapsedTimeRef.current;
     if (currentStep === 0) {
       startTimer(remainingTime, () => setCurrentStep(1));
       progressControls.start({ width: '100%', transition: { duration: remainingTime / 1000, ease: 'linear' } });
     } else if (currentStep === 1) {
       startTimer(remainingTime, onComplete);
       controls.start({
-        y: '-120%',
+        y: '-100%',
         transition: { duration: remainingTime / 1000, ease: 'linear' },
       });
       progressControls.start({
@@ -86,11 +83,11 @@ const RolesExplanation: React.FC<{ onComplete: () => void }> = ({ onComplete }) 
 
   useEffect(() => {
     if (currentStep === 0) {
-      totalDuration.current = 7000;
+      totalDurationRef.current = 7000;
       startTimer(7000, () => setCurrentStep(1));
       progressControls.start({ width: '100%', transition: { duration: 7, ease: 'linear' } });
     } else if (currentStep === 1) {
-      totalDuration.current = roles.length * 2500;
+      totalDurationRef.current = roles.length * 2500;
       startTimer(roles.length * 2500, onComplete);
       controls.start({ y: '-100%', transition: { duration: roles.length * 2.5, ease: 'linear' } });
       progressControls.start({ width: '100%', transition: { duration: roles.length * 2.5, ease: 'linear' } });
@@ -114,17 +111,17 @@ const RolesExplanation: React.FC<{ onComplete: () => void }> = ({ onComplete }) 
         {currentStep === 0 && (
           <motion.div
             className="text-center"
-            initial={{ opacity: 0}}
-            animate={{ opacity: 1}}
-            exit={{ opacity: 0}}
+            initial={{ opacity: 0, y: 50 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -50 }}
             transition={{ duration: 0.5, ease: 'easeInOut' }}
           >
-            <motion.h1 className="text-3xl font-bold mb-4 select-none">¿Por qué usamos roles?</motion.h1>
-            <motion.p className="mb-4 text-center max-w-2xl mx-auto select-none">
+            <motion.h1 className="text-3xl font-bold mb-4">¿Por qué usamos roles?</motion.h1>
+            <motion.p className="mb-4 text-center max-w-2xl mx-auto">
               Los roles nos ayudan a identificar nuestras fortalezas y áreas de interés. Al conocer tu rol, podrás enfocarte en actividades que te resulten más gratificantes y alineadas con tu personalidad.
             </motion.p>
             <motion.div
-              className="h-1 bg-yellow-500 rounded-full overflow-hidden mt-7 select-none"
+              className="h-1 bg-yellow-500 rounded-full overflow-hidden mt-7"
               initial={{ width: 0 }}
               animate={progressControls}
               transition={{ duration: 7, ease: 'linear' }}
@@ -135,24 +132,24 @@ const RolesExplanation: React.FC<{ onComplete: () => void }> = ({ onComplete }) 
         {currentStep === 1 && (
           <motion.div
             key="roles"
-            className="w-full text-center select-none"
+            className="w-full text-center"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.5, ease: 'easeInOut' }}
           >
-            <motion.h1 className="text-2xl font-bold mb-4 absolute top-0 left-0 py-4 bg-neutral-950 text-center w-full z-10 select-none">Presentación de Roles</motion.h1>
+            <motion.h1 className="text-2xl font-bold mb-4 absolute top-0 left-0 py-4 bg-neutral-950 text-center w-full z-10">Presentación de Roles</motion.h1>
             <motion.div
-              className="flex flex-col items-center select-none"
+              className="flex flex-col items-center"
               initial={{ y: '100%' }}
               animate={controls}
-              transition={{ duration: roles.length * 2, ease: 'linear' }} // Duración más lenta
+              transition={{ duration: roles.length * 2.5, ease: 'linear' }}
               style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}
             >
               {roles.map((role) => (
                 <div
                   key={role.name}
-                  className="p-6 bg-gradient-to-br from-yellow-500/20 to-transparent border border-yellow-500 rounded-lg shadow-md mb-4 w-80 select-none"
+                  className="p-6 bg-gradient-to-br from-yellow-500/20 to-transparent border border-yellow-500 rounded-lg shadow-md mb-4 w-80"
                   style={{ flex: 'none' }}
                 >
                   <h2 className="text-xl font-bold mb-2">{role.name}</h2>
@@ -160,14 +157,20 @@ const RolesExplanation: React.FC<{ onComplete: () => void }> = ({ onComplete }) 
                 </div>
               ))}
             </motion.div>
-            <div className='w-full absolute py-3 top-12 z-10 left-0 bg-neutral-950 flex px-5 items-center shadow-lg select-none'>
+            <div className='w-full absolute py-3 top-12 z-10 left-0 bg-neutral-950 flex px-5 items-center shadow-lg'>
               <motion.div
                 className="h-1 bg-yellow-500 rounded-full overflow-hidden"
                 initial={{ width: 0 }}
                 animate={progressControls}
-                transition={{ duration: roles.length * 2, ease: 'linear' }} // Duración de la barra de progreso ajustada
+                transition={{ duration: roles.length * 2.5, ease: 'linear' }}
               />
             </div>
+            <button
+              onClick={onComplete}
+              className="bg-gradient-to-br from-yellow-500/20 to-transparent border border-yellow-500 hover:scale-105 transition-transform text-white py-3 px-6 rounded-lg font-semibold focus:outline-none focus:shadow-outline mt-6"
+            >
+              Ir al Test
+            </button>
           </motion.div>
         )}
       </AnimatePresence>
