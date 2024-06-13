@@ -17,7 +17,8 @@ const nuclei = [
     bgColor: 'bg-gradient-to-br from-indigo-600/20 to-transparent border border-indigo-400/40',
     shadowColor: 'shadow-indigo-400/30',
     image: 'https://image.lexica.art/full_webp/eaa38ff4-ef57-470d-9070-18f6717cd2df',
-    profiles: 'Sabio, Visionario, Aventurero, Guerrero'
+    profiles: 'Sabio, Visionario, Aventurero, Guerrero',
+    icon: '/assets/nucleos/enigma.svg'
   },
   {
     name: 'Quantum',
@@ -26,7 +27,8 @@ const nuclei = [
     bgColor: 'bg-gradient-to-br from-cyan-600/20 to-transparent border border-cyan-700',
     shadowColor: 'shadow-cyan-700/30',
     image: 'https://image.lexica.art/full_webp/dd19b683-792e-4182-bf34-6ac9f688dbd5',
-    profiles: 'Visionario, Creador, Guardián, Conector'
+    profiles: 'Visionario, Creador, Guardián, Conector',
+    icon: '/assets/nucleos/quantum.svg'
   },
   {
     name: 'Arbóreo',
@@ -35,7 +37,8 @@ const nuclei = [
     bgColor: 'bg-gradient-to-br from-lime-600/20 to-transparent border border-lime-700',
     shadowColor: 'shadow-lime-700/30',
     image: 'https://image.lexica.art/full_webp/15a3113e-bc6b-439c-8c2b-31fde388f29c',
-    profiles: 'Guardián, Aventurero, Sabio'
+    profiles: 'Guardián, Aventurero, Sabio',
+    icon: '/assets/nucleos/arboreo.svg'
   },
   {
     name: 'Áureo',
@@ -44,7 +47,8 @@ const nuclei = [
     bgColor: 'bg-gradient-to-br from-yellow-600/20 to-transparent border border-yellow-700',
     shadowColor: 'shadow-yellow-700/30',
     image: 'https://image.lexica.art/full_webp/fe7c5a9a-7430-4420-a877-b8ff1147e20b',
-    profiles: 'Creador, Guerrero, Conector, Visionario'
+    profiles: 'Creador, Guerrero, Conector, Visionario',
+    icon: '/assets/nucleos/aureo.svg'
   },
 ];
 
@@ -103,7 +107,10 @@ const NucleusSelection: React.FC<NucleusSelectionProps> = ({ onComplete }) => {
                 </div>
                 <img src={nucleus.image} alt={`${nucleus.name} icon`} className="w-full h-64 object-cover rounded-lg mb-4" />
                 <div className="flex flex-col space-y-2 flex-grow">
-                  <h3 className="text-2xl">{nucleus.name}</h3>
+                  <div className='w-fit flex gap-2 justify-between'>
+                    <img src={nucleus.icon} alt="enimga icon" width={26} height={26} className='rounded-full' />
+                    <h3 className="text-2xl">{nucleus.name}</h3>
+                  </div>
                   <p className="text-sm font-light opacity-90">{nucleus.description}</p>
                   <p className="text-xs italic opacity-70 absolute bottom-6">Roles Recomendados: {nucleus.profiles}</p>
                 </div>

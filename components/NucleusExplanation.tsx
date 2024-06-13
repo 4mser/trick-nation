@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence, useAnimation } from 'framer-motion';
+import Image from 'next/image';
 
 const NucleusExplanation: React.FC<{ onComplete: () => void }> = ({ onComplete }) => {
   const [isPaused, setIsPaused] = useState(false);
@@ -69,6 +70,14 @@ const NucleusExplanation: React.FC<{ onComplete: () => void }> = ({ onComplete }
           exit={{ opacity: 0, y: -50 }}
           transition={{ duration: 0.5, ease: 'easeInOut' }}
         >
+          <motion.div
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, ease: 'easeInOut' }}
+              className='w-full flex justify-center items-center'
+            >
+              <Image src="/assets/icons/nucleo.svg" alt="Rol Icon" width={48} height={48} className='mb-2' />
+            </motion.div>
           <motion.h1 className="text-3xl font-bold mb-4">Ahora debes elegir tu <span className='text-yellow-500'>núcleo</span></motion.h1>
           <motion.p className="mb-4 text-center max-w-2xl mx-auto">
             Los núcleos son grupos que te permiten colaborar con personas afines y participar en actividades que te apasionen.

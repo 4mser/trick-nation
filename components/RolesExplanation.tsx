@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence, useAnimation } from 'framer-motion';
+import Image from 'next/image';
 
 const roles = [
   {
@@ -123,6 +124,14 @@ const RolesExplanation: React.FC<{ onComplete: () => void }> = ({ onComplete }) 
             exit={{ opacity: 0, y: -50 }}
             transition={{ duration: 0.5, ease: 'easeInOut' }}
           >
+            <motion.div
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, ease: 'easeInOut' }}
+              className='w-full flex justify-center items-center'
+            >
+              <Image src="/assets/icons/rol.svg" alt="Rol Icon" width={48} height={48} className='mb-2' />
+            </motion.div>
             <motion.h1 className="text-3xl font-bold mb-4">¿Por qué usamos <span className='text-yellow-500'>roles</span>?</motion.h1>
             <motion.p className="mb-4 text-center max-w-2xl mx-auto">
               Los roles nos ayudan a identificar nuestras fortalezas y áreas de interés. Al conocer tu rol, podrás enfocarte en actividades que te resulten más gratificantes y alineadas con tu personalidad.
@@ -145,7 +154,7 @@ const RolesExplanation: React.FC<{ onComplete: () => void }> = ({ onComplete }) 
             exit={{ opacity: 0 }}
             transition={{ duration: 1, ease: 'easeInOut' }}
           >
-            <motion.h1 className="text-2xl font-bold mb-4 absolute top-0 left-0 py-4 bg-neutral-950 text-center w-full z-10">Presentación de Roles</motion.h1>
+            <motion.h1 className="text-2xl font-bold mb-4 absolute top-0 left-0 py-4 bg-neutral-950 text-center w-full z-10 ">Presentación de Roles</motion.h1>
             <motion.div
               className="flex flex-col items-center"
               initial={{ y: '100%' }}
@@ -156,7 +165,7 @@ const RolesExplanation: React.FC<{ onComplete: () => void }> = ({ onComplete }) 
               {roles.map((role) => (
                 <div
                   key={role.name}
-                  className="p-6 bg-gradient-to-br from-yellow-500/20 to-transparent border border-yellow-500 rounded-lg shadow-md mb-4 w-80"
+                  className="p-6  border border-neutral-500 rounded-lg shadow-md mb-4"
                   style={{ flex: 'none' }}
                 >
                   <h2 className="text-xl font-bold mb-2">{role.name}</h2>
@@ -164,7 +173,7 @@ const RolesExplanation: React.FC<{ onComplete: () => void }> = ({ onComplete }) 
                 </div>
               ))}
             </motion.div>
-            <div className='w-full absolute py-3 top-12 z-10 left-0 bg-neutral-950 flex px-5 items-center shadow-lg'>
+            <div className='w-full absolute py-3 top-12 z-10 left-0 bg-neutral-950 flex px-5 items-center shadow-2xl'>
               <motion.div
                 className="h-1 bg-yellow-500 rounded-full overflow-hidden"
                 initial={{ width: 0 }}
