@@ -71,7 +71,7 @@ const RolesExplanation: React.FC<{ onComplete: () => void }> = ({ onComplete }) 
     } else if (currentStep === 1) {
       startTimer(remainingTime, onComplete);
       controls.start({
-        y: '-100%',
+        y: '-120%',
         transition: { duration: remainingTime / 1000, ease: 'linear' },
       });
       progressControls.start({
@@ -106,11 +106,18 @@ const RolesExplanation: React.FC<{ onComplete: () => void }> = ({ onComplete }) 
       onMouseUp={handleMouseUp}
       onTouchStart={handleMouseDown}
       onTouchEnd={handleMouseUp}
+      onContextMenu={(e) => e.preventDefault()} // Prevent context menu on long press
+      style={{
+        WebkitUserSelect: 'none', // For Safari
+        MozUserSelect: 'none',    // For Firefox
+        msUserSelect: 'none',     // For IE and Edge
+        userSelect: 'none',       // Standard syntax
+      }}
     >
       <AnimatePresence>
         {currentStep === 0 && (
           <motion.div
-            className="text-center select-none"
+            className="text-center"
             initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -50 }}
@@ -132,37 +139,37 @@ const RolesExplanation: React.FC<{ onComplete: () => void }> = ({ onComplete }) 
         {currentStep === 1 && (
           <motion.div
             key="roles"
-            className="w-full text-center select-none"
+            className="w-full text-center"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.5, ease: 'easeInOut' }}
           >
-            <motion.h1 className="text-2xl font-bold mb-4 absolute top-0 left-0 py-4 bg-neutral-950 text-center w-full z-10 select-none">Presentación de Roles</motion.h1>
+            <motion.h1 className="text-2xl font-bold mb-4 absolute top-0 left-0 py-4 bg-neutral-950 text-center w-full z-10">Presentación de Roles</motion.h1>
             <motion.div
               className="flex flex-col items-center"
               initial={{ y: '100%' }}
               animate={controls}
-              transition={{ duration: roles.length * 2.5, ease: 'linear' }}
+              transition={{ duration: roles.length * 2.5, ease: 'linear' }} // Duración más lenta
               style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}
             >
               {roles.map((role) => (
                 <div
                   key={role.name}
-                  className="p-6 bg-gradient-to-br from-yellow-500/20 to-transparent border border-yellow-500 rounded-lg shadow-md mb-4 w-80 select-none"
+                  className="p-6 bg-gradient-to-br from-yellow-500/20 to-transparent border border-yellow-500 rounded-lg shadow-md mb-4 w-80"
                   style={{ flex: 'none' }}
                 >
-                  <h2 className="text-xl font-bold mb-2 select-none">{role.name}</h2>
-                  <p className="text-sm opacity-80 select-none">{role.description}</p>
+                  <h2 className="text-xl font-bold mb-2">{role.name}</h2>
+                  <p className="text-sm opacity-80">{role.description}</p>
                 </div>
               ))}
             </motion.div>
             <div className='w-full absolute py-3 top-12 z-10 left-0 bg-neutral-950 flex px-5 items-center shadow-lg'>
               <motion.div
-                className="h-1 bg-yellow-500 rounded-full overflow-hidden select-none"
+                className="h-1 bg-yellow-500 rounded-full overflow-hidden"
                 initial={{ width: 0 }}
                 animate={progressControls}
-                transition={{ duration: roles.length * 2.5, ease: 'linear' }}
+                transition={{ duration: roles.length * 2.5, ease: 'linear' }} // Duración de la barra de progreso ajustada
               />
             </div>
             <button
