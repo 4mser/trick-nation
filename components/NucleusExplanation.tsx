@@ -69,7 +69,7 @@ const NucleusExplanation: React.FC<{ onComplete: () => void }> = ({ onComplete }
           exit={{ opacity: 0, y: -50 }}
           transition={{ duration: 0.5, ease: 'easeInOut' }}
         >
-          <motion.h1 className="text-3xl font-bold mb-4">Ahora debes elegir tu núcleo</motion.h1>
+          <motion.h1 className="text-3xl font-bold mb-4">Ahora debes elegir tu <span className='text-yellow-500'>núcleo</span></motion.h1>
           <motion.p className="mb-4 text-center max-w-2xl mx-auto">
             Los núcleos son grupos que te permiten colaborar con personas afines y participar en actividades que te apasionen.
           </motion.p>

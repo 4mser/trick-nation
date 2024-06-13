@@ -93,13 +93,13 @@ const Test: FC<TestProps> = ({ onComplete }) => {
     transition={{ delay: 0.4, duration: 0.5 }}
     className="text-xl mb-4"
   >
-    Tu rol asignado es:
+    Tu rol asignado es
   </motion.p>
   <motion.h3
     initial={{ scale: 0.8, opacity: 0 }}
     animate={{ scale: 1, opacity: 1 }}
     transition={{ delay: 0.6, duration: 0.5 }}
-    className="text-2xl font-semibold text-yellow-400 mb-6"
+    className="text-4xl font-semibold text-yellow-400 mb-6"
   >
     {dominantProfile}
   </motion.h3>
@@ -107,7 +107,7 @@ const Test: FC<TestProps> = ({ onComplete }) => {
     initial={{ y: 20, opacity: 0 }}
     animate={{ y: 0, opacity: 1 }}
     transition={{ delay: 0.8, duration: 0.5 }}
-    className="text-base mb-8 text-center"
+    className="text-base pb-8 text-center "
   >
     {resultMessage}
   </motion.p>
@@ -115,11 +115,11 @@ const Test: FC<TestProps> = ({ onComplete }) => {
     initial={{ opacity: 0 }}
     animate={{ opacity: 1 }}
     transition={{ delay: 1, duration: 0.5 }}
-    className="flex gap-4 flex-col"
+    className="flex gap-4 flex-col absolute bottom-0 left-0 w-full justify-center items-center p-7 bg-neutral-950"
   >
     <button
       onClick={() => onComplete(dominantProfile)}
-      className="bg-gradient-to-br from-yellow-500/10 to-transparent border border-yellow-500/60 text-white font-normal py-2 px-4 rounded focus:outline-none focus:shadow-outline transition duration-300 ease-in-out hover:bg-yellow-400 hover:shadow-2xl hover:shadow-yellow-400/50"
+      className=" border border-white/40 text-white font-normal py-2 px-4 rounded focus:outline-none focus:shadow-outline transition duration-300 ease-in-out hover:scale-95"
     >
       Continuar
     </button>

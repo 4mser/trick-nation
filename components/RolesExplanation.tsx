@@ -123,7 +123,7 @@ const RolesExplanation: React.FC<{ onComplete: () => void }> = ({ onComplete }) 
             exit={{ opacity: 0, y: -50 }}
             transition={{ duration: 0.5, ease: 'easeInOut' }}
           >
-            <motion.h1 className="text-3xl font-bold mb-4">¿Por qué usamos roles?</motion.h1>
+            <motion.h1 className="text-3xl font-bold mb-4">¿Por qué usamos <span className='text-yellow-500'>roles</span>?</motion.h1>
             <motion.p className="mb-4 text-center max-w-2xl mx-auto">
               Los roles nos ayudan a identificar nuestras fortalezas y áreas de interés. Al conocer tu rol, podrás enfocarte en actividades que te resulten más gratificantes y alineadas con tu personalidad.
             </motion.p>
