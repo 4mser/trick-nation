@@ -16,7 +16,7 @@ const nuclei = [
     description: 'Rodeado de misterios y conocimientos ocultos, el Núcleo Enigma es un refugio para los curiosos del mundo esotérico y paranormal. Es ideal para aquellos que buscan descubrir los secretos más profundos de la existencia, explorando enigmas que desafían la lógica.',
     bgColor: 'bg-gradient-to-br from-indigo-600/20 to-transparent border border-indigo-400/40',
     shadowColor: 'shadow-indigo-400/30',
-    image: '/images/enigma.jpeg',
+    image: 'https://image.lexica.art/full_webp/eaa38ff4-ef57-470d-9070-18f6717cd2df',
     profiles: 'Sabio, Visionario, Aventurero, Guerrero'
   },
   {
@@ -43,7 +43,7 @@ const nuclei = [
     description: 'Un santuario de la creatividad y la expresión, el Núcleo Áureo celebra las artes en todas sus manifestaciones. Desde la pintura hasta la música y el deporte, es un lugar para aquellos que sueñan con inspirar al mundo a través de su arte y creatividad única.',
     bgColor: 'bg-gradient-to-br from-yellow-600/20 to-transparent border border-yellow-700',
     shadowColor: 'shadow-yellow-700/30',
-    image: '/images/aureo.jpeg',
+    image: 'https://image.lexica.art/full_webp/fe7c5a9a-7430-4420-a877-b8ff1147e20b',
     profiles: 'Creador, Guerrero, Conector, Visionario'
   },
 ];
