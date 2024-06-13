@@ -164,7 +164,7 @@ const Test: FC<TestProps> = ({ onComplete }) => {
                   onClick={() => setSelectedOption(index)}
                   className={`relative text-white border ${
                     selectedOption === index ? 'bg-gradient-to-br from-yellow-500/20 to-transparent border-yellow-500' : 'border-white/10'
-                  } focus:outline-none font-light rounded-2xl text-sm px-5 py-5 text-center transition flex justify-center items-center duration-300 ease-in-out cursor-pointer`}
+                  } focus:outline-none font-light rounded-2xl text-[13px] px-3 py-3 text-center transition flex justify-center items-center duration-300 ease-in-out cursor-pointer`}
                 >
                   {option.text}
                 </motion.div>
@@ -172,7 +172,7 @@ const Test: FC<TestProps> = ({ onComplete }) => {
             </div>
           </motion.div>
         </AnimatePresence>
-        <div className="absolute bottom-0 bg-neutral-950 left-0 flex justify-between flex-col items-center p-7 mt-4 font-light w-full">
+        <div className="absolute bottom-0 bg-neutral-950 left-0 flex justify-between flex-col items-center py-5 mt-4 font-light w-full">
           <button
             onClick={handleAnswer}
             disabled={selectedOption === null}
