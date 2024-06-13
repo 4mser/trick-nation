@@ -26,7 +26,7 @@ const nuclei = [
     bgColor: 'bg-gradient-to-br from-cyan-600/20 to-transparent border border-cyan-700',
     shadowColor: 'shadow-cyan-700/30',
     image: '/images/quantum.jpeg',
-    profiles: 'Creador, Guardián, Conector'
+    profiles: 'Visionario, Creador, Guardián, Conector'
   },
   {
     name: 'Arbóreo',
