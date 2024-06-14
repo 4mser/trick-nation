@@ -145,7 +145,7 @@ const Map: React.FC = () => {
             rotateX: modelRotate[0],
             rotateY: modelRotate[1],
             rotateZ: modelRotate[2],
-            scale: modelAsMercatorCoordinate.meterInMercatorCoordinateUnits() * 40  // Ajusta el valor de escala según sea necesario
+            scale: modelAsMercatorCoordinate.meterInMercatorCoordinateUnits() * 300  // Ajusta el valor de escala según sea necesario
           };
 
           const scene = new THREE.Scene();
@@ -165,9 +165,16 @@ const Map: React.FC = () => {
           directionalLight.position.set(0, 70, 100).normalize();
           scene.add(directionalLight);
 
+          const clock = new THREE.Clock();
+          let mixer: THREE.AnimationMixer;
+
           const loader = new GLTFLoader();
-          loader.load('/models/owl/scene.gltf', (gltf: any) => {
+          loader.load('/models/bird/scene.gltf', (gltf: any) => {
             const model = gltf.scene;
+            mixer = new THREE.AnimationMixer(model);
+            gltf.animations.forEach((clip: THREE.AnimationClip) => {
+              mixer.clipAction(clip).play();
+            });
             model.traverse((child: any) => {
               if (child.isMesh) {
                 child.material.depthTest = true;
@@ -179,6 +186,9 @@ const Map: React.FC = () => {
           });
 
           mapboxMap.on('render', () => {
+            const delta = clock.getDelta();
+            if (mixer) mixer.update(delta);
+
             const rotationX = new THREE.Matrix4().makeRotationAxis(
               new THREE.Vector3(1, 0, 0),
               modelTransform.rotateX
