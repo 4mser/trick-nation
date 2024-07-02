@@ -91,7 +91,7 @@ const Map: React.FC = () => {
         const mapboxMap = new mapboxgl.Map({
           container: node,
           accessToken: MAPBOX_TOKEN,
-          style: 'mapbox://styles/mapbox/dark-v11',
+          style: 'mapbox://styles/mapbox/streets-v12',
           center: [longitude, latitude],
           zoom: 17,
         });
@@ -123,11 +123,11 @@ const Map: React.FC = () => {
               setUserLocation([e.lngLat.lng, e.lngLat.lat]);
             }
           });
-
+          
           // Añadir marcador 3D
-          const modelOrigin: [number, number] = [-73.397417, -39.869354];
+          const modelOrigin: [number, number] = [-73.24623040951846, -39.81121725135903];
           const modelAltitude = 0;
-          const modelRotate = [Math.PI / 2, 0, 0];
+          const modelRotate = [Math.PI / 2, 0, 1];
 
           const modelAsMercatorCoordinate = mapboxgl.MercatorCoordinate.fromLngLat(
             modelOrigin,
@@ -140,8 +140,8 @@ const Map: React.FC = () => {
             translateZ: modelAsMercatorCoordinate.z || 0,
             rotateX: modelRotate[0],
             rotateY: modelRotate[1],
-            rotateZ: modelRotate[2],
-            scale: modelAsMercatorCoordinate.meterInMercatorCoordinateUnits() * 200  // Ajusta el valor de escala según sea necesario
+            rotateZ: modelRotate[1],
+            scale: modelAsMercatorCoordinate.meterInMercatorCoordinateUnits() * 2  // Ajusta el valor de escala según sea necesario
           };
 
           const scene = new THREE.Scene();
@@ -167,7 +167,7 @@ const Map: React.FC = () => {
 
           const loader = new GLTFLoader();
 
-          loader.load('/models/bird/scene.gltf', (gltf: any) => {
+          loader.load('/models/avengers/scene.gltf', (gltf: any) => {
             const model = gltf.scene;
             mixer = new THREE.AnimationMixer(model);
             gltf.animations.forEach((clip: THREE.AnimationClip) => {
