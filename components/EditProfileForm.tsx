@@ -214,7 +214,7 @@ const EditProfileForm: React.FC<EditProfileFormProps> = ({ onClose, onProfileUpd
           </div>
         )}
       </div>
-      <button type="submit" className="w-full rounded-md  bg-gradient-to-br from-yellow-500/20 to-transparent border border-yellow-500 hover:scale-95 transition-transform text-white font-bold py-2 px-4 focus:outline-none focus:shadow-outline">
+      <button type="submit" className="w-full rounded-md  bg-gradient-to-br from-yellow-500/20 to-transparent border border-yellow-500 hover:from-yellow-600/60 transition-transform text-white font-bold py-2 px-4 focus:outline-none focus:shadow-outline">
         Actualizar Perfil
       </button>
       <button

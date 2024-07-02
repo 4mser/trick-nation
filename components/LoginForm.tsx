@@ -86,7 +86,7 @@ const LoginForm: React.FC = () => {
         </div>
         <button
           type="submit"
-          className="w-full mt-2 border border-yellow-600 bg-gradient-to-br from-yellow-600/20 to-transparent hover:scale-95 transition text-white py-2 px-4 rounded-md focus:outline-none focus:shadow-outline"
+          className="w-full mt-2 border border-yellow-600 bg-gradient-to-br from-yellow-600/20 to-transparent hover:from-yellow-600/60 text-white py-2 px-4 rounded-md focus:outline-none focus:shadow-outline"
         >
           Iniciar Sesión
         </button>

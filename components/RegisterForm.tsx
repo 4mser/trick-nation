@@ -87,7 +87,7 @@ const RegisterForm: React.FC = () => {
         </div>
         <button
           type="submit"
-          className="w-full mt-2 border border-yellow-600 bg-gradient-to-br from-yellow-600/20 to-transparent hover:scale-95 text-white transition py-2 px-4 rounded-md focus:outline-none "
+          className="w-full mt-2 border border-yellow-600 bg-gradient-to-br from-yellow-600/20 to-transparent hover:from-yellow-600/60 text-white transition py-2 px-4 rounded-md focus:outline-none "
         >
           Registrarme
         </button>

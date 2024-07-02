@@ -2,7 +2,7 @@ import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 
-const LoginPage: React.FC = () => {
+const Welcome: React.FC = () => {
   return (
     <div className='w-full h-[100dvh] bg-neutral-950 fixed top-0 left-0 z-10 flex justify-center items-center flex-col'>
       <div className='w-full grid place-items-center'>
@@ -26,4 +26,4 @@ const LoginPage: React.FC = () => {
   );
 };
 
-export default LoginPage;
+export default Welcome;

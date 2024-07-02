@@ -1,10 +1,8 @@
-'use client';
-
 import React, { useEffect, useRef, useState, useCallback } from "react";
 import mapboxgl, { LngLatLike, Marker } from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 import * as THREE from 'three';
-import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import api from '@/services/api';
 import { useAuth } from '@/context/auth-context';
 import SpotFormModal from './SpotFormModal';
@@ -32,9 +30,7 @@ const Map: React.FC = () => {
       markerElement.style.width = `${markerSize}px`;
       markerElement.style.height = `${markerSize}px`;
       markerElement.style.borderRadius = '50%';
-      markerElement.style.backgroundColor = isExplorationRadio
-        ? 'rgba(234, 179, 8, 0.233)'
-        : 'rgb(234, 179, 8)';
+      markerElement.style.backgroundColor = isExplorationRadio ? 'rgba(234, 179, 8, 0.233)' : 'rgb(234, 179, 8)';
       return markerElement;
     },
     []
@@ -95,7 +91,7 @@ const Map: React.FC = () => {
         const mapboxMap = new mapboxgl.Map({
           container: node,
           accessToken: MAPBOX_TOKEN,
-          style: 'mapbox://styles/mapbox/standard',
+          style: 'mapbox://styles/mapbox/dark-v11',
           center: [longitude, latitude],
           zoom: 17,
         });
@@ -145,7 +141,7 @@ const Map: React.FC = () => {
             rotateX: modelRotate[0],
             rotateY: modelRotate[1],
             rotateZ: modelRotate[2],
-            scale: modelAsMercatorCoordinate.meterInMercatorCoordinateUnits() * 300  // Ajusta el valor de escala según sea necesario
+            scale: modelAsMercatorCoordinate.meterInMercatorCoordinateUnits() * 200  // Ajusta el valor de escala según sea necesario
           };
 
           const scene = new THREE.Scene();
@@ -157,6 +153,7 @@ const Map: React.FC = () => {
           });
 
           renderer.autoClear = false;
+          renderer.clearDepth();
 
           const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
           scene.add(ambientLight);
@@ -169,19 +166,14 @@ const Map: React.FC = () => {
           let mixer: THREE.AnimationMixer;
 
           const loader = new GLTFLoader();
+
           loader.load('/models/bird/scene.gltf', (gltf: any) => {
             const model = gltf.scene;
             mixer = new THREE.AnimationMixer(model);
             gltf.animations.forEach((clip: THREE.AnimationClip) => {
               mixer.clipAction(clip).play();
             });
-            model.traverse((child: any) => {
-              if (child.isMesh) {
-                child.material.depthTest = true;
-                child.material.depthWrite = true;
-                child.renderOrder = 999; // Asegura que el modelo se renderice al final
-              }
-            });
+
             scene.add(model);
           });
 

@@ -11,8 +11,8 @@ type NucleusSelectionProps = {
 
 const nuclei = [
   {
-    name: 'Enigma',
     backendName: 'Enigma',
+    name: 'Enigma',
     description: 'Rodeado de misterios y conocimientos ocultos, el Núcleo Enigma es un refugio para curiosos del mundo esotérico y paranormal. Es ideal para aquellos que buscan descubrir los secretos más profundos de la existencia, explorando enigmas que desafían la lógica.',
     bgColor: 'bg-gradient-to-br from-indigo-600/20 to-transparent border border-indigo-400/40',
     shadowColor: 'shadow-indigo-400/30',
@@ -21,8 +21,8 @@ const nuclei = [
     icon: '/assets/nucleos/enigma.svg'
   },
   {
-    name: 'Quantum',
     backendName: 'Quantum',
+    name: 'Quantum',
     description: 'En el Núcleo Quantum, la ciencia y la tecnología son la base de todo. Es el hogar de aquellos que se apasionan por la innovación y el descubrimiento, explorando los misterios del universo y desarrollando soluciones que impulsan el futuro.',
     bgColor: 'bg-gradient-to-br from-cyan-600/20 to-transparent border border-cyan-700',
     shadowColor: 'shadow-cyan-700/30',
@@ -31,8 +31,8 @@ const nuclei = [
     icon: '/assets/nucleos/quantum.svg'
   },
   {
-    name: 'Arbóreo',
     backendName: 'Arboreo',
+    name: 'Arbóreo',
     description: 'Enraizado en el amor y el respeto por la naturaleza, el Núcleo Arbóreo valora la conservación del medio ambiente y la biodiversidad. Sus miembros se esfuerzan por vivir en armonía con el planeta, promoviendo un futuro sostenible para todas las formas de vida.',
     bgColor: 'bg-gradient-to-br from-lime-600/20 to-transparent border border-lime-700',
     shadowColor: 'shadow-lime-700/30',
@@ -41,8 +41,8 @@ const nuclei = [
     icon: '/assets/nucleos/arboreo.svg'
   },
   {
-    name: 'Áureo',
     backendName: 'Aureo',
+    name: 'Áureo',
     description: 'Un santuario de la creatividad, la expresión y la disciplina. El Núcleo Áureo celebra las artes en todas sus manifestaciones. Desde la pintura hasta la música y el deporte, es un lugar para aquellos que sueñan con superarse si mismos e inspirar a el mundo.',
     bgColor: 'bg-gradient-to-br from-yellow-600/20 to-transparent border border-yellow-700',
     shadowColor: 'shadow-yellow-700/30',
