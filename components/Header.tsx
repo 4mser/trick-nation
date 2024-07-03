@@ -19,7 +19,7 @@ const Header: React.FC = () => {
   const secondHalfLinks = bottombarLinks.slice(2);
 
   return (
-    <section className="fixed bottom-0 z-10 w-full bg-neutral-950 border-t border-white/10 ">
+    <section className="fixed bottom-0 z-10 w-full bg-neutral-950 border-t border-white/10 text-white">
       <div className="flex items-center justify-around gap-3">
         {/* Primeros dos enlaces */}
         {firstHalfLinks.map((link) => {

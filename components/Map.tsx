@@ -7,7 +7,9 @@ import api from '@/services/api';
 import { useAuth } from '@/context/auth-context';
 import SpotFormModal from './SpotFormModal';
 import SpotDetailModal from './SpotDetailModal';
+import TotemFormModal from './TotemFormModal';
 import { Spot } from '../types/spots';
+import { Totem } from "@/types/totem";
 
 const MAPBOX_TOKEN = process.env.NEXT_PUBLIC_MAPBOX_TOKEN || '';
 
@@ -18,7 +20,9 @@ const Map: React.FC = () => {
   const [userLocation, setUserLocation] = useState<[number, number] | null>(null);
   const markerRef = useRef<Marker | null>(null);
   const [spots, setSpots] = useState<Spot[]>([]);
+  const [totems, setTotems] = useState<Totem[]>([]);
   const [showSpotForm, setShowSpotForm] = useState(false);
+  const [showTotemForm, setShowTotemForm] = useState(false);
   const [isDebugMode, setIsDebugMode] = useState(false);
   const [selectedSpot, setSelectedSpot] = useState<Spot | null>(null);
 
@@ -63,7 +67,7 @@ const Map: React.FC = () => {
 
   const centerMapOnUserLocation = useCallback(() => {
     if (map && userLocation) {
-      map.flyTo({ center: userLocation, zoom: 17 });
+      map.flyTo({ center: userLocation as [number, number], zoom: 17 });
     }
   }, [map, userLocation]);
 
@@ -72,12 +76,26 @@ const Map: React.FC = () => {
     setShowSpotForm(true);
   }, [userLocation, user]);
 
+  const handleAddTotem = useCallback(() => {
+    if (!userLocation || !user) return;
+    setShowTotemForm(true);
+  }, [userLocation, user]);
+
   const fetchSpots = useCallback(async () => {
     try {
       const response = await api.get<Spot[]>('/spots');
       setSpots(response.data);
     } catch (error) {
       console.error('Failed to fetch spots:', error);
+    }
+  }, []);
+
+  const fetchTotems = useCallback(async () => {
+    try {
+      const response = await api.get<Totem[]>('/totems');
+      setTotems(response.data);
+    } catch (error) {
+      console.error('Failed to fetch totems:', error);
     }
   }, []);
 
@@ -91,15 +109,9 @@ const Map: React.FC = () => {
         const mapboxMap = new mapboxgl.Map({
           container: node,
           accessToken: MAPBOX_TOKEN,
-          style: 'mapbox://styles/mapbox/streets-v12',
+          style: 'mapbox://styles/mapbox/dark-v11',
           center: [longitude, latitude],
           zoom: 17,
-        });
-
-        mapboxMap.on('style.load', () => {
-          mapboxMap.setConfigProperty('basemap', 'lightPreset', 'dusk');
-          mapboxMap.setConfigProperty('basemap', 'showPointOfInterestLabels', false);
-          mapboxMap.setConfigProperty('basemap', 'showTransitLabels', false);
         });
 
         setMap(mapboxMap);
@@ -122,100 +134,6 @@ const Map: React.FC = () => {
             if (isDebugMode) {
               setUserLocation([e.lngLat.lng, e.lngLat.lat]);
             }
-          });
-          
-          // Añadir marcador 3D
-          const modelOrigin: [number, number] = [-73.24623040951846, -39.81121725135903];
-          const modelAltitude = 0;
-          const modelRotate = [Math.PI / 2, 0, 1];
-
-          const modelAsMercatorCoordinate = mapboxgl.MercatorCoordinate.fromLngLat(
-            modelOrigin,
-            modelAltitude
-          );
-
-          const modelTransform = {
-            translateX: modelAsMercatorCoordinate.x,
-            translateY: modelAsMercatorCoordinate.y,
-            translateZ: modelAsMercatorCoordinate.z || 0,
-            rotateX: modelRotate[0],
-            rotateY: modelRotate[1],
-            rotateZ: modelRotate[1],
-            scale: modelAsMercatorCoordinate.meterInMercatorCoordinateUnits() * 2  // Ajusta el valor de escala según sea necesario
-          };
-
-          const scene = new THREE.Scene();
-          const camera = new THREE.Camera();
-          const renderer = new THREE.WebGLRenderer({
-            canvas: mapboxMap.getCanvas(),
-            context: (mapboxMap as any).painter.context.gl,
-            antialias: true
-          });
-
-          renderer.autoClear = false;
-          renderer.clearDepth();
-
-          const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
-          scene.add(ambientLight);
-
-          const directionalLight = new THREE.DirectionalLight(0xffffff, 0.6);
-          directionalLight.position.set(0, 70, 100).normalize();
-          scene.add(directionalLight);
-
-          const clock = new THREE.Clock();
-          let mixer: THREE.AnimationMixer;
-
-          const loader = new GLTFLoader();
-
-          loader.load('/models/avengers/scene.gltf', (gltf: any) => {
-            const model = gltf.scene;
-            mixer = new THREE.AnimationMixer(model);
-            gltf.animations.forEach((clip: THREE.AnimationClip) => {
-              mixer.clipAction(clip).play();
-            });
-
-            scene.add(model);
-          });
-
-          mapboxMap.on('render', () => {
-            const delta = clock.getDelta();
-            if (mixer) mixer.update(delta);
-
-            const rotationX = new THREE.Matrix4().makeRotationAxis(
-              new THREE.Vector3(1, 0, 0),
-              modelTransform.rotateX
-            );
-            const rotationY = new THREE.Matrix4().makeRotationAxis(
-              new THREE.Vector3(0, 1, 0),
-              modelTransform.rotateY
-            );
-            const rotationZ = new THREE.Matrix4().makeRotationAxis(
-              new THREE.Vector3(0, 0, 1),
-              modelTransform.rotateZ
-            );
-
-            const m = new THREE.Matrix4().fromArray((mapboxMap as any).transform.customLayerMatrix());
-            const l = new THREE.Matrix4()
-              .makeTranslation(
-                modelTransform.translateX,
-                modelTransform.translateY,
-                modelTransform.translateZ
-              )
-              .scale(
-                new THREE.Vector3(
-                  modelTransform.scale,
-                  -modelTransform.scale,
-                  modelTransform.scale
-                )
-              )
-              .multiply(rotationX)
-              .multiply(rotationY)
-              .multiply(rotationZ);
-
-            camera.projectionMatrix = m.multiply(l);
-            renderer.state.reset();
-            renderer.render(scene, camera);
-            mapboxMap.triggerRepaint();
           });
         });
 
@@ -271,11 +189,115 @@ const Map: React.FC = () => {
 
   useEffect(() => {
     fetchSpots();
-  }, [fetchSpots]);
+    fetchTotems();
+  }, [fetchSpots, fetchTotems]);
+
+  useEffect(() => {
+    if (map) {
+      totems.forEach((totem) => {
+        add3DModelToMap(map, totem.modelUrl, totem.location.coordinates);
+      });
+    }
+  }, [map, totems]);
 
   const toggleDebugMode = useCallback(() => {
     setIsDebugMode((prev) => !prev);
   }, []);
+
+  const add3DModelToMap = (map: mapboxgl.Map, modelUrl: string, location: [number, number]) => {
+    const modelOrigin = location;
+    const modelAltitude = 0;
+    const modelRotate = [Math.PI / 2, 0, 0];
+
+    const modelAsMercatorCoordinate = mapboxgl.MercatorCoordinate.fromLngLat(
+      modelOrigin,
+      modelAltitude
+    );
+
+    const modelTransform = {
+      translateX: modelAsMercatorCoordinate.x,
+      translateY: modelAsMercatorCoordinate.y,
+      translateZ: modelAsMercatorCoordinate.z || 0,
+      rotateX: modelRotate[0],
+      rotateY: modelRotate[1],
+      rotateZ: modelRotate[2],
+      scale: modelAsMercatorCoordinate.meterInMercatorCoordinateUnits() * 200,
+    };
+
+    const scene = new THREE.Scene();
+    const camera = new THREE.Camera();
+    const renderer = new THREE.WebGLRenderer({
+      canvas: map.getCanvas(),
+      context: (map as any).painter.context.gl,
+      antialias: true,
+    });
+
+    renderer.autoClear = false;
+    renderer.clearDepth();
+
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
+    scene.add(ambientLight);
+
+    const directionalLight = new THREE.DirectionalLight(0xffffff, 0.6);
+    directionalLight.position.set(0, 70, 100).normalize();
+    scene.add(directionalLight);
+
+    const clock = new THREE.Clock();
+    let mixer: THREE.AnimationMixer | null = null;
+
+    const loader = new GLTFLoader();
+
+    loader.load(modelUrl, (gltf) => {
+      const model = gltf.scene;
+      mixer = new THREE.AnimationMixer(model);
+      gltf.animations.forEach((clip) => {
+        mixer?.clipAction(clip).play();
+      });
+
+      scene.add(model);
+    });
+
+    map.on('render', () => {
+      const delta = clock.getDelta();
+      if (mixer) mixer.update(delta);
+
+      const rotationX = new THREE.Matrix4().makeRotationAxis(
+        new THREE.Vector3(1, 0, 0),
+        modelTransform.rotateX
+      );
+      const rotationY = new THREE.Matrix4().makeRotationAxis(
+        new THREE.Vector3(0, 1, 0),
+        modelTransform.rotateY
+      );
+      const rotationZ = new THREE.Matrix4().makeRotationAxis(
+        new THREE.Vector3(0, 0, 1),
+        modelTransform.rotateZ
+      );
+
+      const m = new THREE.Matrix4().fromArray((map as any).transform.customLayerMatrix());
+      const l = new THREE.Matrix4()
+        .makeTranslation(
+          modelTransform.translateX,
+          modelTransform.translateY,
+          modelTransform.translateZ
+        )
+        .scale(
+          new THREE.Vector3(
+            modelTransform.scale,
+            -modelTransform.scale,
+            modelTransform.scale
+          )
+        )
+        .multiply(rotationX)
+        .multiply(rotationY)
+        .multiply(rotationZ);
+
+      camera.projectionMatrix = m.multiply(l);
+      renderer.state.reset();
+      renderer.render(scene, camera);
+      map.triggerRepaint();
+    });
+  };
 
   return (
     <section className="max-h-[100dvh] overflow-hidden">
@@ -287,6 +309,14 @@ const Map: React.FC = () => {
         >
           <div className='flex justify-center items-center w-full h-full p-2.5 bg-black/30 backdrop-blur-3xl rounded-full'>
             <img src="../assets/map-icons/pin.svg" alt="Mark Spot" className='w-full filter hue-rotate-[210deg] h-full object-contain' />
+          </div>
+        </button>
+        <button
+          className='absolute right-28 bottom-3 w-14 h-14 rounded-full overflow-hidden flex justify-center items-center bg-gradient-to-tr from-green-500 to-green-800 p-[2px]'
+          onClick={handleAddTotem}
+        >
+          <div className='flex justify-center items-center w-full h-full p-2.5 bg-black/30 backdrop-blur-3xl rounded-full'>
+            <img src="../assets/map-icons/totem.svg" alt="Add Totem" className='w-full filter hue-rotate-[210deg] h-full object-contain' />
           </div>
         </button>
         <button
@@ -314,9 +344,17 @@ const Map: React.FC = () => {
       {showSpotForm && user && user._id && (
         <SpotFormModal
           onClose={() => setShowSpotForm(false)}
-          userLocation={userLocation}
+          userLocation={userLocation as [number, number]} // Asegurando que userLocation no sea null
           userId={user._id}
           onSpotCreated={fetchSpots}
+        />
+      )}
+      {showTotemForm && user && user._id && (
+        <TotemFormModal
+          onClose={() => setShowTotemForm(false)}
+          userLocation={userLocation as [number, number]} // Asegurando que userLocation no sea null
+          userId={user._id}
+          onTotemCreated={fetchTotems}
         />
       )}
       {selectedSpot && (

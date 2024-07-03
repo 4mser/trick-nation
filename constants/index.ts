@@ -10,20 +10,15 @@ export const bottombarLinks = [
       label: "Explora",
     },
     {
-      imgURL: "/assets/navbar/tokens.svg",
-      route: "/content",
-      label: "Tokens"
-    },
-    {
       imgURL: "/assets/navbar/misiones.svg",
       route: "/missions",
       label: "Misiones",
     },
-    // {
-    //   imgURL: "/assets/navbar/community.svg",
-    //   route: "/",
-    //   label: "Riders",
-    // },
+    {
+      imgURL: "/assets/navbar/tokens.svg",
+      route: "/content",
+      label: "Tokens"
+    },
     {
       imgURL: "/assets/navbar/tienda.svg",
       route: "/store",
