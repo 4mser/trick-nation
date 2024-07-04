@@ -6,12 +6,13 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js';
 import api from '@/services/api';
 import { useAuth } from '@/context/auth-context';
-import SpotFormModal from './SpotFormModal';
-import SpotDetailModal from './SpotDetailModal';
 import TotemFormModal from './TotemFormModal';
 import TotemDetailModal from './TotemDetailModal';
-import { Spot } from '../types/spots';
 import { Totem } from "@/types/totem";
+import { Pin } from "@/types/pins";
+import PinFormModal from "./PinFormModal";
+import PinDetailModal from "./PinDetailModal";
+
 
 const MAPBOX_TOKEN = process.env.NEXT_PUBLIC_MAPBOX_TOKEN || '';
 const EXPLORATION_RADIUS_METERS = 30;
@@ -22,12 +23,12 @@ const Map: React.FC = () => {
   const mapNode = useRef<HTMLDivElement | null>(null);
   const [userLocation, setUserLocation] = useState<[number, number] | null>(null);
   const markerRef = useRef<Marker | null>(null);
-  const [spots, setSpots] = useState<Spot[]>([]);
+  const [pins, setPins] = useState<Pin[]>([]);
   const [totems, setTotems] = useState<Totem[]>([]);
   const [showSpotForm, setShowSpotForm] = useState(false);
   const [showTotemForm, setShowTotemForm] = useState(false);
   const [isDebugMode, setIsDebugMode] = useState(false);
-  const [selectedSpot, setSelectedSpot] = useState<Spot | null>(null);
+  const [selectedSpot, setSelectedSpot] = useState<Pin | null>(null);
   const [selectedTotem, setSelectedTotem] = useState<Totem | null>(null);
 
   const raycaster = new THREE.Raycaster();
@@ -52,7 +53,7 @@ const Map: React.FC = () => {
     []
   );
 
-  const createSpotMarkerElement = useCallback((spot: Spot) => {
+  const createSpotMarkerElement = useCallback((spot: Pin) => {
     const markerElement = document.createElement('div');
     markerElement.className = 'spot-marker';
     markerElement.style.width = '40px';
@@ -120,12 +121,12 @@ const Map: React.FC = () => {
     setShowTotemForm(true);
   }, [userLocation, user]);
 
-  const fetchSpots = useCallback(async () => {
+  const fetchPins = useCallback(async () => {
     try {
-      const response = await api.get<Spot[]>('/spots');
-      setSpots(response.data);
+      const response = await api.get<Pin[]>('/pins');
+      setPins(response.data);
     } catch (error) {
-      console.error('Failed to fetch spots:', error);
+      console.error('Failed to fetch pins:', error);
     }
   }, []);
 
@@ -373,7 +374,7 @@ const Map: React.FC = () => {
 
   useEffect(() => {
     if (map) {
-      spots
+      pins
         .filter(spot => calculateDistance(userLocation as [number, number], spot.location.coordinates) <= EXPLORATION_RADIUS_METERS)
         .forEach((spot) => {
           const coordinates: [number, number] = [spot.location.coordinates[0], spot.location.coordinates[1]];
@@ -384,12 +385,12 @@ const Map: React.FC = () => {
             .addTo(map);
         });
     }
-  }, [map, spots, userLocation, createSpotMarkerElement]);
+  }, [map, pins, userLocation, createSpotMarkerElement]);
 
   useEffect(() => {
-    fetchSpots();
+    fetchPins();
     fetchTotems();
-  }, [fetchSpots, fetchTotems]);
+  }, [fetchPins, fetchTotems]);
 
   const toggleDebugMode = useCallback(() => {
     setIsDebugMode((prev) => !prev);
@@ -439,11 +440,11 @@ const Map: React.FC = () => {
         </button>
       </section>
       {showSpotForm && user && user._id && (
-        <SpotFormModal
+        <PinFormModal
           onClose={() => setShowSpotForm(false)}
           userLocation={userLocation as [number, number]} // Asegurando que userLocation no sea null
           userId={user._id}
-          onSpotCreated={fetchSpots}
+          onPinCreated={fetchPins}
         />
       )}
       {showTotemForm && user && user._id && (
@@ -455,8 +456,8 @@ const Map: React.FC = () => {
         />
       )}
       {selectedSpot && (
-        <SpotDetailModal
-          spot={selectedSpot}
+        <PinDetailModal
+          pin={selectedSpot}
           onClose={() => setSelectedSpot(null)}
         />
       )}

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Spot } from '../types/spots';
+import { Spot } from '../types/pins';
 
 interface SpotPopupProps {
   spot: Spot;

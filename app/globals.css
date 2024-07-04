@@ -95,3 +95,11 @@
 .totem-marker {
   animation: pulse 2s infinite, bounce 2s infinite;
 }
+
+.backdrop-blur-md {
+  backdrop-filter: blur(12px); /* Estándar */
+  -webkit-backdrop-filter: blur(12px); /* Prefijo WebKit para navegadores basados en WebKit (Safari, Chrome) */
+  -moz-backdrop-filter: blur(12px); /* Prefijo Mozilla (experimental) */
+  -ms-backdrop-filter: blur(12px); /* Prefijo Microsoft (experimental) */
+  -o-backdrop-filter: blur(12px); /* Prefijo Opera (experimental) */
+}

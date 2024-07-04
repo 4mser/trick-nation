@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import api from '@/services/api';
-import { Spot } from '@/types/spots';
+import { Spot } from '@/types/pins';
 import { useAuth } from '@/context/auth-context';
 import Loader from '@/components/Loader';
 

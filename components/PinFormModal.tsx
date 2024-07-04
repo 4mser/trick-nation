@@ -3,14 +3,14 @@
 import React, { useState } from 'react';
 import api from '@/services/api';
 
-interface SpotFormModalProps {
+interface PinFormModalProps {
   onClose: () => void;
   userLocation: [number, number] | null;
   userId: string;
-  onSpotCreated: () => void;
+  onPinCreated: () => void;
 }
 
-const SpotFormModal: React.FC<SpotFormModalProps> = ({ onClose, userLocation, userId, onSpotCreated }) => {
+const PinFormModal: React.FC<PinFormModalProps> = ({ onClose, userLocation, userId, onPinCreated }) => {
   const [name, setName] = useState('');
   const [file, setFile] = useState<File | null>(null);
 
@@ -30,15 +30,15 @@ const SpotFormModal: React.FC<SpotFormModalProps> = ({ onClose, userLocation, us
     }
 
     try {
-      await api.post('/spots', formData, {
+      await api.post('/pins', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
       });
-      onSpotCreated();
+      onPinCreated();
       onClose();
     } catch (error) {
-      console.error('Failed to create spot:', error);
+      console.error('Failed to create Pin:', error);
     }
   };
 
@@ -81,4 +81,4 @@ const SpotFormModal: React.FC<SpotFormModalProps> = ({ onClose, userLocation, us
   );
 };
 
-export default SpotFormModal;
+export default PinFormModal;
