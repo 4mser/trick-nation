@@ -15,7 +15,9 @@ interface TotemFormModalProps {
 const TotemFormModal: React.FC<TotemFormModalProps> = ({ onClose, userLocation, userId, onTotemCreated }) => {
   const [name, setName] = useState('');
   const [files, setFiles] = useState<FileList | null>(null);
+  const [image, setImage] = useState<File | null>(null);
   const [selectedLocation, setSelectedLocation] = useState<[number, number]>(userLocation);
+  const [is3DModel, setIs3DModel] = useState(false);
   const mapContainer = useRef<HTMLDivElement | null>(null);
   const map = useRef<mapboxgl.Map | null>(null);
   const markerRef = useRef<mapboxgl.Marker | null>(null);
@@ -47,16 +49,22 @@ const TotemFormModal: React.FC<TotemFormModalProps> = ({ onClose, userLocation, 
   }, [userLocation]);
 
   useEffect(() => {
-    if (fileInputRef.current) {
+    if (fileInputRef.current && is3DModel) {
       fileInputRef.current.setAttribute('webkitdirectory', 'true');
       fileInputRef.current.setAttribute('directory', 'true');
+    } else if (fileInputRef.current) {
+      fileInputRef.current.removeAttribute('webkitdirectory');
+      fileInputRef.current.removeAttribute('directory');
     }
-  }, [fileInputRef]);
+  }, [fileInputRef, is3DModel]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!files) return;
+    if (!image) {
+      console.error('No image selected');
+      return;
+    }
 
     const formData = new FormData();
     formData.append('name', name);
@@ -64,12 +72,16 @@ const TotemFormModal: React.FC<TotemFormModalProps> = ({ onClose, userLocation, 
     formData.append('location[type]', 'Point');
     formData.append('location[coordinates][0]', selectedLocation[0].toString());
     formData.append('location[coordinates][1]', selectedLocation[1].toString());
+    formData.append('files', image);
 
-    for (let i = 0; i < files.length; i++) {
-      formData.append('files', files[i], (files[i] as any).webkitRelativePath);
+    if (files) {
+      for (let i = 0; i < files.length; i++) {
+        formData.append('files', files[i], (files[i] as any).webkitRelativePath);
+      }
     }
 
     try {
+      console.log('Sending form data...');
       await api.post('/totems', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
@@ -85,6 +97,12 @@ const TotemFormModal: React.FC<TotemFormModalProps> = ({ onClose, userLocation, 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
       setFiles(e.target.files);
+    }
+  };
+
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      setImage(e.target.files[0]);
     }
   };
 
@@ -104,15 +122,36 @@ const TotemFormModal: React.FC<TotemFormModalProps> = ({ onClose, userLocation, 
             />
           </div>
           <div className="mb-4">
-            <label className="block text-gray-700 mb-2">Upload Model & Textures:</label>
+            <label className="block text-gray-700 mb-2">Upload Image:</label>
             <input
               type="file"
-              multiple
-              onChange={handleFileChange}
-              ref={fileInputRef}
+              accept="image/*"
+              onChange={handleImageChange}
+              required
               className="w-full p-2 border border-gray-300 rounded"
             />
           </div>
+          <div className="mb-4 flex items-center">
+            <input
+              type="checkbox"
+              checked={is3DModel}
+              onChange={(e) => setIs3DModel(e.target.checked)}
+              className="mr-2"
+            />
+            <label className="text-gray-700">This totem includes a 3D model</label>
+          </div>
+          {is3DModel && (
+            <div className="mb-4">
+              <label className="block text-gray-700 mb-2">Upload Model & Textures:</label>
+              <input
+                type="file"
+                multiple
+                onChange={handleFileChange}
+                ref={fileInputRef}
+                className="w-full p-2 border border-gray-300 rounded"
+              />
+            </div>
+          )}
           <div className="mb-4">
             <label className="block text-gray-700 mb-2">Selected Location:</label>
             <div className="mb-2">{selectedLocation.join(', ')}</div>

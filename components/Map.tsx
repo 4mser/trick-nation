@@ -3,15 +3,18 @@ import mapboxgl, { LngLatLike, Marker } from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js';
 import api from '@/services/api';
 import { useAuth } from '@/context/auth-context';
 import SpotFormModal from './SpotFormModal';
 import SpotDetailModal from './SpotDetailModal';
 import TotemFormModal from './TotemFormModal';
+import TotemDetailModal from './TotemDetailModal';
 import { Spot } from '../types/spots';
 import { Totem } from "@/types/totem";
 
 const MAPBOX_TOKEN = process.env.NEXT_PUBLIC_MAPBOX_TOKEN || '';
+const EXPLORATION_RADIUS_METERS = 30;
 
 const Map: React.FC = () => {
   const { user } = useAuth();
@@ -25,6 +28,15 @@ const Map: React.FC = () => {
   const [showTotemForm, setShowTotemForm] = useState(false);
   const [isDebugMode, setIsDebugMode] = useState(false);
   const [selectedSpot, setSelectedSpot] = useState<Spot | null>(null);
+  const [selectedTotem, setSelectedTotem] = useState<Totem | null>(null);
+
+  const raycaster = new THREE.Raycaster();
+  const mouse = new THREE.Vector2();
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera();
+  const clock = new THREE.Clock();
+  let mixer: THREE.AnimationMixer | null = null;
+  let renderer: THREE.WebGLRenderer;
 
   const createMarkerElement = useCallback(
     (isExplorationRadio = false) => {
@@ -47,19 +59,48 @@ const Map: React.FC = () => {
     markerElement.style.height = '40px';
     markerElement.style.borderRadius = '50%';
     markerElement.style.overflow = 'hidden';
-    markerElement.style.border = '2px solid white';
+    markerElement.style.border = '2px solid rgb(234, 179, 8)';
     markerElement.style.boxShadow = '0 0 5px rgba(0,0,0,0.5)';
     
     const img = document.createElement('img');
     img.src = `${spot.imageUrl || '/default-spot-image.jpg'}`;
     img.style.width = '100%';
     img.style.height = '100%';
+    img.style.borderRadius = '50%'
+    img.style.padding = '2px'
     img.style.objectFit = 'cover';
     
     markerElement.appendChild(img);
     
     markerElement.addEventListener('click', () => {
       setSelectedSpot(spot);
+    });
+    
+    return markerElement;
+  }, []);
+
+  const createTotemMarkerElement = useCallback((totem: Totem) => {
+    const markerElement = document.createElement('div');
+    markerElement.className = 'totem-marker';
+    markerElement.style.width = '60px';
+    markerElement.style.height = '60px';
+    markerElement.style.borderRadius = '50%';
+    markerElement.style.overflow = 'hidden';
+    markerElement.style.border = '3px solid white';
+    markerElement.style.boxShadow = '0 0 5px rgba(0,0,0,0.5)';
+    
+    const img = document.createElement('img');
+    img.src = `${totem.imageUrl}`;
+    img.style.width = '100%';
+    img.style.height = '100%';
+    img.style.borderRadius = '50%'
+    img.style.padding = '3px'
+    img.style.objectFit = 'cover';
+    
+    markerElement.appendChild(img);
+    
+    markerElement.addEventListener('click', () => {
+      setSelectedTotem(totem);
     });
     
     return markerElement;
@@ -99,112 +140,26 @@ const Map: React.FC = () => {
     }
   }, []);
 
-  useEffect(() => {
-    const node = mapNode.current;
-    if (typeof window === 'undefined' || node === null) return;
+  const calculateDistance = (location1: [number, number], location2: [number, number]): number => {
+    const [lat1, lon1] = location1;
+    const [lat2, lon2] = location2;
 
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        const { latitude, longitude } = position.coords;
-        const mapboxMap = new mapboxgl.Map({
-          container: node,
-          accessToken: MAPBOX_TOKEN,
-          style: 'mapbox://styles/mapbox/dark-v11',
-          center: [longitude, latitude],
-          zoom: 17,
-        });
+    const R = 6371e3; // Radius of the Earth in meters
+    const φ1 = lat1 * (Math.PI / 180);
+    const φ2 = lat2 * (Math.PI / 180);
+    const Δφ = (lat2 - lat1) * (Math.PI / 180);
+    const Δλ = (lon2 - lon1) * (Math.PI / 180);
 
-        setMap(mapboxMap);
-        setUserLocation([longitude, latitude]);
+    const a = Math.sin(Δφ / 2) * Math.sin(Δφ / 2) +
+              Math.cos(φ1) * Math.cos(φ2) *
+              Math.sin(Δλ / 2) * Math.sin(Δλ / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 
-        mapboxMap.on('load', () => {
-          mapboxMap.on('zoom', () => {
-            if (markerRef.current) {
-              const zoomLevel = mapboxMap.getZoom();
-              const metersPerPixel = (156543.03392 * Math.cos(latitude * (Math.PI / 180))) / Math.pow(2, zoomLevel);
-              const explorationRadioRadiusInMeters = 270;
-              const explorationRadioRadiusInPixels = explorationRadioRadiusInMeters / metersPerPixel;
-              const markerSizeInPixels = explorationRadioRadiusInPixels * 0.9;
-              markerRef.current.getElement().style.width = `${markerSizeInPixels}px`;
-              markerRef.current.getElement().style.height = `${markerSizeInPixels}px`;
-            }
-          });
+    const distance = R * c;
+    return distance;
+  };
 
-          mapboxMap.on('click', (e) => {
-            if (isDebugMode) {
-              setUserLocation([e.lngLat.lng, e.lngLat.lat]);
-            }
-          });
-        });
-
-        return () => {
-          mapboxMap.remove();
-        };
-      },
-      (error) => {
-        console.error('Error al obtener la ubicación del usuario:', error);
-      }
-    );
-  }, [isDebugMode]);
-
-  useEffect(() => {
-    if (map && userLocation) {
-      if (markerRef.current) {
-        markerRef.current.remove();
-      }
-
-      const userLocationMarker = new mapboxgl.Marker({
-        element: createMarkerElement(),
-        draggable: isDebugMode,
-      })
-        .setLngLat(userLocation as [number, number])
-        .addTo(map)
-        .on('dragend', () => {
-          const newLocation = userLocationMarker.getLngLat();
-          setUserLocation([newLocation.lng, newLocation.lat]);
-        });
-
-      const explorationRadioMarker = new mapboxgl.Marker({
-        element: createMarkerElement(true),
-      })
-        .setLngLat(userLocation as [number, number])
-        .addTo(map);
-
-      markerRef.current = explorationRadioMarker;
-    }
-  }, [map, userLocation, createMarkerElement, isDebugMode]);
-
-  useEffect(() => {
-    if (map) {
-      spots.forEach((spot) => {
-        const coordinates: [number, number] = [spot.location.coordinates[0], spot.location.coordinates[1]];
-        new mapboxgl.Marker({
-          element: createSpotMarkerElement(spot),
-        })
-          .setLngLat(coordinates)
-          .addTo(map);
-      });
-    }
-  }, [map, spots, createSpotMarkerElement]);
-
-  useEffect(() => {
-    fetchSpots();
-    fetchTotems();
-  }, [fetchSpots, fetchTotems]);
-
-  useEffect(() => {
-    if (map) {
-      totems.forEach((totem) => {
-        add3DModelToMap(map, totem.modelUrl, totem.location.coordinates);
-      });
-    }
-  }, [map, totems]);
-
-  const toggleDebugMode = useCallback(() => {
-    setIsDebugMode((prev) => !prev);
-  }, []);
-
-  const add3DModelToMap = (map: mapboxgl.Map, modelUrl: string, location: [number, number]) => {
+  const add3DModelToMap = (map: mapboxgl.Map, modelUrl: string, location: [number, number], totem: Totem) => {
     const modelOrigin = location;
     const modelAltitude = 0;
     const modelRotate = [Math.PI / 2, 0, 0];
@@ -224,28 +179,11 @@ const Map: React.FC = () => {
       scale: modelAsMercatorCoordinate.meterInMercatorCoordinateUnits() * 200,
     };
 
-    const scene = new THREE.Scene();
-    const camera = new THREE.Camera();
-    const renderer = new THREE.WebGLRenderer({
-      canvas: map.getCanvas(),
-      context: (map as any).painter.context.gl,
-      antialias: true,
-    });
-
-    renderer.autoClear = false;
-    renderer.clearDepth();
-
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
-    scene.add(ambientLight);
-
-    const directionalLight = new THREE.DirectionalLight(0xffffff, 0.6);
-    directionalLight.position.set(0, 70, 100).normalize();
-    scene.add(directionalLight);
-
-    const clock = new THREE.Clock();
-    let mixer: THREE.AnimationMixer | null = null;
-
     const loader = new GLTFLoader();
+    const dracoLoader = new DRACOLoader();
+    dracoLoader.setDecoderPath('/path/to/draco/gltf/');
+
+    loader.setDRACOLoader(dracoLoader);
 
     loader.load(modelUrl, (gltf) => {
       const model = gltf.scene;
@@ -255,6 +193,14 @@ const Map: React.FC = () => {
       });
 
       scene.add(model);
+
+      model.userData = { ...totem }; // Add userData to the model for later reference
+
+      model.traverse((child) => {
+        if (child instanceof THREE.Mesh) {
+          child.userData = { ...totem }; // Add userData to the child mesh
+        }
+      });
     });
 
     map.on('render', () => {
@@ -299,6 +245,158 @@ const Map: React.FC = () => {
     });
   };
 
+  useEffect(() => {
+    const node = mapNode.current;
+    if (typeof window === 'undefined' || node === null) return;
+
+    // Asegúrate de que el contenedor del mapa esté vacío
+    if (node.firstChild) {
+      node.removeChild(node.firstChild);
+    }
+
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const { latitude, longitude } = position.coords;
+        const mapboxMap = new mapboxgl.Map({
+          container: node,
+          accessToken: MAPBOX_TOKEN,
+          style: 'mapbox://styles/mapbox/standard',
+          center: [longitude, latitude],
+          zoom: 17,
+        });
+
+        setMap(mapboxMap);
+        setUserLocation([longitude, latitude]);
+
+        renderer = new THREE.WebGLRenderer({
+          canvas: mapboxMap.getCanvas(),
+          context: (mapboxMap as any).painter.context.gl,
+          antialias: true,
+        });
+
+        renderer.autoClear = false;
+        renderer.clearDepth();
+
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
+        scene.add(ambientLight);
+
+        const directionalLight = new THREE.DirectionalLight(0xffffff, 0.6);
+        directionalLight.position.set(0, 70, 100).normalize();
+        scene.add(directionalLight);
+
+        mapboxMap.on('style.load', () => {
+          mapboxMap.setConfigProperty('basemap', 'lightPreset', 'dusk');
+          mapboxMap.setConfigProperty('basemap', 'showPointOfInterestLabels', false);
+          mapboxMap.setConfigProperty('basemap', 'showTransitLabels', false);
+        });
+
+        mapboxMap.on('load', () => {
+          mapboxMap.on('zoom', () => {
+            if (markerRef.current) {
+              const zoomLevel = mapboxMap.getZoom();
+              const metersPerPixel = (156543.03392 * Math.cos(latitude * (Math.PI / 180))) / Math.pow(2, zoomLevel);
+              const explorationRadioRadiusInMeters = 270;
+              const explorationRadioRadiusInPixels = explorationRadioRadiusInMeters / metersPerPixel;
+              const markerSizeInPixels = explorationRadioRadiusInPixels * 0.9;
+              markerRef.current.getElement().style.width = `${markerSizeInPixels}px`;
+              markerRef.current.getElement().style.height = `${markerSizeInPixels}px`;
+            }
+          });
+
+          mapboxMap.on('click', (e) => {
+            if (isDebugMode) {
+              setUserLocation([e.lngLat.lng, e.lngLat.lat]);
+              return;
+            }
+
+            mouse.x = (e.point.x / mapboxMap.getCanvas().clientWidth) * 2 - 1;
+            mouse.y = -(e.point.y / mapboxMap.getCanvas().clientHeight) * 2 + 1;
+            
+            raycaster.setFromCamera(mouse, camera);
+            
+            const intersects = raycaster.intersectObjects(scene.children, true);
+            
+            if (intersects.length > 0) {
+              const intersectedObject = intersects[0].object;
+              const totemData = intersectedObject.userData as Totem;
+              setSelectedTotem(totemData);
+            }
+          });
+
+          totems.forEach((totem) => {
+            if (totem.modelUrl) {
+              add3DModelToMap(mapboxMap, totem.modelUrl, totem.location.coordinates, totem);
+            } else {
+              new mapboxgl.Marker({
+                element: createTotemMarkerElement(totem),
+              })
+                .setLngLat(totem.location.coordinates as [number, number])
+                .addTo(mapboxMap);
+            }
+          });
+        });
+
+        return () => {
+          mapboxMap.remove();
+        };
+      },
+      (error) => {
+        console.error('Error al obtener la ubicación del usuario:', error);
+      }
+    );
+  }, [isDebugMode, totems, createTotemMarkerElement]);
+
+  useEffect(() => {
+    if (map && userLocation) {
+      if (markerRef.current) {
+        markerRef.current.remove();
+      }
+
+      const userLocationMarker = new mapboxgl.Marker({
+        element: createMarkerElement(),
+        draggable: isDebugMode,
+      })
+        .setLngLat(userLocation as [number, number])
+        .addTo(map)
+        .on('dragend', () => {
+          const newLocation = userLocationMarker.getLngLat();
+          setUserLocation([newLocation.lng, newLocation.lat]);
+        });
+
+      const explorationRadioMarker = new mapboxgl.Marker({
+        element: createMarkerElement(true),
+      })
+        .setLngLat(userLocation as [number, number])
+        .addTo(map);
+
+      markerRef.current = explorationRadioMarker;
+    }
+  }, [map, userLocation, createMarkerElement, isDebugMode]);
+
+  useEffect(() => {
+    if (map) {
+      spots
+        .filter(spot => calculateDistance(userLocation as [number, number], spot.location.coordinates) <= EXPLORATION_RADIUS_METERS)
+        .forEach((spot) => {
+          const coordinates: [number, number] = [spot.location.coordinates[0], spot.location.coordinates[1]];
+          new mapboxgl.Marker({
+            element: createSpotMarkerElement(spot),
+          })
+            .setLngLat(coordinates)
+            .addTo(map);
+        });
+    }
+  }, [map, spots, userLocation, createSpotMarkerElement]);
+
+  useEffect(() => {
+    fetchSpots();
+    fetchTotems();
+  }, [fetchSpots, fetchTotems]);
+
+  const toggleDebugMode = useCallback(() => {
+    setIsDebugMode((prev) => !prev);
+  }, []);
+
   return (
     <section className="max-h-[100dvh] overflow-hidden">
       <div ref={mapNode} style={{ width: '100%', height: '100dvh' }} />
@@ -311,14 +409,15 @@ const Map: React.FC = () => {
             <img src="../assets/map-icons/pin.svg" alt="Mark Spot" className='w-full filter hue-rotate-[210deg] h-full object-contain' />
           </div>
         </button>
-        <button
+        {/* Solo activar para subir totems */}
+        {/* <button
           className='absolute right-28 bottom-3 w-14 h-14 rounded-full overflow-hidden flex justify-center items-center bg-gradient-to-tr from-green-500 to-green-800 p-[2px]'
           onClick={handleAddTotem}
         >
           <div className='flex justify-center items-center w-full h-full p-2.5 bg-black/30 backdrop-blur-3xl rounded-full'>
             <img src="../assets/map-icons/totem.svg" alt="Add Totem" className='w-full filter hue-rotate-[210deg] h-full object-contain' />
           </div>
-        </button>
+        </button> */}
         <button
           className='absolute right-[49px] bottom-[59px] bg-black/50 flex justify-center items-center w-9 h-9 rounded-full p-2'
         >
@@ -361,6 +460,12 @@ const Map: React.FC = () => {
         <SpotDetailModal
           spot={selectedSpot}
           onClose={() => setSelectedSpot(null)}
+        />
+      )}
+      {selectedTotem && (
+        <TotemDetailModal
+          totem={selectedTotem}
+          onClose={() => setSelectedTotem(null)}
         />
       )}
     </section>
