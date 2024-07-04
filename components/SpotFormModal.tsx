@@ -49,31 +49,31 @@ const SpotFormModal: React.FC<SpotFormModalProps> = ({ onClose, userLocation, us
   };
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-      <div className="bg-white p-8 rounded-lg shadow-lg">
-        <h2 className="text-2xl font-bold mb-4">Mark a Spot</h2>
+    <div className="fixed z-[100] inset-0 flex items-center justify-center bg-black/30">
+      <div className="bg-white/10 backdrop-blur-md p-8 rounded-lg shadow-lg">
+        <h2 className="text-2xl font-bold mb-4 text-white">Deja un Pin en el mapa</h2>
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
-            <label className="block text-gray-700 mb-2">Spot Name:</label>
+            <label className="block text-gray-300 mb-2">Comentario:</label>
             <input
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
               required
-              className="w-full p-2 border border-gray-300 rounded"
+              className="w-full p-2 border border-gray-300 rounded bg-transparent text-white"
             />
           </div>
           <div className="mb-4">
-            <label className="block text-gray-700 mb-2">Upload Image:</label>
+            <label className="block text-gray-300 mb-2">Cargar Archivo:</label>
             <input
               type="file"
               onChange={handleFileChange}
-              className="w-full p-2 border border-gray-300 rounded"
+              className="w-full rounded bg-transparent text-white/70"
             />
           </div>
           <div className="flex justify-end">
-            <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded mr-2">Save</button>
-            <button type="button" onClick={onClose} className="bg-gray-500 text-white px-4 py-2 rounded">Cancel</button>
+            <button type="submit" className="bg-yellow-500 text-white px-4 py-2 rounded mr-2">Subir</button>
+            <button type="button" onClick={onClose} className="bg-gray-500 text-white px-4 py-2 rounded">Cancelar</button>
           </div>
         </form>
       </div>

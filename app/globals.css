@@ -74,3 +74,24 @@
       @apply bg-background text-foreground;
     }
   }
+
+
+  /* Agrega esto a tu archivo CSS */
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(234, 179, 8, 0.4);
+  }
+  70% {
+    box-shadow: 0 0 0 20px rgba(234, 179, 8, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(234, 179, 8, 0);
+  }
+}
+
+
+
+
+.totem-marker {
+  animation: pulse 2s infinite, bounce 2s infinite;
+}

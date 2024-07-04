@@ -59,15 +59,13 @@ const Map: React.FC = () => {
     markerElement.style.height = '40px';
     markerElement.style.borderRadius = '50%';
     markerElement.style.overflow = 'hidden';
-    markerElement.style.border = '2px solid rgb(234, 179, 8)';
-    markerElement.style.boxShadow = '0 0 5px rgba(0,0,0,0.5)';
+    markerElement.style.boxShadow = '0 2px 5px rgba(0,0,0,0.5)';
     
     const img = document.createElement('img');
     img.src = `${spot.imageUrl || '/default-spot-image.jpg'}`;
     img.style.width = '100%';
     img.style.height = '100%';
     img.style.borderRadius = '50%'
-    img.style.padding = '2px'
     img.style.objectFit = 'cover';
     
     markerElement.appendChild(img);
@@ -86,7 +84,7 @@ const Map: React.FC = () => {
     markerElement.style.height = '60px';
     markerElement.style.borderRadius = '50%';
     markerElement.style.overflow = 'hidden';
-    markerElement.style.border = '3px solid white';
+    markerElement.style.border = '3px solid rgb(234, 179, 8)';
     markerElement.style.boxShadow = '0 0 5px rgba(0,0,0,0.5)';
     
     const img = document.createElement('img');
@@ -144,7 +142,7 @@ const Map: React.FC = () => {
     const [lat1, lon1] = location1;
     const [lat2, lon2] = location2;
 
-    const R = 6371e3; // Radius of the Earth in meters
+    const R = 6371e3; // Radio de la fokin tierra en metros
     const φ1 = lat1 * (Math.PI / 180);
     const φ2 = lat2 * (Math.PI / 180);
     const Δφ = (lat2 - lat1) * (Math.PI / 180);
