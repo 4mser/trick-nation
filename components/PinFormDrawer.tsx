@@ -13,8 +13,6 @@ import {
   DrawerTrigger,
 } from "@/components/ui/drawer";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Progress } from "@/components/ui/progress";
 import axios from 'axios';
 
@@ -30,6 +28,7 @@ const PinFormDrawer: React.FC<PinFormDrawerProps> = ({ userLocation, userId, onP
   const [loading, setLoading] = useState(false);
   const [progress, setProgress] = useState(0);
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [fileName, setFileName] = useState('Sin archivos seleccionados');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -73,6 +72,9 @@ const PinFormDrawer: React.FC<PinFormDrawerProps> = ({ userLocation, userId, onP
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       setFile(e.target.files[0]);
+      setFileName(e.target.files[0].name);
+    } else {
+      setFileName('Sin archivos seleccionados');
     }
   };
 
@@ -85,41 +87,43 @@ const PinFormDrawer: React.FC<PinFormDrawerProps> = ({ userLocation, userId, onP
           </div>
         </Button>
       </DrawerTrigger>
-      <DrawerContent className="bg-white/10 backdrop-blur-md border-t border-white/10 rounded-t-3xl">
+      <DrawerContent className="dark backdrop-blur-md border-none rounded-t-3xl">
         <DrawerHeader>
           <DrawerTitle className="text-white text-center">Deja un Pin en el mapa</DrawerTitle>
           <DrawerDescription>
             <form onSubmit={handleSubmit}>
               <div className="mb-4">
-                <Label className="block text-gray-300 mb-2">Comentario:</Label>
-                <Input
+                <label className="block text-gray-300 mb-2">Comentario:</label>
+                <input
                   type="text"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   required
-                  className="w-full p-2 border border-gray-300 rounded bg-transparent text-white"
+                  className="w-full p-2 border border-white/30 rounded-md bg-transparent text-white"
                 />
               </div>
               <div className="mb-4">
-                <Label className="block text-gray-300 mb-2">Cargar Archivo:</Label>
-                <Input
-                  type="file"
-                  onChange={handleFileChange}
-                  className="w-full rounded bg-transparent text-white"
-                  style={{ color: 'white' }}
-                />
+                <label className="custom-file-label">
+                  Seleccionar archivo
+                  <input
+                    type="file"
+                    onChange={handleFileChange}
+                    className="custom-file-input"
+                  />
+                </label>
+                <span className="custom-file-text">{fileName}</span>
               </div>
               {loading && (
                 <div className="mb-4">
                   <Progress value={progress} className="w-full bg-yellow-600 h-2" />
                 </div>
               )}
-              <DrawerFooter className="flex justify-end">
-                <Button type="submit" className="bg-yellow-500 text-white px-4 py-2 rounded" disabled={loading}>
+              <DrawerFooter className="flex justify-end p-0 py-4">
+                <button type="submit" className="bg-gradient-to-br from-yellow-600/60 to-transparent border border-yellow-600 text-white px-4 py-2 rounded" disabled={loading}>
                   {loading ? `Subiendo... ${progress}%` : 'Subir'}
-                </Button>
+                </button>
                 <DrawerClose asChild>
-                  <Button className=" text-white px-4 py-2 rounded" onClick={() => setDrawerOpen(false)}>Cancelar</Button>
+                  <button className=" text-white px-4 py-2 rounded" onClick={() => setDrawerOpen(false)}>Cancelar</button>
                 </DrawerClose>
               </DrawerFooter>
             </form>
