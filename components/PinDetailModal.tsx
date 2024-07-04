@@ -26,7 +26,7 @@ const PinDetailModal: React.FC<PinDetailModalProps> = ({ pin, onClose }) => {
         <div className='p-4'>
           <h3 className="text-xl font-bold mb-2">{pin.name}</h3>
           <p className="mb-2">{pin.discoveredByUserId.username}</p>
-          <a href={`/spots/${pin._id}`} className="text-blue-500 hover:underline">View Details</a>
+          <a href={`/pins/${pin._id}`} className="text-blue-500 hover:underline">View Details</a>
         </div>
       </div>
     </div>

@@ -2,15 +2,26 @@
 
 import React, { useState } from 'react';
 import api from '@/services/api';
+import {
+  Drawer,
+  DrawerClose,
+  DrawerContent,
+  DrawerDescription,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from "@/components/ui/drawer";
+import { Button } from "@/components/ui/button"; // Asegúrate de que el componente Button esté importado correctamente
 
-interface PinFormModalProps {
+interface PinFormDrawerProps {
   onClose: () => void;
   userLocation: [number, number] | null;
   userId: string;
   onPinCreated: () => void;
 }
 
-const PinFormModal: React.FC<PinFormModalProps> = ({ onClose, userLocation, userId, onPinCreated }) => {
+const PinFormModal: React.FC<PinFormDrawerProps> = ({ onClose, userLocation, userId, onPinCreated }) => {
   const [name, setName] = useState('');
   const [file, setFile] = useState<File | null>(null);
 
@@ -49,35 +60,42 @@ const PinFormModal: React.FC<PinFormModalProps> = ({ onClose, userLocation, user
   };
 
   return (
-    <div className="fixed z-[100] inset-0 flex items-center justify-center bg-black/30">
-      <div className="bg-white/10 backdrop-blur-md p-8 rounded-lg shadow-lg">
-        <h2 className="text-2xl font-bold mb-4 text-white">Deja un Pin en el mapa</h2>
-        <form onSubmit={handleSubmit}>
-          <div className="mb-4">
-            <label className="block text-gray-300 mb-2">Comentario:</label>
-            <input
-              type="text"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              required
-              className="w-full p-2 border border-gray-300 rounded bg-transparent text-white"
-            />
-          </div>
-          <div className="mb-4">
-            <label className="block text-gray-300 mb-2">Cargar Archivo:</label>
-            <input
-              type="file"
-              onChange={handleFileChange}
-              className="w-full rounded bg-transparent text-white/70"
-            />
-          </div>
-          <div className="flex justify-end">
-            <button type="submit" className="bg-yellow-500 text-white px-4 py-2 rounded mr-2">Subir</button>
-            <button type="button" onClick={onClose} className="bg-gray-500 text-white px-4 py-2 rounded">Cancelar</button>
-          </div>
-        </form>
-      </div>
-    </div>
+    <Drawer open={true} onOpenChange={onClose}>
+      <DrawerTrigger />
+      <DrawerContent>
+        <DrawerHeader>
+          <DrawerTitle>Deja un Pin en el mapa</DrawerTitle>
+          <DrawerDescription>
+            <form onSubmit={handleSubmit}>
+              <div className="mb-4">
+                <label className="block text-gray-300 mb-2">Comentario:</label>
+                <input
+                  type="text"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  required
+                  className="w-full p-2 border border-gray-300 rounded bg-transparent text-white"
+                />
+              </div>
+              <div className="mb-4">
+                <label className="block text-gray-300 mb-2">Cargar Archivo:</label>
+                <input
+                  type="file"
+                  onChange={handleFileChange}
+                  className="w-full rounded bg-transparent text-white/70"
+                />
+              </div>
+              <DrawerFooter>
+                <Button type="submit" className="bg-yellow-500 text-white px-4 py-2 rounded mr-2">Subir</Button>
+                <DrawerClose asChild>
+                  <Button variant="outline" onClick={onClose} className="bg-gray-500 text-white px-4 py-2 rounded">Cancelar</Button>
+                </DrawerClose>
+              </DrawerFooter>
+            </form>
+          </DrawerDescription>
+        </DrawerHeader>
+      </DrawerContent>
+    </Drawer>
   );
 };
 

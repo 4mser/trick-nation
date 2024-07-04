@@ -25,10 +25,10 @@ const Map: React.FC = () => {
   const markerRef = useRef<Marker | null>(null);
   const [pins, setPins] = useState<Pin[]>([]);
   const [totems, setTotems] = useState<Totem[]>([]);
-  const [showSpotForm, setShowSpotForm] = useState(false);
+  const [showPinForm, setShowPinForm] = useState(false);
   const [showTotemForm, setShowTotemForm] = useState(false);
   const [isDebugMode, setIsDebugMode] = useState(false);
-  const [selectedSpot, setSelectedSpot] = useState<Pin | null>(null);
+  const [selectedPin, setSelectedPin] = useState<Pin | null>(null);
   const [selectedTotem, setSelectedTotem] = useState<Totem | null>(null);
 
   const raycaster = new THREE.Raycaster();
@@ -53,9 +53,9 @@ const Map: React.FC = () => {
     []
   );
 
-  const createSpotMarkerElement = useCallback((spot: Pin) => {
+  const createPinMarkerElement = useCallback((pin: Pin) => {
     const markerElement = document.createElement('div');
-    markerElement.className = 'spot-marker';
+    markerElement.className = 'pin-marker';
     markerElement.style.width = '40px';
     markerElement.style.height = '40px';
     markerElement.style.borderRadius = '50%';
@@ -63,7 +63,7 @@ const Map: React.FC = () => {
     markerElement.style.boxShadow = '0 2px 5px rgba(0,0,0,0.5)';
     
     const img = document.createElement('img');
-    img.src = `${spot.imageUrl || '/default-spot-image.jpg'}`;
+    img.src = `${pin.imageUrl || '/default-pin-image.jpg'}`;
     img.style.width = '100%';
     img.style.height = '100%';
     img.style.borderRadius = '50%'
@@ -72,7 +72,7 @@ const Map: React.FC = () => {
     markerElement.appendChild(img);
     
     markerElement.addEventListener('click', () => {
-      setSelectedSpot(spot);
+      setSelectedPin(pin);
     });
     
     return markerElement;
@@ -111,9 +111,9 @@ const Map: React.FC = () => {
     }
   }, [map, userLocation]);
 
-  const handleMarkSpot = useCallback(() => {
+  const handleMarkPin = useCallback(() => {
     if (!userLocation || !user) return;
-    setShowSpotForm(true);
+    setShowPinForm(true);
   }, [userLocation, user]);
 
   const handleAddTotem = useCallback(() => {
@@ -375,17 +375,17 @@ const Map: React.FC = () => {
   useEffect(() => {
     if (map) {
       pins
-        .filter(spot => calculateDistance(userLocation as [number, number], spot.location.coordinates) <= EXPLORATION_RADIUS_METERS)
-        .forEach((spot) => {
-          const coordinates: [number, number] = [spot.location.coordinates[0], spot.location.coordinates[1]];
+        .filter(pin => calculateDistance(userLocation as [number, number], pin.location.coordinates) <= EXPLORATION_RADIUS_METERS)
+        .forEach((pin) => {
+          const coordinates: [number, number] = [pin.location.coordinates[0], pin.location.coordinates[1]];
           new mapboxgl.Marker({
-            element: createSpotMarkerElement(spot),
+            element: createPinMarkerElement(pin),
           })
             .setLngLat(coordinates)
             .addTo(map);
         });
     }
-  }, [map, pins, userLocation, createSpotMarkerElement]);
+  }, [map, pins, userLocation, createPinMarkerElement]);
 
   useEffect(() => {
     fetchPins();
@@ -402,10 +402,10 @@ const Map: React.FC = () => {
       <section className='fixed z-50 bottom-14 w-fit right-3 h-fit'>
         <button
           className='absolute right-0 bottom-3 w-14 h-14 rounded-full overflow-hidden flex justify-center items-center bg-gradient-to-tr from-yellow-500 to-yellow-800 p-[2px]'
-          onClick={handleMarkSpot}
+          onClick={handleMarkPin}
         >
           <div className='flex justify-center items-center w-full h-full p-2.5 bg-black/30 backdrop-blur-3xl rounded-full'>
-            <img src="../assets/map-icons/pin.svg" alt="Mark Spot" className='w-full filter hue-rotate-[210deg] h-full object-contain' />
+            <img src="../assets/map-icons/pin.svg" alt="Mark Pin" className='w-full filter hue-rotate-[210deg] h-full object-contain' />
           </div>
         </button>
         {/* Solo activar para subir totems */}
@@ -439,9 +439,9 @@ const Map: React.FC = () => {
           />
         </button>
       </section>
-      {showSpotForm && user && user._id && (
+      {showPinForm && user && user._id && (
         <PinFormModal
-          onClose={() => setShowSpotForm(false)}
+          onClose={() => setShowPinForm(false)}
           userLocation={userLocation as [number, number]} // Asegurando que userLocation no sea null
           userId={user._id}
           onPinCreated={fetchPins}
@@ -455,10 +455,10 @@ const Map: React.FC = () => {
           onTotemCreated={fetchTotems}
         />
       )}
-      {selectedSpot && (
+      {selectedPin && (
         <PinDetailModal
-          pin={selectedSpot}
-          onClose={() => setSelectedSpot(null)}
+          pin={selectedPin}
+          onClose={() => setSelectedPin(null)}
         />
       )}
       {selectedTotem && (
