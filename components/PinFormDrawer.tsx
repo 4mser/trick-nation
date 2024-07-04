@@ -91,7 +91,7 @@ const PinFormDrawer: React.FC<PinFormDrawerProps> = ({ userLocation, userId, onP
         <DrawerHeader>
           <DrawerTitle className="text-white text-center">Deja un Pin en el mapa</DrawerTitle>
           <DrawerDescription>
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit} className="text-base"> {/* Add text-base to prevent zoom */}
               <div className="mb-4">
                 <label className="block text-gray-300 mb-2">Comentario:</label>
                 <input
@@ -99,7 +99,7 @@ const PinFormDrawer: React.FC<PinFormDrawerProps> = ({ userLocation, userId, onP
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   required
-                  className="w-full p-2 border border-white/30 rounded-md bg-transparent text-white"
+                  className="w-full p-2 border border-white/30 rounded-md bg-transparent text-white text-base" 
                 />
               </div>
               <div className="mb-4">
@@ -123,7 +123,7 @@ const PinFormDrawer: React.FC<PinFormDrawerProps> = ({ userLocation, userId, onP
                   {loading ? `Subiendo... ${progress}%` : 'Subir'}
                 </button>
                 <DrawerClose asChild>
-                  <button className=" text-white px-4 py-2 rounded" onClick={() => setDrawerOpen(false)}>Cancelar</button>
+                  <button className="text-white px-4 py-2 rounded" onClick={() => setDrawerOpen(false)}>Cancelar</button>
                 </DrawerClose>
               </DrawerFooter>
             </form>
