@@ -10,9 +10,8 @@ import TotemFormModal from './TotemFormModal';
 import TotemDetailModal from './TotemDetailModal';
 import { Totem } from "@/types/totem";
 import { Pin } from "@/types/pins";
-import PinFormModal from "./PinFormModal";
+import PinFormDrawer from "./PinFormDrawer";
 import PinDetailModal from "./PinDetailModal";
-
 
 const MAPBOX_TOKEN = process.env.NEXT_PUBLIC_MAPBOX_TOKEN || '';
 const EXPLORATION_RADIUS_METERS = 30;
@@ -25,7 +24,6 @@ const Map: React.FC = () => {
   const markerRef = useRef<Marker | null>(null);
   const [pins, setPins] = useState<Pin[]>([]);
   const [totems, setTotems] = useState<Totem[]>([]);
-  const [showPinForm, setShowPinForm] = useState(false);
   const [showTotemForm, setShowTotemForm] = useState(false);
   const [isDebugMode, setIsDebugMode] = useState(false);
   const [selectedPin, setSelectedPin] = useState<Pin | null>(null);
@@ -110,11 +108,6 @@ const Map: React.FC = () => {
       map.flyTo({ center: userLocation as [number, number], zoom: 17 });
     }
   }, [map, userLocation]);
-
-  const handleMarkPin = useCallback(() => {
-    if (!userLocation || !user) return;
-    setShowPinForm(true);
-  }, [userLocation, user]);
 
   const handleAddTotem = useCallback(() => {
     if (!userLocation || !user) return;
@@ -400,14 +393,12 @@ const Map: React.FC = () => {
     <section className="max-h-[100dvh] overflow-hidden">
       <div ref={mapNode} style={{ width: '100%', height: '100dvh' }} />
       <section className='fixed z-50 bottom-14 w-fit right-3 h-fit'>
-        <button
-          className='absolute right-0 bottom-3 w-14 h-14 rounded-full overflow-hidden flex justify-center items-center bg-gradient-to-tr from-yellow-500 to-yellow-800 p-[2px]'
-          onClick={handleMarkPin}
-        >
-          <div className='flex justify-center items-center w-full h-full p-2.5 bg-black/30 backdrop-blur-3xl rounded-full'>
-            <img src="../assets/map-icons/pin.svg" alt="Mark Pin" className='w-full filter hue-rotate-[210deg] h-full object-contain' />
-          </div>
-        </button>
+        {/* El botón para abrir el drawer está dentro de PinFormDrawer */}
+        <PinFormDrawer
+          userLocation={userLocation as [number, number]}
+          userId={user ? user._id : ''}
+          onPinCreated={fetchPins}
+        />
         {/* Solo activar para subir totems */}
         {/* <button
           className='absolute right-28 bottom-3 w-14 h-14 rounded-full overflow-hidden flex justify-center items-center bg-gradient-to-tr from-green-500 to-green-800 p-[2px]'
@@ -439,14 +430,6 @@ const Map: React.FC = () => {
           />
         </button>
       </section>
-      {showPinForm && user && user._id && (
-        <PinFormModal
-          onClose={() => setShowPinForm(false)}
-          userLocation={userLocation as [number, number]} // Asegurando que userLocation no sea null
-          userId={user._id}
-          onPinCreated={fetchPins}
-        />
-      )}
       {showTotemForm && user && user._id && (
         <TotemFormModal
           onClose={() => setShowTotemForm(false)}
