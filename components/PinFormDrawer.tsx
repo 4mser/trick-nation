@@ -81,7 +81,7 @@ const PinFormDrawer: React.FC<PinFormDrawerProps> = ({ userLocation, userId, onP
   return (
     <Drawer open={drawerOpen} onOpenChange={setDrawerOpen}>
       <DrawerTrigger asChild>
-        <Button className='absolute right-0 bottom-3 w-14 h-14 rounded-full overflow-hidden flex justify-center items-center bg-gradient-to-tr from-yellow-500 to-yellow-800 p-[2px]'>
+        <Button className='absolute right-0 bottom-3 w-14 h-14 rounded-full overflow-hidden flex justify-center items-center bg-gradient-to-tr from-yellow-500 to-yellow-800 p-[2px] outline-none'>
           <div className='flex justify-center items-center w-full h-full p-2.5 bg-black/30 backdrop-blur-3xl rounded-full'>
             <img src="../assets/map-icons/pin.svg" alt="Mark Pin" className='w-full filter hue-rotate-[210deg] h-full object-contain' />
           </div>
