@@ -14,7 +14,7 @@ import PinFormDrawer from "./PinFormDrawer";
 import PinDetailModal from "./PinDetailModal";
 
 const MAPBOX_TOKEN = process.env.NEXT_PUBLIC_MAPBOX_TOKEN || '';
-const EXPLORATION_RADIUS_METERS = 30;
+const EXPLORATION_RADIUS_METERS = 80;
 
 const Map: React.FC = () => {
   const { user } = useAuth();
@@ -41,7 +41,7 @@ const Map: React.FC = () => {
     (isExplorationRadio = false) => {
       const markerElement = document.createElement('div');
       markerElement.className = 'custom-marker';
-      const markerSize = isExplorationRadio ? 270 : 18;
+      const markerSize = isExplorationRadio ? 300 : 18;
       markerElement.style.width = `${markerSize}px`;
       markerElement.style.height = `${markerSize}px`;
       markerElement.style.borderRadius = '50%';
@@ -287,7 +287,7 @@ const Map: React.FC = () => {
             if (markerRef.current) {
               const zoomLevel = mapboxMap.getZoom();
               const metersPerPixel = (156543.03392 * Math.cos(latitude * (Math.PI / 180))) / Math.pow(2, zoomLevel);
-              const explorationRadioRadiusInMeters = 270;
+              const explorationRadioRadiusInMeters = EXPLORATION_RADIUS_METERS;
               const explorationRadioRadiusInPixels = explorationRadioRadiusInMeters / metersPerPixel;
               const markerSizeInPixels = explorationRadioRadiusInPixels * 0.9;
               markerRef.current.getElement().style.width = `${markerSizeInPixels}px`;
@@ -367,16 +367,17 @@ const Map: React.FC = () => {
 
   useEffect(() => {
     if (map) {
-      pins
-        .filter(pin => calculateDistance(userLocation as [number, number], pin.location.coordinates) <= EXPLORATION_RADIUS_METERS)
-        .forEach((pin) => {
-          const coordinates: [number, number] = [pin.location.coordinates[0], pin.location.coordinates[1]];
+      pins.forEach((pin) => {
+        const coordinates: [number, number] = [pin.location.coordinates[0], pin.location.coordinates[1]];
+        const distance = calculateDistance(userLocation as [number, number], coordinates);
+        if (distance <= EXPLORATION_RADIUS_METERS) {
           new mapboxgl.Marker({
             element: createPinMarkerElement(pin),
           })
             .setLngLat(coordinates)
             .addTo(map);
-        });
+        }
+      });
     }
   }, [map, pins, userLocation, createPinMarkerElement]);
 
