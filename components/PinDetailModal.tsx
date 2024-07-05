@@ -1,35 +1,61 @@
-import React from 'react';
-import { Pin } from '../types/pins';
+'use client';
 
-interface PinDetailModalProps {
+import React, { useEffect, useState } from 'react';
+import { Pin } from '../types/pins';
+import {
+  Drawer,
+  DrawerClose,
+  DrawerContent,
+  DrawerDescription,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerTitle,
+} from "@/components/ui/drawer";
+
+interface PinDetailDrawerProps {
   pin: Pin | null;
   onClose: () => void;
 }
 
-const PinDetailModal: React.FC<PinDetailModalProps> = ({ pin, onClose }) => {
-  if (!pin) return null;
+const PinDetailModal: React.FC<PinDetailDrawerProps> = ({ pin, onClose }) => {
+  const [drawerOpen, setDrawerOpen] = useState(false);
 
-  const handleModalClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-    e.stopPropagation(); // Detiene la propagación del evento para que no cierre el modal
+  useEffect(() => {
+    if (pin) {
+      setDrawerOpen(true);
+    } else {
+      setDrawerOpen(false);
+    }
+  }, [pin]);
+
+  const handleDrawerClose = (isOpen: boolean) => {
+    if (!isOpen) {
+      setDrawerOpen(false);
+      setTimeout(onClose, 300); // Delay onClose to allow for smooth transition
+    }
   };
 
+  if (!pin) return null;
+
   return (
-    <div className="fixed inset-0 z-[100] flex text-white items-center justify-center bg-black bg-opacity-50" onClick={onClose}>
-      <div className="relative bg-white/10 backdrop-blur-md rounded-xl shadow-lg max-w-sm w-full overflow-hidden" onClick={handleModalClick}>
-        <div className='relative'>
-          <img
-            src={`${pin.imageUrl || '/default-pin-image.jpg'}`}
-            alt={pin.name}
-            className="w-full h-[50dvh] object-cover mb-4"
-          />
-        </div>
-        <div className='p-4'>
-          <h3 className="text-xl font-bold mb-2">{pin.name}</h3>
-          <p className="mb-2">{pin.discoveredByUserId.username}</p>
-          <a href={`/pins/${pin._id}`} className="text-blue-500 hover:underline">View Details</a>
-        </div>
-      </div>
-    </div>
+    <Drawer open={drawerOpen} onOpenChange={handleDrawerClose}>
+      <DrawerContent className="dark backdrop-blur-md rounded-t-3xl">
+        <DrawerHeader>
+          <DrawerTitle className="text-white text-center">{pin.name}</DrawerTitle>
+          <DrawerDescription className=''>
+            <p className="mb-2">{pin.discoveredByUserId.username}</p>
+            <div className="relative w-full">
+              <img
+                src={`${pin.imageUrl || '/default-pin-image.jpg'}`}
+                alt={pin.name}
+                className="w-full max-h-[70dvh] rounded-md object-cover"
+              />
+            </div>
+          </DrawerDescription>
+        </DrawerHeader>
+        <DrawerClose></DrawerClose>
+      </DrawerContent>
+    </Drawer>
   );
 };
 
