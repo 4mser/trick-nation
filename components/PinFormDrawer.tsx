@@ -119,7 +119,7 @@ const PinFormDrawer: React.FC<PinFormDrawerProps> = ({ userLocation, userId, onP
                 </div>
               )}
               <DrawerFooter className="flex justify-end p-0 py-4">
-                <button type="submit" className="bg-gradient-to-br from-yellow-600/60 to-transparent border border-yellow-600 text-white px-4 py-2 rounded" disabled={loading}>
+                <button type="submit" className="bg-gradient-to-br from-yellow-600/60 to-transparent border border-yellow-600 text-white px-4 py-2 rounded-md" disabled={loading}>
                   {loading ? `Subiendo... ${progress}%` : 'Subir'}
                 </button>
                 <DrawerClose asChild>

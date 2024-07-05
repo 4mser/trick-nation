@@ -20,7 +20,7 @@ const PinDetailModal: React.FC<PinDetailModalProps> = ({ pin, onClose }) => {
           <img
             src={`${pin.imageUrl || '/default-pin-image.jpg'}`}
             alt={pin.name}
-            className="w-full h-full object-cover mb-4"
+            className="w-full h-[50dvh] object-cover mb-4"
           />
         </div>
         <div className='p-4'>
