@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState, useCallback } from "react";
-import mapboxgl, { LngLatLike, Marker } from "mapbox-gl";
+import mapboxgl, { Marker } from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
@@ -14,7 +14,7 @@ import PinFormDrawer from "./PinFormDrawer";
 import PinDetailModal from "./PinDetailModal";
 
 const MAPBOX_TOKEN = process.env.NEXT_PUBLIC_MAPBOX_TOKEN || '';
-const EXPLORATION_RADIUS_METERS = 300;
+const EXPLORATION_RADIUS_METERS = 100;
 
 const Map: React.FC = () => {
   const { user } = useAuth();
@@ -37,19 +37,71 @@ const Map: React.FC = () => {
   let mixer: THREE.AnimationMixer | null = null;
   let renderer: THREE.WebGLRenderer;
 
-  const createMarkerElement = useCallback(
-    (isExplorationRadio = false) => {
-      const markerElement = document.createElement('div');
-      markerElement.className = 'custom-marker';
-      const markerSize = isExplorationRadio ? 300 : 18;
-      markerElement.style.width = `${markerSize}px`;
-      markerElement.style.height = `${markerSize}px`;
-      markerElement.style.borderRadius = '50%';
-      markerElement.style.backgroundColor = isExplorationRadio ? 'rgba(234, 179, 8, 0.233)' : 'rgb(234, 179, 8)';
-      return markerElement;
-    },
-    []
-  );
+  const createMarkerElement = useCallback(() => {
+    const markerElement = document.createElement('div');
+    markerElement.className = 'custom-marker';
+    markerElement.style.width = '18px';
+    markerElement.style.height = '18px';
+    markerElement.style.borderRadius = '50%';
+    markerElement.style.backgroundColor = 'rgb(234, 179, 8)';
+    return markerElement;
+  }, []);
+
+  const createGeoJSONCircle = (center: [number, number], radiusInMeters: number) => {
+    const points = 64;
+    const coords = {
+      latitude: center[1],
+      longitude: center[0],
+    };
+    const km = radiusInMeters / 1000;
+    const ret = [];
+    const distanceX = km / (111.32 * Math.cos((coords.latitude * Math.PI) / 180));
+    const distanceY = km / 110.574;
+
+    let theta, x, y;
+    for (let i = 0; i < points; i++) {
+      theta = (i / points) * (2 * Math.PI);
+      x = distanceX * Math.cos(theta);
+      y = distanceY * Math.sin(theta);
+
+      ret.push([coords.longitude + x, coords.latitude + y]);
+    }
+    ret.push(ret[0]);
+
+    return {
+      type: 'Feature',
+      geometry: {
+        type: 'Polygon',
+        coordinates: [ret],
+      },
+      properties: {},
+    } as GeoJSON.Feature<GeoJSON.Polygon>;
+  };
+
+  const addExplorationCircleToMap = (map: mapboxgl.Map, center: [number, number], radius: number) => {
+    const circleData = createGeoJSONCircle(center, radius);
+
+    if (map.getSource('exploration-circle')) {
+      const source = map.getSource('exploration-circle') as mapboxgl.GeoJSONSource;
+      source.setData(circleData);
+    } else {
+      map.addSource('exploration-circle', {
+        type: 'geojson',
+        data: circleData,
+      });
+
+      map.addLayer({
+        id: 'exploration-circle-layer',
+        type: 'fill',
+        source: 'exploration-circle',
+        layout: {},
+        paint: {
+          'fill-color': '#eab308',
+          'fill-opacity': 0.2,
+        },
+      });
+    }
+  };
 
   const createPinMarkerElement = useCallback((pin: Pin) => {
     const markerElement = document.createElement('div');
@@ -59,20 +111,20 @@ const Map: React.FC = () => {
     markerElement.style.borderRadius = '50%';
     markerElement.style.overflow = 'hidden';
     markerElement.style.boxShadow = '0 2px 5px rgba(0,0,0,0.5)';
-    
+
     const img = document.createElement('img');
     img.src = `${pin.imageUrl || '/default-pin-image.jpg'}`;
     img.style.width = '100%';
     img.style.height = '100%';
-    img.style.borderRadius = '50%'
+    img.style.borderRadius = '50%';
     img.style.objectFit = 'cover';
-    
+
     markerElement.appendChild(img);
-    
+
     markerElement.addEventListener('click', () => {
       setSelectedPin(pin);
     });
-    
+
     return markerElement;
   }, []);
 
@@ -85,21 +137,21 @@ const Map: React.FC = () => {
     markerElement.style.overflow = 'hidden';
     markerElement.style.border = '3px solid rgb(234, 179, 8)';
     markerElement.style.boxShadow = '0 0 5px rgba(0,0,0,0.5)';
-    
+
     const img = document.createElement('img');
     img.src = `${totem.imageUrl}`;
     img.style.width = '100%';
     img.style.height = '100%';
-    img.style.borderRadius = '50%'
-    img.style.padding = '3px'
+    img.style.borderRadius = '50%';
+    img.style.padding = '3px';
     img.style.objectFit = 'cover';
-    
+
     markerElement.appendChild(img);
-    
+
     markerElement.addEventListener('click', () => {
       setSelectedTotem(totem);
     });
-    
+
     return markerElement;
   }, []);
 
@@ -143,8 +195,8 @@ const Map: React.FC = () => {
     const Δλ = (lon2 - lon1) * (Math.PI / 180);
 
     const a = Math.sin(Δφ / 2) * Math.sin(Δφ / 2) +
-              Math.cos(φ1) * Math.cos(φ2) *
-              Math.sin(Δλ / 2) * Math.sin(Δλ / 2);
+      Math.cos(φ1) * Math.cos(φ2) *
+      Math.sin(Δλ / 2) * Math.sin(Δλ / 2);
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 
     const distance = R * c;
@@ -241,7 +293,6 @@ const Map: React.FC = () => {
     const node = mapNode.current;
     if (typeof window === 'undefined' || node === null) return;
 
-    // Asegúrate de que el contenedor del mapa esté vacío
     if (node.firstChild) {
       node.removeChild(node.firstChild);
     }
@@ -283,31 +334,18 @@ const Map: React.FC = () => {
         });
 
         mapboxMap.on('load', () => {
-          mapboxMap.on('zoom', () => {
-            if (markerRef.current) {
-              const zoomLevel = mapboxMap.getZoom();
-              const metersPerPixel = (156543.03392 * Math.cos(latitude * (Math.PI / 180))) / Math.pow(2, zoomLevel);
-              const explorationRadioRadiusInMeters = EXPLORATION_RADIUS_METERS;
-              const explorationRadioRadiusInPixels = explorationRadioRadiusInMeters / metersPerPixel;
-              const markerSizeInPixels = explorationRadioRadiusInPixels * 1;
-              markerRef.current.getElement().style.width = `${markerSizeInPixels}px`;
-              markerRef.current.getElement().style.height = `${markerSizeInPixels}px`;
-            }
-          });
+          if (userLocation) {
+            addExplorationCircleToMap(mapboxMap, userLocation, EXPLORATION_RADIUS_METERS);
+          }
 
           mapboxMap.on('click', (e) => {
-            if (isDebugMode) {
-              setUserLocation([e.lngLat.lng, e.lngLat.lat]);
-              return;
-            }
-
             mouse.x = (e.point.x / mapboxMap.getCanvas().clientWidth) * 2 - 1;
             mouse.y = -(e.point.y / mapboxMap.getCanvas().clientHeight) * 2 + 1;
-            
+
             raycaster.setFromCamera(mouse, camera);
-            
+
             const intersects = raycaster.intersectObjects(scene.children, true);
-            
+
             if (intersects.length > 0) {
               const intersectedObject = intersects[0].object;
               const totemData = intersectedObject.userData as Totem;
@@ -336,7 +374,7 @@ const Map: React.FC = () => {
         console.error('Error al obtener la ubicación del usuario:', error);
       }
     );
-  }, [isDebugMode, totems, createTotemMarkerElement]);
+  }, [totems, createTotemMarkerElement]);
 
   useEffect(() => {
     if (map && userLocation) {
@@ -346,27 +384,29 @@ const Map: React.FC = () => {
 
       const userLocationMarker = new mapboxgl.Marker({
         element: createMarkerElement(),
-        draggable: isDebugMode,
-      })
-        .setLngLat(userLocation as [number, number])
-        .addTo(map)
-        .on('dragend', () => {
-          const newLocation = userLocationMarker.getLngLat();
-          setUserLocation([newLocation.lng, newLocation.lat]);
-        });
-
-      const explorationRadioMarker = new mapboxgl.Marker({
-        element: createMarkerElement(true),
+        draggable: false,
       })
         .setLngLat(userLocation as [number, number])
         .addTo(map);
 
-      markerRef.current = explorationRadioMarker;
+      markerRef.current = userLocationMarker;
     }
-  }, [map, userLocation, createMarkerElement, isDebugMode]);
+  }, [map, userLocation, createMarkerElement]);
 
   useEffect(() => {
-    if (map) {
+    if (map && userLocation) {
+      if (map.isStyleLoaded()) {
+        addExplorationCircleToMap(map, userLocation, EXPLORATION_RADIUS_METERS);
+      } else {
+        map.on('style.load', () => {
+          addExplorationCircleToMap(map, userLocation, EXPLORATION_RADIUS_METERS);
+        });
+      }
+    }
+  }, [map, userLocation]);
+
+  useEffect(() => {
+    if (map && userLocation) {
       pins.forEach((pin) => {
         const coordinates: [number, number] = [pin.location.coordinates[0], pin.location.coordinates[1]];
         const distance = calculateDistance(userLocation as [number, number], coordinates);
@@ -394,31 +434,21 @@ const Map: React.FC = () => {
     <section className="max-h-[100dvh] overflow-hidden">
       <div ref={mapNode} style={{ width: '100%', height: '100dvh' }} />
       <section className='fixed z-50 bottom-14 w-fit right-3 h-fit'>
-        {/* El botón para abrir el drawer está dentro de PinFormDrawer */}
         <PinFormDrawer
           userLocation={userLocation as [number, number]}
           userId={user ? user._id : ''}
           onPinCreated={fetchPins}
         />
-        {/* Solo activar para subir totems */}
-        {/* <button
-          className='absolute right-28 bottom-3 w-14 h-14 rounded-full overflow-hidden flex justify-center items-center bg-gradient-to-tr from-green-500 to-green-800 p-[2px]'
-          onClick={handleAddTotem}
-        >
-          <div className='flex justify-center items-center w-full h-full p-2.5 bg-black/30 backdrop-blur-3xl rounded-full'>
-            <img src="../assets/map-icons/totem.svg" alt="Add Totem" className='w-full filter hue-rotate-[210deg] h-full object-contain' />
-          </div>
-        </button> */}
         <button
           className='absolute right-[49px] bottom-[59px] bg-black/50 flex justify-center items-center w-9 h-9 rounded-full p-2'
         >
           <img src="../assets/map-icons/ranking.svg" alt="Ranking" className='w-full h-full object-contain opacity-80' />
         </button>
         <button
-          className='absolute right-[3.8rem] bottom-3 bg-black/50 flex justify-center items-center w-9 h-9 rounded-full p-2'
+          className={`absolute right-[3.8rem] bottom-3 flex justify-center items-center w-9 h-9 rounded-full p-2 ${isDebugMode ? "bg-yellow-500" : "bg-black/50"}`}
           onClick={toggleDebugMode}
         >
-          <img src="../assets/map-icons/rayo.svg" alt="Debug Mode" className='w-full h-full object-contain opacity-80' />
+          <img src="../assets/map-icons/rayo.svg" alt="Debug Mode" className="w-full h-full object-contain opacity-80" />
         </button>
         <button
           onClick={centerMapOnUserLocation}
