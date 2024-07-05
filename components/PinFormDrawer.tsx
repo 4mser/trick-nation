@@ -87,7 +87,7 @@ const PinFormDrawer: React.FC<PinFormDrawerProps> = ({ userLocation, userId, onP
           </div>
         </Button>
       </DrawerTrigger>
-      <DrawerContent className="dark backdrop-blur-md  rounded-t-3xl">
+      <DrawerContent className="dark backdrop-blur-md  rounded-t-3xl outline-none">
         <DrawerHeader>
           <DrawerTitle className="text-white text-center">Deja un Pin en el mapa</DrawerTitle>
           <DrawerDescription>
