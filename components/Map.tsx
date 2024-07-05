@@ -14,7 +14,8 @@ import PinFormDrawer from "./PinFormDrawer";
 import PinDetailModal from "./PinDetailModal";
 
 const MAPBOX_TOKEN = process.env.NEXT_PUBLIC_MAPBOX_TOKEN || '';
-const EXPLORATION_RADIUS_METERS = 80;
+const EXPLORATION_RADIUS_METERS = 300;
+const EXPLORATION_RADIUS_METERS2 = 70;
 
 const Map: React.FC = () => {
   const { user } = useAuth();
@@ -289,7 +290,7 @@ const Map: React.FC = () => {
               const metersPerPixel = (156543.03392 * Math.cos(latitude * (Math.PI / 180))) / Math.pow(2, zoomLevel);
               const explorationRadioRadiusInMeters = EXPLORATION_RADIUS_METERS;
               const explorationRadioRadiusInPixels = explorationRadioRadiusInMeters / metersPerPixel;
-              const markerSizeInPixels = explorationRadioRadiusInPixels * 0.9;
+              const markerSizeInPixels = explorationRadioRadiusInPixels * 1;
               markerRef.current.getElement().style.width = `${markerSizeInPixels}px`;
               markerRef.current.getElement().style.height = `${markerSizeInPixels}px`;
             }
@@ -370,7 +371,7 @@ const Map: React.FC = () => {
       pins.forEach((pin) => {
         const coordinates: [number, number] = [pin.location.coordinates[0], pin.location.coordinates[1]];
         const distance = calculateDistance(userLocation as [number, number], coordinates);
-        if (distance <= EXPLORATION_RADIUS_METERS) {
+        if (distance <= EXPLORATION_RADIUS_METERS2) {
           new mapboxgl.Marker({
             element: createPinMarkerElement(pin),
           })
