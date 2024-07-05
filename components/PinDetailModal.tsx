@@ -83,7 +83,7 @@ const PinDetailModal: React.FC<PinDetailDrawerProps> = ({ pin, onClose }) => {
                 <div className="absolute top-4 right-4">
                   <Button
                     onClick={handleDelete}
-                    className="bg-red-500/20 border w-9 h-9 border-red-500 text-white p-2 rounded-full flex items-center justify-center"
+                    className="bg-red-500/20 border w-9 h-9 hover:bg-red-500 border-red-500 text-white p-2 rounded-full flex items-center justify-center"
                     disabled={loading}
                   >
                     {loading ? <Loader /> : <img src="/assets/icons/delete.svg" alt="Delete" className="w-5 h-5" />}

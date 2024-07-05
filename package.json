@@ -30,6 +30,7 @@
     "ldrs": "^1.0.2",
     "lucide-react": "^0.400.0",
     "mapbox-gl": "^3.4.0",
+    "mapbox-gl-shaders": "^0.0.1-security",
     "next": "14.2.3",
     "react": "^18",
     "react-dom": "^18",

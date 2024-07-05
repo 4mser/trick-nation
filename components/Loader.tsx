@@ -1,7 +1,7 @@
 import 'ldrs/spiral'
 const Loader = () => {
   return (
-    <div className="container">
+    <div className="containerLoader">
         <div className="dot"></div>
         <div className="dot"></div>
         <div className="dot"></div>

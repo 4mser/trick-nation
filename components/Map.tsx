@@ -90,14 +90,29 @@ const Map: React.FC = () => {
         data: circleData,
       });
 
+      // Añadir el círculo de exploración con un efecto de brillo
       map.addLayer({
         id: 'exploration-circle-layer',
         type: 'fill',
         source: 'exploration-circle',
         layout: {},
         paint: {
-          'fill-color': '#eab308',
-          'fill-opacity': 0.2,
+          'fill-color': 'rgba(255, 223, 0, 0.5)', // Color dorado más vibrante
+          'fill-opacity': 0.9,
+        },
+      });
+
+      // Añadir un borde brillante al círculo
+      map.addLayer({
+        id: 'exploration-circle-glow',
+        type: 'line',
+        source: 'exploration-circle',
+        layout: {},
+        paint: {
+          'line-color': 'rgba(255, 223, 0, 1)', // Color dorado más vibrante
+          'line-width': 4,
+          'line-opacity': 1,
+          'line-blur': 3,
         },
       });
     }
@@ -303,7 +318,7 @@ const Map: React.FC = () => {
         const mapboxMap = new mapboxgl.Map({
           container: node,
           accessToken: MAPBOX_TOKEN,
-          style: 'mapbox://styles/mapbox/standard',
+          style: 'mapbox://styles/mapbox/standard', // Changing to a lighter style
           center: [longitude, latitude],
           zoom: 17,
         });
