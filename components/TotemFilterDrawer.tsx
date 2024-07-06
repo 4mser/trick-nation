@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Drawer, DrawerClose, DrawerContent, DrawerDescription, DrawerFooter, DrawerHeader, DrawerTitle, DrawerTrigger } from "@/components/ui/drawer";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
@@ -26,7 +26,7 @@ interface TotemFilterDrawerProps {
 
 const TotemFilterDrawer: React.FC<TotemFilterDrawerProps> = ({ onApplyFilters }) => {
   const [drawerOpen, setDrawerOpen] = useState(false);
-  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+  const [selectedCategories, setSelectedCategories] = useState<string[]>(categoriesList.map(category => category.name));
 
   const handleCategoryChange = (category: string) => {
     setSelectedCategories(prevCategories =>
@@ -36,10 +36,15 @@ const TotemFilterDrawer: React.FC<TotemFilterDrawerProps> = ({ onApplyFilters })
     );
   };
 
-  const handleApplyFilters = () => {
-    onApplyFilters(selectedCategories);
-    setDrawerOpen(false);
-  };
+  useEffect(() => {
+    onApplyFilters(selectedCategories); // Apply filters on initial render with all categories selected
+  }, []); // Empty dependency array to run only once on mount
+
+  useEffect(() => {
+    if (!drawerOpen) {
+      onApplyFilters(selectedCategories); // Apply filters when drawer is closed
+    }
+  }, [drawerOpen, selectedCategories, onApplyFilters]);
 
   return (
     <Drawer open={drawerOpen} onOpenChange={setDrawerOpen}>
@@ -56,12 +61,12 @@ const TotemFilterDrawer: React.FC<TotemFilterDrawerProps> = ({ onApplyFilters })
         </DrawerHeader>
         <DrawerDescription asChild>
           <div>
-            <form className="text-base">
-              <div className="px-3 flex flex-col gap-1">
+            <form className="text-sm mb-6">
+              <div className="px-3 flex flex-col gap-3">
                 {categoriesList.map((category) => {
                   const isSelected = selectedCategories.includes(category.name);
                   return (
-                    <div key={category.name} className="flex items-center mb-2 custom-switch justify-between ">
+                    <div key={category.name} className="flex items-center  custom-switch justify-between">
                       <div className='flex items-center'>
                         <img src={category.icon} alt={category.name} className={`h-6 w-6 mr-2 ${isSelected ? 'category-selected' : 'category-not-selected'}`} />
                         <label className={`text-white/80 ${isSelected ? 'category-selected' : 'category-not-selected'}`}>{category.name}</label>
@@ -75,13 +80,8 @@ const TotemFilterDrawer: React.FC<TotemFilterDrawerProps> = ({ onApplyFilters })
                   );
                 })}
               </div>
-              <DrawerFooter className="px-3">
-                <button type="button" onClick={handleApplyFilters} className="bg-gradient-to-br from-yellow-600/60 to-transparent border border-yellow-600 text-white px-4 py-2 rounded-md">
-                  Aplicar Filtros
-                </button>
                 <DrawerClose asChild>
                 </DrawerClose>
-              </DrawerFooter>
             </form>
           </div>
         </DrawerDescription>

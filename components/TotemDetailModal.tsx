@@ -1,5 +1,14 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Totem } from '@/types/totem';
+import {
+  Drawer,
+  DrawerClose,
+  DrawerContent,
+  DrawerDescription,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerTitle,
+} from "@/components/ui/drawer";
 
 interface TotemDetailModalProps {
   totem: Totem | null;
@@ -30,14 +39,30 @@ const TotemDetailModal: React.FC<TotemDetailModalProps> = ({ totem, onClose }) =
     e.stopPropagation(); // Detiene la propagación del evento para que no cierre el modal
   };
 
+  const [drawerOpen, setDrawerOpen] = useState(false);
+
+  useEffect(() => {
+    if (totem) {
+      setDrawerOpen(true);
+    } else {
+      setDrawerOpen(false);
+    }
+  }, [totem]);
+
+  const handleDrawerClose = (isOpen: boolean) => {
+    if (!isOpen) {
+      setDrawerOpen(false);
+      setTimeout(onClose, 300); // Delay onClose to allow for smooth transition
+    }
+  };
+
   const renderCategories = () => {
     return (totem.categories || []).map((category) => {
       const categoryData = categoriesList.find(c => c.name === category);
       if (categoryData) {
         return (
-          <div key={category} className="flex items-center space-x-2 p-1 bg-neutral-800 rounded-full">
-            <img src={categoryData.icon} alt={categoryData.name} className="h-6 w-6" />
-            <span className="text-sm">{categoryData.name}</span>
+          <div key={category} className="flex justify-center items-center space-x-2 p-2 bg-neutral-800 rounded-full">
+            <img src={categoryData.icon} alt={categoryData.name} className="h-7 w-7" />
           </div>
         );
       }
@@ -46,28 +71,34 @@ const TotemDetailModal: React.FC<TotemDetailModalProps> = ({ totem, onClose }) =
   };
 
   return (
-    <div className="fixed inset-0 text-white flex items-center justify-center bg-black bg-opacity-50" onClick={onClose}>
-      <div className="relative bg-black rounded-xl shadow-lg max-w-sm w-full overflow-hidden" onClick={handleModalClick}>
-        <div className='relative'>
+    <Drawer open={drawerOpen} onOpenChange={handleDrawerClose}>
+      <DrawerContent className='dark rounded-t-3xl outline-none'>
+        <DrawerTitle>
+
+        </DrawerTitle>
+        <DrawerDescription>
+        <div className='p-4'>
           <img
             src={totem.imageUrl}
             alt={totem.name}
-            className="w-full h-40 object-cover mb-4"
+            className="w-full max-h-[65dvh] object-cover rounded-md"
           />
-          <div className='absolute w-full bottom-0 h-20 bg-gradient-to-t from-black to-transparent'></div>
         </div>
-        <div className='p-4'>
-          <h3 className="text-xl font-bold mb-2">{totem.name}</h3>
-          <a href={`/totems/${totem._id}`} className="text-blue-500 hover:underline">Entrar al Totem</a>
+        <section className='p-4'>
+          <div className='flex justify-between w-full items-center'>
+            <h1 className="text-xl font-bold mb-2 text-white">{totem.name}</h1>
+            <a href={`/totems/${totem._id}`} className="text-yellow-500 hover:underline">Entrar al Totem</a>
+          </div>
           <div className="mt-4">
-            <h4 className="text-lg font-semibold mb-2">Categories</h4>
             <div className="flex flex-wrap gap-2">
               {renderCategories()}
             </div>
           </div>
-        </div>
-      </div>
-    </div>
+        </section>
+        </DrawerDescription>
+        <DrawerClose></DrawerClose>
+      </DrawerContent>
+    </Drawer>
   );
 };
 

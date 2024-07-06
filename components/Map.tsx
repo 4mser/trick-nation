@@ -12,7 +12,7 @@ import { Totem } from "@/types/totem";
 import { Pin } from "@/types/pins";
 import PinFormDrawer from "./PinFormDrawer";
 import PinDetailModal from "./PinDetailModal";
-import TotemFilterDrawer from './TotemFilterDrawer'; // Asegúrate de importar el componente TotemFilterDrawer
+import TotemFilterDrawer from './TotemFilterDrawer';
 
 const MAPBOX_TOKEN = process.env.NEXT_PUBLIC_MAPBOX_TOKEN || '';
 const EXPLORATION_RADIUS_METERS = 100;
@@ -25,11 +25,11 @@ const Map: React.FC = () => {
   const markerRef = useRef<Marker | null>(null);
   const [pins, setPins] = useState<Pin[]>([]);
   const [totems, setTotems] = useState<Totem[]>([]);
-  const [filteredTotems, setFilteredTotems] = useState<Totem[]>([]);
   const [showTotemForm, setShowTotemForm] = useState(false);
   const [isDebugMode, setIsDebugMode] = useState(false);
   const [selectedPin, setSelectedPin] = useState<Pin | null>(null);
   const [selectedTotem, setSelectedTotem] = useState<Totem | null>(null);
+  const totemMarkersRef = useRef<{ [id: string]: mapboxgl.Marker }>({});
 
   const raycaster = new THREE.Raycaster();
   const mouse = new THREE.Vector2();
@@ -123,8 +123,8 @@ const Map: React.FC = () => {
   const createPinMarkerElement = useCallback((pin: Pin) => {
     const markerElement = document.createElement('div');
     markerElement.className = 'pin-marker';
-    markerElement.style.width = '40px';
-    markerElement.style.height = '40px';
+    markerElement.style.width = '25px';
+    markerElement.style.height = '25px';
     markerElement.style.borderRadius = '50%';
     markerElement.style.overflow = 'hidden';
     markerElement.style.boxShadow = '0 2px 5px rgba(0,0,0,0.5)';
@@ -148,8 +148,8 @@ const Map: React.FC = () => {
   const createTotemMarkerElement = useCallback((totem: Totem) => {
     const markerElement = document.createElement('div');
     markerElement.className = 'totem-marker';
-    markerElement.style.width = '60px';
-    markerElement.style.height = '60px';
+    markerElement.style.width = '50px';
+    markerElement.style.height = '50px';
     markerElement.style.borderRadius = '50%';
     markerElement.style.overflow = 'hidden';
     markerElement.style.border = '3px solid rgb(234, 179, 8)';
@@ -183,12 +183,31 @@ const Map: React.FC = () => {
     setShowTotemForm(true);
   }, [userLocation, user]);
 
+  const updateTotemMarkers = useCallback((filtered: Totem[]) => {
+    // Eliminar todos los marcadores actuales de tótems
+    Object.values(totemMarkersRef.current).forEach(marker => marker.remove());
+    totemMarkersRef.current = {};
+
+    // Agregar los marcadores filtrados
+    filtered.forEach(totem => {
+      const markerElement = createTotemMarkerElement(totem);
+      const marker = new mapboxgl.Marker({
+        element: markerElement,
+      })
+        .setLngLat(totem.location.coordinates as [number, number])
+        .addTo(map!);
+
+      totemMarkersRef.current[totem._id] = marker;
+    });
+  }, [createTotemMarkerElement, map]);
+
   const handleApplyFilters = useCallback((selectedCategories: string[]) => {
     const filtered = totems.filter(totem =>
       selectedCategories.some(category => totem.categories.includes(category))
     );
-    setFilteredTotems(filtered);
-  }, [totems]);
+
+    updateTotemMarkers(filtered);
+  }, [totems, updateTotemMarkers]);
 
   const fetchPins = useCallback(async () => {
     try {
@@ -203,11 +222,13 @@ const Map: React.FC = () => {
     try {
       const response = await api.get<Totem[]>('/totems');
       setTotems(response.data);
-      setFilteredTotems(response.data);
+
+      // Crear marcadores de tótems y mantener una referencia a ellos
+      updateTotemMarkers(response.data);
     } catch (error) {
       console.error('Failed to fetch totems:', error);
     }
-  }, []);
+  }, [updateTotemMarkers]);
 
   const calculateDistance = (location1: [number, number], location2: [number, number]): number => {
     const [lat1, lon1] = location1;
@@ -378,17 +399,7 @@ const Map: React.FC = () => {
             }
           });
 
-          filteredTotems.forEach((totem) => {
-            if (totem.modelUrl) {
-              add3DModelToMap(mapboxMap, totem.modelUrl, totem.location.coordinates, totem);
-            } else {
-              new mapboxgl.Marker({
-                element: createTotemMarkerElement(totem),
-              })
-                .setLngLat(totem.location.coordinates as [number, number])
-                .addTo(mapboxMap);
-            }
-          });
+          fetchTotems();
         });
 
         return () => {
@@ -399,7 +410,7 @@ const Map: React.FC = () => {
         console.error('Error al obtener la ubicación del usuario:', error);
       }
     );
-  }, [filteredTotems, createTotemMarkerElement]);
+  }, [createTotemMarkerElement]);
 
   useEffect(() => {
     if (map && userLocation) {
@@ -448,8 +459,7 @@ const Map: React.FC = () => {
 
   useEffect(() => {
     fetchPins();
-    fetchTotems();
-  }, [fetchPins, fetchTotems]);
+  }, [fetchPins]);
 
   const toggleDebugMode = useCallback(() => {
     setIsDebugMode((prev) => !prev);
