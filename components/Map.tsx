@@ -123,8 +123,8 @@ const Map: React.FC = () => {
   const createPinMarkerElement = useCallback((pin: Pin) => {
     const markerElement = document.createElement('div');
     markerElement.className = 'pin-marker';
-    markerElement.style.width = '25px';
-    markerElement.style.height = '25px';
+    markerElement.style.width = '40px';
+    markerElement.style.height = '40px';
     markerElement.style.borderRadius = '50%';
     markerElement.style.overflow = 'hidden';
     markerElement.style.boxShadow = '0 2px 5px rgba(0,0,0,0.5)';
@@ -148,8 +148,8 @@ const Map: React.FC = () => {
   const createTotemMarkerElement = useCallback((totem: Totem) => {
     const markerElement = document.createElement('div');
     markerElement.className = 'totem-marker';
-    markerElement.style.width = '50px';
-    markerElement.style.height = '50px';
+    markerElement.style.width = '55px';
+    markerElement.style.height = '55px';
     markerElement.style.borderRadius = '50%';
     markerElement.style.overflow = 'hidden';
     markerElement.style.border = '3px solid rgb(234, 179, 8)';
