@@ -410,7 +410,7 @@ const Map: React.FC = () => {
         console.error('Error al obtener la ubicación del usuario:', error);
       }
     );
-  }, [createTotemMarkerElement]);
+  }, [createTotemMarkerElement, fetchTotems, userLocation]);
 
   useEffect(() => {
     if (map && userLocation) {
@@ -467,6 +467,26 @@ const Map: React.FC = () => {
 
   return (
     <section className="max-h-[100dvh] overflow-hidden">
+      {showTotemForm && user && user._id && (
+        <TotemFormModal
+          onClose={() => setShowTotemForm(false)}
+          userLocation={userLocation as [number, number]} // Asegurando que userLocation no sea null
+          userId={user._id}
+          onTotemCreated={fetchTotems}
+        />
+      )}
+      {selectedPin && (
+        <PinDetailModal
+          pin={selectedPin}
+          onClose={() => setSelectedPin(null)}
+        />
+      )}
+      {selectedTotem && (
+        <TotemDetailModal
+          totem={selectedTotem}
+          onClose={() => setSelectedTotem(null)}
+        />
+      )}
       <div ref={mapNode} style={{ width: '100%', height: '100dvh' }} />
         <TotemFilterDrawer onApplyFilters={handleApplyFilters} /> {/* Add the new drawer */}
       <section className='fixed z-50 bottom-14 w-fit right-3 h-fit'>
@@ -506,26 +526,7 @@ const Map: React.FC = () => {
           />
         </button>
       </section>
-      {showTotemForm && user && user._id && (
-        <TotemFormModal
-          onClose={() => setShowTotemForm(false)}
-          userLocation={userLocation as [number, number]} // Asegurando que userLocation no sea null
-          userId={user._id}
-          onTotemCreated={fetchTotems}
-        />
-      )}
-      {selectedPin && (
-        <PinDetailModal
-          pin={selectedPin}
-          onClose={() => setSelectedPin(null)}
-        />
-      )}
-      {selectedTotem && (
-        <TotemDetailModal
-          totem={selectedTotem}
-          onClose={() => setSelectedTotem(null)}
-        />
-      )}
+      
     </section>
   );
 };

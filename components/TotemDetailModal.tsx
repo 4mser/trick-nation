@@ -5,8 +5,6 @@ import {
   DrawerClose,
   DrawerContent,
   DrawerDescription,
-  DrawerFooter,
-  DrawerHeader,
   DrawerTitle,
 } from "@/components/ui/drawer";
 
@@ -72,29 +70,28 @@ const TotemDetailModal: React.FC<TotemDetailModalProps> = ({ totem, onClose }) =
 
   return (
     <Drawer open={drawerOpen} onOpenChange={handleDrawerClose}>
-      <DrawerContent className='dark rounded-t-3xl outline-none'>
+      <DrawerContent className='dark rounded-t-3xl outline-none' onClick={handleModalClick}>
         <DrawerTitle>
-
+          <h1 className="w-full text-center text-xl font-bold my-2 text-white">{totem.name}</h1>
         </DrawerTitle>
         <DrawerDescription>
-        <div className='p-4'>
-          <img
-            src={totem.imageUrl}
-            alt={totem.name}
-            className="w-full max-h-[65dvh] object-cover rounded-md"
-          />
-        </div>
-        <section className='p-4'>
-          <div className='flex justify-between w-full items-center'>
-            <h1 className="text-xl font-bold mb-2 text-white">{totem.name}</h1>
-            <a href={`/totems/${totem._id}`} className="text-yellow-500 hover:underline">Entrar al Totem</a>
+          <div className='p-4'>
+            <img
+              src={totem.imageUrl}
+              alt={totem.name}
+              className="w-full max-h-[65dvh] object-cover rounded-md"
+            />
           </div>
-          <div className="mt-4">
-            <div className="flex flex-wrap gap-2">
-              {renderCategories()}
+          <section className='p-4 mb-4'>
+            <div className='flex justify-between w-full items-center'>
+              <a href={`/totems/${totem._id}`} className="text-yellow-500 hover:underline">Entrar al Totem</a>
             </div>
-          </div>
-        </section>
+            <div className="mt-4">
+              <div className="flex flex-wrap gap-2">
+                {renderCategories()}
+              </div>
+            </div>
+          </section>
         </DrawerDescription>
         <DrawerClose></DrawerClose>
       </DrawerContent>
