@@ -1,3 +1,4 @@
+'use client'
 import React, { useEffect, useState } from 'react';
 import { Totem } from '@/types/totem';
 import {
@@ -31,12 +32,6 @@ const categoriesList = [
 ];
 
 const TotemDetailModal: React.FC<TotemDetailModalProps> = ({ totem, onClose }) => {
-  if (!totem) return null;
-
-  const handleModalClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-    e.stopPropagation(); // Detiene la propagación del evento para que no cierre el modal
-  };
-
   const [drawerOpen, setDrawerOpen] = useState(false);
 
   useEffect(() => {
@@ -54,8 +49,12 @@ const TotemDetailModal: React.FC<TotemDetailModalProps> = ({ totem, onClose }) =
     }
   };
 
+  const handleModalClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    e.stopPropagation(); // Detiene la propagación del evento para que no cierre el modal
+  };
+
   const renderCategories = () => {
-    return (totem.categories || []).map((category) => {
+    return (totem?.categories || []).map((category) => {
       const categoryData = categoriesList.find(c => c.name === category);
       if (categoryData) {
         return (
@@ -72,19 +71,19 @@ const TotemDetailModal: React.FC<TotemDetailModalProps> = ({ totem, onClose }) =
     <Drawer open={drawerOpen} onOpenChange={handleDrawerClose}>
       <DrawerContent className='dark rounded-t-3xl outline-none' onClick={handleModalClick}>
         <DrawerTitle>
-          <h1 className="w-full text-center text-xl font-bold my-2 text-white">{totem.name}</h1>
+          <h1 className="w-full text-center text-xl font-bold my-2 text-white">{totem?.name}</h1>
         </DrawerTitle>
         <DrawerDescription>
           <div className='p-4'>
             <img
-              src={totem.imageUrl}
-              alt={totem.name}
+              src={totem?.imageUrl}
+              alt={totem?.name}
               className="w-full max-h-[65dvh] object-cover rounded-md"
             />
           </div>
           <section className='p-4 mb-4'>
             <div className='flex justify-between w-full items-center'>
-              <a href={`/totems/${totem._id}`} className="text-yellow-500 hover:underline">Entrar al Totem</a>
+              <a href={`/totems/${totem?._id}`} className="text-yellow-500 hover:underline">Entrar al Totem</a>
             </div>
             <div className="mt-4">
               <div className="flex flex-wrap gap-2">
