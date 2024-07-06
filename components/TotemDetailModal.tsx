@@ -69,7 +69,7 @@ const TotemDetailModal: React.FC<TotemDetailModalProps> = ({ totem, onClose }) =
 
   return (
     <Drawer open={drawerOpen} onOpenChange={handleDrawerClose}>
-      <DrawerContent className='dark rounded-t-3xl outline-none' onClick={handleModalClick}>
+      <DrawerContent className='bg-white/5 border-none backdrop-blur-md rounded-t-3xl outline-none' onClick={handleModalClick}>
         <DrawerTitle>
           <h1 className="w-full text-center text-xl font-bold my-2 text-white">{totem?.name}</h1>
         </DrawerTitle>

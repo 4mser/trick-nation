@@ -64,7 +64,7 @@ const PinDetailModal: React.FC<PinDetailDrawerProps> = ({ pin, onClose }) => {
 
   return (
     <Drawer open={drawerOpen} onOpenChange={handleDrawerClose}>
-      <DrawerContent className="dark backdrop-blur-md rounded-t-3xl outline-none">
+      <DrawerContent className="bg-white/5 border-none backdrop-blur-md rounded-t-3xl outline-none">
         <DrawerHeader>
           <DrawerTitle className="text-white text-center">{pin.name}</DrawerTitle>
           <DrawerDescription>

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Drawer, DrawerClose, DrawerContent, DrawerDescription, DrawerFooter, DrawerHeader, DrawerTitle, DrawerTrigger } from "@/components/ui/drawer";
 import { Button } from "@/components/ui/button";
-import { Switch } from "@/components/ui/switch";
+import CustomSwitch from './CustomSwitch'; // Importa el switch personalizado
 
 const categoriesList = [
   { name: 'Naturaleza', icon: '/assets/categories/naturaleza.svg' },
@@ -50,19 +50,19 @@ const TotemFilterDrawer: React.FC<TotemFilterDrawerProps> = ({ onApplyFilters })
     <Drawer open={drawerOpen} onOpenChange={setDrawerOpen}>
       <DrawerTrigger asChild>
         <Button className='absolute right-3 top-4 w-14 h-14 rounded-full overflow-hidden flex justify-center items-center bg-gradient-to-tr from-green-500 to-blue-400 p-[2px] outline-none'>
-          <div className='flex justify-center items-center w-full h-full p-2 bg-black/30 backdrop-blur-3xl rounded-full'>
+          <div className='flex justify-center items-center w-full h-full p-1  bg-black/30 backdrop-blur-3xl rounded-full'>
             <img src="/assets/categories/todo.svg" alt="Filter Totems" className='w-full h-full object-cover' />
           </div>
         </Button>
       </DrawerTrigger>
-      <DrawerContent className="dark backdrop-blur-md rounded-t-3xl outline-none">
+      <DrawerContent className=" bg-white/5 border-none backdrop-blur-md rounded-t-3xl outline-none">
         <DrawerHeader>
           <DrawerTitle className="text-white text-center">Categorías</DrawerTitle>
         </DrawerHeader>
         <DrawerDescription asChild>
           <div>
             <form className="text-sm mb-6">
-              <div className="px-3 flex flex-col gap-3">
+              <div className="px-3 flex flex-col gap-4">
                 {categoriesList.map((category) => {
                   const isSelected = selectedCategories.includes(category.name);
                   return (
@@ -71,10 +71,9 @@ const TotemFilterDrawer: React.FC<TotemFilterDrawerProps> = ({ onApplyFilters })
                         <img src={category.icon} alt={category.name} className={`h-6 w-6 mr-2 ${isSelected ? 'category-selected' : 'category-not-selected'}`} />
                         <label className={`text-white/80 ${isSelected ? 'category-selected' : 'category-not-selected'}`}>{category.name}</label>
                       </div>
-                      <Switch
+                      <CustomSwitch
                         checked={isSelected}
-                        onCheckedChange={() => handleCategoryChange(category.name)}
-                        className=""
+                        onChange={() => handleCategoryChange(category.name)}
                       />
                     </div>
                   );
