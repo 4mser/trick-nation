@@ -410,7 +410,7 @@ const Map: React.FC = () => {
         console.error('Error al obtener la ubicación del usuario:', error);
       }
     );
-  }, [createTotemMarkerElement, fetchTotems, userLocation]);
+  }, [createTotemMarkerElement]);
 
   useEffect(() => {
     if (map && userLocation) {
