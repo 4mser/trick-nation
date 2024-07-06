@@ -1,0 +1,16 @@
+const categoriesList = [
+    { name: 'Naturaleza', icon: '/assets/categories/naturaleza.svg' },
+    { name: 'Rutas y Aventuras', icon: '/assets/categories/rutas.svg' },
+    { name: 'Comidas y Bebidas', icon: '/assets/categories/comidas.svg' },
+    { name: 'Deporte y Fitness', icon: '/assets/categories/deporte.svg' },
+    { name: 'Actividades y Eventos', icon: '/assets/categories/eventos.svg' },
+    { name: 'Educación y Cultura', icon: '/assets/categories/cultura.svg' },
+    { name: 'Activismo y Medioambiente', icon: '/assets/categories/medioambiente.svg' },
+    { name: 'Ciencia y Tecnología', icon: '/assets/categories/ciencia.svg' },
+    { name: 'Emprendimientos', icon: '/assets/categories/emprendimientos.svg' },
+    { name: 'Exploración Urbana', icon: '/assets/categories/exploracion.svg' },
+    { name: 'Arte y Creatividad', icon: '/assets/categories/arte.svg' },
+    { name: 'Salud y Bienestar', icon: '/assets/categories/salud.svg' },
+    { name: 'Belleza y Estilo', icon: '/assets/categories/belleza.svg' },
+    { name: 'Historia y Patrimonio', icon: '/assets/categories/historia.svg' },
+  ];

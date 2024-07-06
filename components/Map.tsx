@@ -12,6 +12,7 @@ import { Totem } from "@/types/totem";
 import { Pin } from "@/types/pins";
 import PinFormDrawer from "./PinFormDrawer";
 import PinDetailModal from "./PinDetailModal";
+import TotemFilterDrawer from './TotemFilterDrawer'; // Asegúrate de importar el componente TotemFilterDrawer
 
 const MAPBOX_TOKEN = process.env.NEXT_PUBLIC_MAPBOX_TOKEN || '';
 const EXPLORATION_RADIUS_METERS = 100;
@@ -24,6 +25,7 @@ const Map: React.FC = () => {
   const markerRef = useRef<Marker | null>(null);
   const [pins, setPins] = useState<Pin[]>([]);
   const [totems, setTotems] = useState<Totem[]>([]);
+  const [filteredTotems, setFilteredTotems] = useState<Totem[]>([]);
   const [showTotemForm, setShowTotemForm] = useState(false);
   const [isDebugMode, setIsDebugMode] = useState(false);
   const [selectedPin, setSelectedPin] = useState<Pin | null>(null);
@@ -181,6 +183,13 @@ const Map: React.FC = () => {
     setShowTotemForm(true);
   }, [userLocation, user]);
 
+  const handleApplyFilters = useCallback((selectedCategories: string[]) => {
+    const filtered = totems.filter(totem =>
+      selectedCategories.some(category => totem.categories.includes(category))
+    );
+    setFilteredTotems(filtered);
+  }, [totems]);
+
   const fetchPins = useCallback(async () => {
     try {
       const response = await api.get<Pin[]>('/pins');
@@ -194,6 +203,7 @@ const Map: React.FC = () => {
     try {
       const response = await api.get<Totem[]>('/totems');
       setTotems(response.data);
+      setFilteredTotems(response.data);
     } catch (error) {
       console.error('Failed to fetch totems:', error);
     }
@@ -368,7 +378,7 @@ const Map: React.FC = () => {
             }
           });
 
-          totems.forEach((totem) => {
+          filteredTotems.forEach((totem) => {
             if (totem.modelUrl) {
               add3DModelToMap(mapboxMap, totem.modelUrl, totem.location.coordinates, totem);
             } else {
@@ -389,7 +399,7 @@ const Map: React.FC = () => {
         console.error('Error al obtener la ubicación del usuario:', error);
       }
     );
-  }, [totems, createTotemMarkerElement]);
+  }, [filteredTotems, createTotemMarkerElement]);
 
   useEffect(() => {
     if (map && userLocation) {
@@ -448,12 +458,22 @@ const Map: React.FC = () => {
   return (
     <section className="max-h-[100dvh] overflow-hidden">
       <div ref={mapNode} style={{ width: '100%', height: '100dvh' }} />
+        <TotemFilterDrawer onApplyFilters={handleApplyFilters} /> {/* Add the new drawer */}
       <section className='fixed z-50 bottom-14 w-fit right-3 h-fit'>
         <PinFormDrawer
           userLocation={userLocation as [number, number]}
           userId={user ? user._id : ''}
           onPinCreated={fetchPins}
         />
+        {/* Solo activar para subir totems */}
+        <button
+          className='absolute right-28 bottom-3 w-14 h-14 rounded-full overflow-hidden flex justify-center items-center bg-gradient-to-tr from-green-500 to-green-800 p-[2px]'
+          onClick={handleAddTotem}
+        >
+          <div className='flex justify-center items-center w-full h-full p-2.5 bg-black/30 backdrop-blur-3xl rounded-full'>
+            <img src="../assets/map-icons/totem.svg" alt="Add Totem" className='w-full filter hue-rotate-[210deg] h-full object-contain' />
+          </div>
+        </button>
         <button
           className='absolute right-[49px] bottom-[59px] bg-black/50 flex justify-center items-center w-9 h-9 rounded-full p-2'
         >

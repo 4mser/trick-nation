@@ -10,4 +10,5 @@ export interface Totem {
   imageUrl: string;
   modelUrl?: string;
   createdAt: Date;
+  categories: string[];
 }
