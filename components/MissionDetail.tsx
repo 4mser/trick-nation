@@ -46,7 +46,6 @@ const MissionDetail: React.FC<MissionDetailProps> = ({ missionId }) => {
   const handleJoinMission = async () => {
     try {
       if (user) {
-        console.log('User ID:', user._id);
         await api.patch(`/missions/${missionId}/join`, { userId: user._id });
         fetchMission();
       }
@@ -100,7 +99,7 @@ const MissionDetail: React.FC<MissionDetailProps> = ({ missionId }) => {
     formData.append('file', file);
 
     try {
-      await api.post(`/missions/${missionId}/sighting`, formData, {
+      await api.patch(`/missions/${missionId}/sightings`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
@@ -124,7 +123,6 @@ const MissionDetail: React.FC<MissionDetailProps> = ({ missionId }) => {
 
   const isUserParticipating = user && mission?.participants.some((participant: any) => {
     const participantId = typeof participant === 'string' ? participant : participant._id;
-    console.log('Comparing participant:', participantId, 'with user ID:', user._id);
     return participantId.toString() === user._id.toString();
   });
 
@@ -139,11 +137,8 @@ const MissionDetail: React.FC<MissionDetailProps> = ({ missionId }) => {
 
           <div className='p-4'>
             <h1 className="text-2xl font-bold mb-2">{mission.name}</h1>
-            {/* <p className="mb-2">Type: {mission.type}</p> */}
             <p className="mb-2">Dificultad: {mission.difficulty}</p>
           </div>
-          {/* <p className="mb-2">Start Date: {new Date(mission.startDate!).toLocaleDateString()}</p>
-          <p className="mb-2">End Date: {mission.endDate ? new Date(mission.endDate).toLocaleDateString() : 'N/A'}</p> */}
           {!isUserParticipating && user && (
             <button
               className="bg-blue-500 text-white p-2 rounded mb-4"
@@ -203,7 +198,6 @@ const MissionDetail: React.FC<MissionDetailProps> = ({ missionId }) => {
                       alt={selectedSpecies.name}
                       className="w-full max-h-[65dvh] object-cover rounded-md"
                     />
-                    {/* <p className="mt-4 text-white">{selectedSpecies.scientificName}</p> */}
                   </div>
                   <section className='p-4 mb-4'>
                     <div className='flex justify-center'>

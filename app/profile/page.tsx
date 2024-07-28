@@ -5,91 +5,87 @@ import useCurrentUser from '@/hooks/useCurrentUser';
 import ProtectedRoute from '@/components/ProtectedRoute';
 import LogoutButton from '@/components/LogoutButton';
 import EditProfileForm from '@/components/EditProfileForm';
-import VideoModal from '@/components/VideoModal';
 import api from '@/services/api';
-import { useRouter } from 'next/navigation';
-import { UserTrick } from '@/types/usertrick';
-import Loader from '@/components/Loader';
+import { Species } from '@/types/mission';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
-
-const useUnlockedTricks = (userId: string | undefined) => {
-  const [unlockedTricks, setUnlockedTricks] = useState<UserTrick[]>([]);
-
-  useEffect(() => {
-    const fetchUnlockedTricks = async () => {
-      if (userId) {
-        const response = await api.get(`/usertricks/user/${userId}`);
-        setUnlockedTricks(response.data);
-      }
-    };
-    fetchUnlockedTricks();
-  }, [userId]);
-
-  return unlockedTricks;
-};
+import {
+  Drawer,
+  DrawerClose,
+  DrawerContent,
+  DrawerDescription,
+  DrawerTitle,
+} from "@/components/ui/drawer";
+import { Button } from "@/components/ui/button";
 
 const UserProfile: React.FC = () => {
   const { user, loading, refetch } = useCurrentUser();
-  const router = useRouter();
   const [isEditing, setIsEditing] = useState(false);
-  const [selectedTrick, setSelectedTrick] = useState<UserTrick | null>(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const unlockedTricks = useUnlockedTricks(user?._id);
+  const [allSpecies, setAllSpecies] = useState<Species[]>([]);
+  const [unlockedSpecies, setUnlockedSpecies] = useState<string[]>([]);
+  const [selectedSpecies, setSelectedSpecies] = useState<Species | null>(null);
+  const [showSpeciesDrawer, setShowSpeciesDrawer] = useState(false);
+  const [showPokedexDrawer, setShowPokedexDrawer] = useState(false);
+  const [missionName, setMissionName] = useState<string>('');
 
-  const handleDeleteAccount = async () => {
-    const confirmed = window.confirm('¿Estás seguro de que quieres eliminar tu cuenta? Esta acción es permanente.');
-    if (!confirmed) return;
-
+  const fetchAllSpecies = async () => {
     try {
-      const token = localStorage.getItem('token');
-      await api.delete('/auth/profile', {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      router.push('/Auth/login');
+      const response = await api.get('/species');
+      setAllSpecies(response.data);
     } catch (error) {
-      console.error('Failed to delete account:', error);
+      console.error('Failed to fetch all species:', error);
     }
   };
+
+  const fetchUnlockedSpecies = async () => {
+    try {
+      const response = await api.get(`/users/${user?._id}`);
+      const unlockedSpeciesIds = response.data.sightings.map((sighting: any) => sighting.species.toString());
+      setUnlockedSpecies(unlockedSpeciesIds);
+
+      if (response.data.missions.length > 0) {
+        const missionId = response.data.missions[0];
+        const missionResponse = await api.get(`/missions/${missionId}`);
+        setMissionName(missionResponse.data.name);
+      }
+    } catch (error) {
+      console.error('Failed to fetch unlocked species:', error);
+    }
+  };
+
+  useEffect(() => {
+    fetchAllSpecies();
+    if (user) {
+      fetchUnlockedSpecies();
+    }
+  }, [user]);
 
   const handleProfileUpdate = async () => {
     await refetch();
     setIsEditing(false);
   };
 
-  const handleDeleteTrick = async (id: string) => {
-    try {
-      await api.delete(`/usertricks/${id}`);
-      setSelectedTrick(null);
-      refetch();
-    } catch (error) {
-      console.error('Failed to delete trick:', error);
+  const handleSpeciesClick = (species: Species) => {
+    setSelectedSpecies(species);
+    setShowSpeciesDrawer(true);
+  };
+
+  const handleDrawerClose = (isOpen: boolean) => {
+    if (!isOpen) {
+      setShowSpeciesDrawer(false);
     }
   };
 
-  const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>, trickId: string) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      const formData = new FormData();
-      formData.append('file', file);
-
-      try {
-        await api.patch(`/usertricks/${trickId}`, formData, {
-          headers: { 'Content-Type': 'multipart/form-data' },
-        });
-        refetch();
-        setSelectedTrick(null);
-      } catch (error) {
-        console.error('Failed to update trick video:', error);
-      }
+  const handlePokedexDrawerClose = (isOpen: boolean) => {
+    if (!isOpen) {
+      setShowPokedexDrawer(false);
     }
   };
 
-  const totalTricks = 332;
-  const progressPercentage = ((unlockedTricks.length / totalTricks) * 100).toFixed(1);
-
-  if (loading) return <div className='w-full h-[100dvh] grid place-items-center'><Loader /></div>;
+  if (loading) return <div>Loading...</div>;
   if (!user) return <div>No user data</div>;
+
+  const progressPercentage = ((unlockedSpecies.length / allSpecies.length) * 100).toFixed(1);
 
   return (
     <div className="bg-neutral-950 text-white shadow-lg pb-32 relative">
@@ -106,7 +102,7 @@ const UserProfile: React.FC = () => {
                   width={96}
                   height={96}
                   className="w-24 h-24 object-cover rounded-3xl shadow-2xl shadow-white/30 cursor-pointer"
-                  onClick={() => setIsModalOpen(true)}
+                  onClick={() => setIsEditing(true)}
                 />
               </motion.div>
               <h2 className="text-2xl font-bold">{user.username}</h2>
@@ -134,7 +130,7 @@ const UserProfile: React.FC = () => {
               </div>
             </div>
             <div className="m-6 space-y-2">
-              <p className="text-white">Progreso: {progressPercentage}%</p>
+              <p className="text-white">Progreso misión {missionName}: {progressPercentage}%</p>
               <div className="w-full h-2 bg-neutral-700 rounded-full overflow-hidden">
                 <motion.div
                   className="h-full bg-green-400 rounded-full"
@@ -142,6 +138,34 @@ const UserProfile: React.FC = () => {
                   animate={{ width: `${progressPercentage}%` }}
                   transition={{ duration: 1.5 }}
                 />
+              </div>
+              <div className="flex justify-center mt-4">
+                {unlockedSpecies.map((speciesId) => {
+                  const species = allSpecies.find((s) => s._id === speciesId);
+                  return species ? (
+                    <motion.div
+                      key={species._id}
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                      onClick={() => handleSpeciesClick(species)}
+                      className="cursor-pointer mx-2 pt-2"
+                    >
+                      <img
+                        src={species.imageUrl}
+                        alt={species.name}
+                        className="w-12 h-12 rounded-full object-cover border-2 border-green-500"
+                      />
+                    </motion.div>
+                  ) : null;
+                })}
+              </div>
+              <div className="flex justify-center mt-4">
+                <div
+                  onClick={() => setShowPokedexDrawer(true)}
+                  className='pt-3 opacity-85 hover:cursor-pointer hover:opacity-100'
+                >
+                  Ver todas las medallas
+                </div>
               </div>
             </div>
             <ul className="relative z-10 bg-neutral-950 mx-5 py-2 flex justify-around rounded-full shadow-md">
@@ -160,67 +184,56 @@ const UserProfile: React.FC = () => {
             </ul>
           </div>
 
-          <div className="mt-4">
-            <h2 className="text-xl font-bold mb-2 text-center">Tokens</h2>
-            {unlockedTricks.length > 0 ? (
-              <div className="grid grid-cols-3 gap-1">
-                {unlockedTricks.map((trick) => (
-                  <div key={trick._id} className="relative aspect-square">
-                    <div
-                      className="absolute bottom-0 left-0 w-full bg-black bg-opacity-50 text-white text-xs p-1 text-center cursor-pointer"
-                      onClick={() => setSelectedTrick(trick)}
-                    >
-                      {trick.trickId.name}
-                    </div>
-                    <video
-                      onClick={() => setSelectedTrick(trick)}
-                      className="w-full h-full object-cover cursor-pointer"
-                      src={`${trick.videoUrl}#t=0.1`}
-                      poster=""
-                      playsInline
-                      controls={false}
+          {selectedSpecies && (
+            <Drawer open={showSpeciesDrawer} onOpenChange={handleDrawerClose}>
+              <DrawerContent className='bg-white/5 border-none backdrop-blur-md rounded-t-3xl outline-none'>
+                <DrawerTitle>
+                  <h1 className="w-full text-center text-xl font-bold my-2 text-white">{selectedSpecies.name}</h1>
+                </DrawerTitle>
+                <DrawerDescription>
+                  <div className='p-4'>
+                    <img
+                      src={selectedSpecies.imageUrl}
+                      alt={selectedSpecies.name}
+                      className="w-full max-h-[65dvh] object-cover rounded-md"
                     />
+                    {/* <p className="mt-4 text-white">{selectedSpecies.description}</p> */}
+                    <p className="mt-2 text-white"><b>Nombre Científico:</b> {selectedSpecies.scientificName}</p>
                   </div>
-                ))}
-              </div>
-            ) : (
-              <p className="px-5 text-center opacity-60">Nada de momento.</p>
-            )}
-          </div>
+                </DrawerDescription>
+                <DrawerClose />
+              </DrawerContent>
+            </Drawer>
+          )}
+
+          <Drawer open={showPokedexDrawer} onOpenChange={handlePokedexDrawerClose}>
+            <DrawerContent className='bg-white/5 border-none backdrop-blur-md rounded-t-3xl outline-none'>
+              <DrawerTitle>
+                <h1 className="w-full text-center text-xl font-bold my-2 text-white">Medallas</h1>
+              </DrawerTitle>
+              <DrawerDescription>
+                <div className="flex flex-wrap gap-2 p-4 items-center justify-center">
+                  {allSpecies.map((species) => (
+                    <motion.div
+                      key={species._id}
+                      className={`border w-10 h-10 ${unlockedSpecies.includes(species._id) ? 'border-green-500' : 'border-gray-700'} text-white rounded-full shadow-lg overflow-hidden`}
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                      onClick={() => unlockedSpecies.includes(species._id) && handleSpeciesClick(species)}
+                    >
+                      <img
+                        src={species.imageUrl}
+                        alt={species.name}
+                        className={`w-full h-full object-cover rounded-full ${unlockedSpecies.includes(species._id) ? '' : 'opacity-30'}`}
+                      />
+                    </motion.div>
+                  ))}
+                </div>
+              </DrawerDescription>
+              <DrawerClose />
+            </DrawerContent>
+          </Drawer>
         </>
-      )}
-      {selectedTrick && (
-        <VideoModal
-          trick={selectedTrick}
-          onClose={() => setSelectedTrick(null)}
-          onDelete={handleDeleteTrick}
-          onFileChange={handleFileChange}
-        />
-      )}
-      {isModalOpen && (
-        <motion.div
-          className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          onClick={() => setIsModalOpen(false)}
-        >
-          <motion.div
-            className="relative  rounded-lg"
-            initial={{ scale: 0.8 }}
-            animate={{ scale: 1 }}
-            exit={{ scale: 0.8 }}
-            onClick={(e) => e.stopPropagation()} // Prevents modal from closing when clicking inside
-          >
-            <Image
-              src={user.profilePictureUrl || '/profile.jpeg'}
-              alt="Profile Picture"
-              width={500}
-              height={500}
-              className="object-cover rounded-lg w-full h-full"
-            />
-          </motion.div>
-        </motion.div>
       )}
     </div>
   );

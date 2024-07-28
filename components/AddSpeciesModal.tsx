@@ -47,8 +47,8 @@ const AddSpeciesModal: React.FC<AddSpeciesModalProps> = ({ missionId, onClose, o
   };
 
   return (
-    <div className="fixed z-50 inset-0 flex items-center justify-center bg-black bg-opacity-30">
-      <div className="bg-white/10 overflow-y-auto backdrop-blur-md text-white p-8 shadow-lg w-full max-w-lg">
+    <div className="fixed z-50 inset-0 flex items-center justify-center bg-black bg-opacity-70 p-4">
+      <div className="bg-white/10 overflow-y-auto backdrop-blur-md text-white p-8 shadow-lg w-full max-w-lg rounded-lg">
         <h2 className="text-2xl font-bold mb-4">Add New Species</h2>
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
