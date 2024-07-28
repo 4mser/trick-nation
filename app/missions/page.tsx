@@ -45,7 +45,7 @@ const MissionsPage: React.FC = () => {
         <div className="p-4">
           <h1 className="text-2xl font-bold mb-4 text-white">Misiones</h1>
           <button
-            className=" absolute bottom-14 right-4 bg-gradient-to-br from-yellow-400/40 to-transparent text-white p-2 rounded mb-4"
+            className=" absolute bottom-14 right-4 bg-gradient-to-br from-yellow-500/60 to-transparent text-white p-2 rounded mb-4"
             onClick={() => setShowMissionForm(true)}
           >
             Crear Misión
@@ -54,7 +54,7 @@ const MissionsPage: React.FC = () => {
             {missions.map((mission) => (
               <div
                 key={mission._id}
-                className="bg-gradient-to-tl from-yellow-400/40 via-yellow-400/10 to-transparent flex text-white p-4 rounded shadow-lg cursor-pointer h-full gap-4"
+                className="bg-gradient-to-tl from-yellow-500/60 via-yellow-500/10 to-transparent flex text-white p-4 rounded shadow-lg cursor-pointer h-full gap-4"
                 onClick={() => router.push(`/missions/${mission._id}`)}
               >
                 {/* <p className="mb-2">Start Date: {new Date(mission.startDate!).toLocaleDateString()}</p> */}

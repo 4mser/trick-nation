@@ -155,7 +155,7 @@ const MissionDetail: React.FC<MissionDetailProps> = ({ missionId }) => {
           {isUserParticipating && (
             <>
               <button
-                className="fixed hover:scale-105 z-10  bottom-12 shadow-lg right-4 bg-gradient-to-br from-yellow-500/70 border-2 border-yellow-400/80 to-transparent backdrop-blur-md  text-yellow-400 p-2 text-2xl  rounded-full w-12 h-12 flex justify-center items-center mb-4"
+                className="fixed hover:scale-105 z-10  bottom-12 shadow-lg right-4 bg-gradient-to-br from-yellow-600/70 border-2 border-yellow-500/80 to-transparent backdrop-blur-md  text-yellow-500 p-2 text-2xl  rounded-full w-12 h-12 flex justify-center items-center mb-4"
                 onClick={() => setShowAddSpeciesModal(true)}
               >
                 + 
@@ -165,7 +165,7 @@ const MissionDetail: React.FC<MissionDetailProps> = ({ missionId }) => {
                 {mission.species.map((species) => (
                   <motion.div
                     key={species._id}
-                    className="bg-gradient-to-br  border-yellow-400/10 from-yellow-400/20 to-transparent text-white rounded-lg shadow-lg cursor-pointer overflow-hidden"
+                    className="bg-gradient-to-br  border-yellow-400/10 from-yellow-600/20 to-transparent text-white rounded-lg shadow-lg cursor-pointer overflow-hidden"
                     onClick={() => handleSpeciesClick(species)}
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
@@ -175,7 +175,7 @@ const MissionDetail: React.FC<MissionDetailProps> = ({ missionId }) => {
                   >
                     <img src={species.imageUrl} alt={species.name} className="w-full h-40 object-cover" />
                     <div className='p-2'>
-                      <h3 className="text-md font-semibold text-yellow-400/80">{species.name}</h3>
+                      <h3 className="text-md font-semibold text-yellow-500/80">{species.name}</h3>
                       <p className="text-xs opacity-70">{species.scientificName}</p>
                     </div>
                   </motion.div>
@@ -208,7 +208,7 @@ const MissionDetail: React.FC<MissionDetailProps> = ({ missionId }) => {
                   <section className='p-4 mb-4'>
                     <div className='flex justify-center'>
                       <Button
-                        className="bg-gradient-to-br from-yellow-500/70  to-transparent backdrop-blur-md p-2 rounded-md w-full"
+                        className="bg-gradient-to-br from-yellow-600/70  to-transparent backdrop-blur-md p-2 rounded-md w-full"
                         onClick={handleAddSightingClick}
                       >
                         Reportar Avistamiento
@@ -245,7 +245,7 @@ const MissionDetail: React.FC<MissionDetailProps> = ({ missionId }) => {
                         </div>
                       )}
                       <DrawerFooter className="flex justify-end p-0 py-4">
-                        <button type="submit" className="bg-gradient-to-br from-yellow-500/60 to-transparent  text-white px-4 py-2 rounded-md" disabled={loading}>
+                        <button type="submit" className="bg-gradient-to-br from-yellow-600/60 to-transparent  text-white px-4 py-2 rounded-md" disabled={loading}>
                           {loading ? `subiendo... ${progress}%` : 'Subir'}
                         </button>
                         <DrawerClose asChild>
