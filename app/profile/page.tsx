@@ -107,7 +107,7 @@ const UserProfile: React.FC = () => {
               </motion.div>
               <h2 className="text-2xl font-bold">{user.username}</h2>
               <p className="px-5 opacity-70 font-light">{user.description}</p>
-              <p className="px-5 opacity-70 font-light">{user.roles.length > 0 ? user.roles[0] : 'Sin rol'}</p>
+              {/* <p className="px-5 opacity-70 font-light">{user.roles.length > 0 ? user.roles[0] : 'Sin rol'}</p> */}
               {user.nucleus && (
                 <div className="flex items-center gap-2 justify-between">
                   <Image
