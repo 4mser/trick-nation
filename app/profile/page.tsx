@@ -139,7 +139,7 @@ const UserProfile: React.FC = () => {
                   transition={{ duration: 1.5 }}
                 />
               </div>
-              <div className="flex justify-center mt-4">
+              <div className="flex  flex-wrap justify-center pt-3 gap-2">
                 {unlockedSpecies.map((speciesId) => {
                   const species = allSpecies.find((s) => s._id === speciesId);
                   return species ? (
@@ -148,7 +148,7 @@ const UserProfile: React.FC = () => {
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
                       onClick={() => handleSpeciesClick(species)}
-                      className="cursor-pointer mx-2 pt-2"
+                      className="cursor-pointer"
                     >
                       <img
                         src={species.imageUrl}
