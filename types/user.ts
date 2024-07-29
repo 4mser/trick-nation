@@ -9,9 +9,10 @@ export interface User {
   city?: string;
   country?: string;
   profilePictureUrl?: string;
-  roles:string[];
-  nucleus:string;
+  roles: string[];
+  nucleus: string;
   currentCrewId?: string;
   unlockedTricks?: { _id: string; name: string }[]; // Agregar los trucos desbloqueados
   onboardingCompleted: boolean;
+  sightings: { species: string; imageUrl: string; date: Date }[]; // Agregar sightings
 }

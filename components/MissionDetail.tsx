@@ -16,6 +16,8 @@ import {
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { motion } from 'framer-motion';
+import Image from 'next/image';
+import { User } from '@/types/user';
 
 interface MissionDetailProps {
   missionId: string;
@@ -26,11 +28,13 @@ const MissionDetail: React.FC<MissionDetailProps> = ({ missionId }) => {
   const [showAddSpeciesModal, setShowAddSpeciesModal] = useState(false);
   const [showSpeciesDrawer, setShowSpeciesDrawer] = useState(false);
   const [showAddSightingDrawer, setShowAddSightingDrawer] = useState(false);
+  const [showRankingDrawer, setShowRankingDrawer] = useState(false);
   const { user } = useAuth();
   const [selectedSpecies, setSelectedSpecies] = useState<Species | null>(null);
   const [file, setFile] = useState<File | null>(null);
   const [loading, setLoading] = useState(false);
   const [progress, setProgress] = useState(0);
+  const [ranking, setRanking] = useState<{ user: User, speciesCount: number }[]>([]);
 
   const fetchMission = async () => {
     try {
@@ -38,6 +42,39 @@ const MissionDetail: React.FC<MissionDetailProps> = ({ missionId }) => {
       setMission(response.data);
     } catch (error) {
       console.error('Failed to fetch mission:', error);
+    }
+  };
+
+  const fetchRanking = async () => {
+    try {
+      if (mission) {
+        const participantIds = mission.participants.map((participant: any) => {
+          if (typeof participant === 'string') {
+            return participant;
+          } else if (participant && '_id' in participant) {
+            return participant._id.toString();
+          } else {
+            return null;
+          }
+        }).filter(Boolean);
+
+        const participantData = await Promise.all(
+          participantIds.map(async (participantId) => {
+            const response = await api.get(`/users/${participantId}`);
+            return response.data;
+          })
+        );
+
+        const rankingData = participantData.map((participant: User) => {
+          const uniqueSpecies = new Set(participant.sightings.map((sighting: any) => sighting.species.toString()));
+          return { user: participant, speciesCount: uniqueSpecies.size };
+        });
+
+        rankingData.sort((a, b) => b.speciesCount - a.speciesCount);
+        setRanking(rankingData);
+      }
+    } catch (error) {
+      console.error('Failed to fetch ranking:', error);
     }
   };
 
@@ -139,7 +176,7 @@ const MissionDetail: React.FC<MissionDetailProps> = ({ missionId }) => {
           </div>
           {!isUserParticipating && user && (
             <button
-              className="bg-blue-500 text-white p-2 rounded mb-4"
+              className="bg-yellow-500 text-white p-2 rounded mb-4"
               onClick={handleJoinMission}
             >
               Unirte a la misión!
@@ -147,13 +184,16 @@ const MissionDetail: React.FC<MissionDetailProps> = ({ missionId }) => {
           )}
           {isUserParticipating && (
             <>
+              <Button className="mx-4 mb-4" onClick={() => { fetchRanking(); setShowRankingDrawer(true); }}>
+                Ver Ranking de Misión
+              </Button>
               <button
                 className="fixed hover:scale-105 z-10  bottom-12 shadow-lg right-4 bg-gradient-to-br from-yellow-600/70 border-2 border-yellow-500/80 to-transparent backdrop-blur-md  text-yellow-500 p-2 text-2xl  rounded-full w-12 h-12 flex justify-center items-center mb-4"
                 onClick={() => setShowAddSpeciesModal(true)}
               >
                 + 
               </button>
-              <h2 className="text-xl font-bold mb-2 px-4">Species</h2>
+              <h2 className="text-xl font-bold mb-2 px-4">Especies</h2>
               <div className="grid grid-cols-2 md:grid-cols-2 gap-4 p-4">
                 {mission.species.map((species) => (
                   <motion.div
@@ -241,7 +281,7 @@ const MissionDetail: React.FC<MissionDetailProps> = ({ missionId }) => {
                           {loading ? `subiendo... ${progress}%` : 'Subir'}
                         </button>
                         <DrawerClose asChild>
-                          <button className="text-white px-4 py-2 rounded" onClick={() => setShowAddSightingDrawer(false)}>Cancel</button>
+                          <button className="text-white px-4 py-2 rounded" onClick={() => setShowAddSightingDrawer(false)}>Cancelar</button>
                         </DrawerClose>
                       </DrawerFooter>
                     </form>
@@ -250,6 +290,36 @@ const MissionDetail: React.FC<MissionDetailProps> = ({ missionId }) => {
               </DrawerContent>
             </Drawer>
           )}
+          <Drawer open={showRankingDrawer} onOpenChange={(isOpen) => setShowRankingDrawer(isOpen)}>
+            <DrawerContent className='bg-white/5 border-none backdrop-blur-md rounded-t-3xl outline-none max-h-[100dvh]'>
+              <DrawerTitle>
+                <h1 className="w-full text-center text-xl font-bold my-2 text-white">Ranking de Avistamientos</h1>
+              </DrawerTitle>
+              <DrawerDescription className='overflow-y-auto'>
+                <div className='p-4'>
+                  <ol className="list-decimal list-inside">
+                    {ranking.map((entry, index) => (
+                      <li key={entry.user._id} className="mb-2 flex justify-between items-center">
+                        <div className="flex items-center">
+                          <span className="mr-2">{index + 1}.</span>
+                          <Image
+                            src={entry.user.profilePictureUrl || '/profile.jpeg'}
+                            alt="Profile Picture"
+                            width={40}
+                            height={40}
+                            className="rounded-full w-10 h-10 object-cover"
+                          />
+                          <span className="ml-2 text-white/80">{entry.user.username}</span>
+                        </div>
+                        <span>{entry.speciesCount} especies</span>
+                      </li>
+                    ))}
+                  </ol>
+                </div>
+              </DrawerDescription>
+              <DrawerClose />
+            </DrawerContent>
+          </Drawer>
         </>
       )}
     </div>
