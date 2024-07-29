@@ -8,7 +8,7 @@ import EditProfileForm from '@/components/EditProfileForm';
 import api from '@/services/api';
 import { Species, Sighting } from '@/types/mission';
 import Image from 'next/image';
-import { motion, AnimatePresence, PanInfo } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import {
   Drawer,
   DrawerClose,
@@ -159,20 +159,20 @@ const UserProfile: React.FC = () => {
     }
   };
 
-  const handleDragEnd = (event: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
-    if (info.offset.x > 100) {
-      handlePrevImage();
-    } else if (info.offset.x < -100) {
-      handleNextImage();
-    }
-  };
-
   const handlePrevImage = () => {
     setCurrentSightingIndex((prevIndex) => (prevIndex - 1 + sightings.length) % sightings.length);
   };
 
   const handleNextImage = () => {
     setCurrentSightingIndex((prevIndex) => (prevIndex + 1) % sightings.length);
+  };
+
+  const handleDragEnd = (event: any, info: any) => {
+    if (info.offset.x < -100) {
+      handleNextImage();
+    } else if (info.offset.x > 100) {
+      handlePrevImage();
+    }
   };
 
   const isUserParticipating = user && mission?.participants.some((participant: any) => {
@@ -314,7 +314,10 @@ const UserProfile: React.FC = () => {
                       <div className='mt-4'>
                         <Button
                             className="bg-gradient-to-br from-green-600/70  mb-2 to-transparent backdrop-blur-md p-2 rounded-md w-full"
-                            onClick={handleAddSightingClick}
+                            onClick={() => {
+                              setShowAddSightingDrawer(true);
+                              setShowSpeciesDrawer(false);
+                            }}
                           >
                             Reportar otro avistamiento
                           </Button>
@@ -351,15 +354,17 @@ const UserProfile: React.FC = () => {
                 <DrawerDescription>
                   <div className='p-4'>
                     <form onSubmit={handleSightingSubmit}>
-                      <div className="mb-4">
-                        <label className="block text-gray-300 mb-2">Subir Imagen:</label>
+                      <div className="">
+                        <label className="custom-file-label">
+                          Subir Imagen:
                         <input
                           type="file"
                           accept="image/*"
                           onChange={handleFileChange}
                           required
-                          className="w-full p-2 border border-white/30 rounded-md bg-transparent text-white"
+                          className="custom-file-input"
                         />
+                        </label>
                       </div>
                       {loadingSighting && (
                         <div className="mb-4">
@@ -371,7 +376,7 @@ const UserProfile: React.FC = () => {
                           {loadingSighting ? `subiendo... ${progress}%` : 'Subir'}
                         </button>
                         <DrawerClose asChild>
-                          <button className="text-white px-4 py-2 rounded" onClick={() => setShowAddSightingDrawer(false)}>Cancel</button>
+                          <button className="text-white px-4 py-2 rounded" onClick={() => setShowAddSightingDrawer(false)}>Cancelar</button>
                         </DrawerClose>
                       </DrawerFooter>
                     </form>
@@ -424,10 +429,9 @@ const UserProfile: React.FC = () => {
                       initial={{ opacity: 0, x: 100 }}
                       animate={{ opacity: 1, x: 0 }}
                       exit={{ opacity: 0, x: -100 }}
-                      className="w-full max-h-[50dvh] object-cover "
                       drag="x"
-                      dragConstraints={{ left: 0, right: 0 }}
                       onDragEnd={handleDragEnd}
+                      className="w-full max-h-[50dvh] object-cover"
                     />
                   </AnimatePresence>
                   <div className='grid grid-cols-3 gap-2 mt-6'>
