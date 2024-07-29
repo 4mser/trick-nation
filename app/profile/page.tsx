@@ -8,7 +8,7 @@ import EditProfileForm from '@/components/EditProfileForm';
 import api from '@/services/api';
 import { Species, Sighting } from '@/types/mission';
 import Image from 'next/image';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence, PanInfo } from 'framer-motion';
 import {
   Drawer,
   DrawerClose,
@@ -35,6 +35,8 @@ const UserProfile: React.FC = () => {
   const [progress, setProgress] = useState(0);
   const [mission, setMission] = useState<any>(null);
   const [sightings, setSightings] = useState<Sighting[]>([]);
+  const [showSightingGalleryDrawer, setShowSightingGalleryDrawer] = useState(false);
+  const [currentSightingIndex, setCurrentSightingIndex] = useState(0);
 
   const fetchAllSpecies = async () => {
     try {
@@ -69,6 +71,7 @@ const UserProfile: React.FC = () => {
     try {
       const response = await api.get(`/users/${user?._id}/sightings/${speciesId}`);
       setSightings(response.data);
+      setCurrentSightingIndex(0);  // Reset to the first sighting
     } catch (error) {
       console.error('Failed to fetch sightings for species:', error);
     }
@@ -106,6 +109,12 @@ const UserProfile: React.FC = () => {
   const handlePokedexDrawerClose = (isOpen: boolean) => {
     if (!isOpen) {
       setShowPokedexDrawer(false);
+    }
+  };
+
+  const handleSightingGalleryDrawerClose = (isOpen: boolean) => {
+    if (!isOpen) {
+      setShowSightingGalleryDrawer(false);
     }
   };
 
@@ -148,6 +157,22 @@ const UserProfile: React.FC = () => {
       setProgress(0);
       setFile(null);
     }
+  };
+
+  const handleDragEnd = (event: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
+    if (info.offset.x > 100) {
+      handlePrevImage();
+    } else if (info.offset.x < -100) {
+      handleNextImage();
+    }
+  };
+
+  const handlePrevImage = () => {
+    setCurrentSightingIndex((prevIndex) => (prevIndex - 1 + sightings.length) % sightings.length);
+  };
+
+  const handleNextImage = () => {
+    setCurrentSightingIndex((prevIndex) => (prevIndex + 1) % sightings.length);
   };
 
   const isUserParticipating = user && mission?.participants.some((participant: any) => {
@@ -295,12 +320,16 @@ const UserProfile: React.FC = () => {
                           </Button>
                         <h3 className="text-md font-semibold text-white">Tus avistamientos:</h3>
                         <div className='grid grid-cols-3 gap-2 mt-2'>
-                          {sightings.map((sighting) => (
+                          {sightings.map((sighting, index) => (
                             <img
                               key={sighting._id}
                               src={sighting.imageUrl}
                               alt="Sighting"
-                              className="w-full h-20 object-cover rounded-md"
+                              className="w-full h-20 object-cover rounded-md cursor-pointer"
+                              onClick={() => {
+                                setCurrentSightingIndex(index);
+                                setShowSightingGalleryDrawer(true);
+                              }}
                             />
                           ))}
                         </div>
@@ -374,6 +403,44 @@ const UserProfile: React.FC = () => {
                       />
                     </motion.div>
                   ))}
+                </div>
+              </DrawerDescription>
+              <DrawerClose />
+            </DrawerContent>
+          </Drawer>
+
+          <Drawer open={showSightingGalleryDrawer} onOpenChange={handleSightingGalleryDrawerClose}>
+            <DrawerContent className='bg-white/5 border-none backdrop-blur-md rounded-t-3xl outline-none max-h-[100dvh]'>
+              <DrawerTitle>
+                <h1 className="w-full text-center text-xl font-bold my-2 text-white">Galería de Avistamientos</h1>
+              </DrawerTitle>
+              <DrawerDescription className='overflow-y-auto pb-10'>
+                <div className="flex flex-col items-center">
+                  <AnimatePresence mode='wait'>
+                    <motion.img
+                      key={sightings[currentSightingIndex]?._id}
+                      src={sightings[currentSightingIndex]?.imageUrl}
+                      alt="Sighting"
+                      initial={{ opacity: 0, x: 100 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      exit={{ opacity: 0, x: -100 }}
+                      className="w-full max-h-[50dvh] object-cover "
+                      drag="x"
+                      dragConstraints={{ left: 0, right: 0 }}
+                      onDragEnd={handleDragEnd}
+                    />
+                  </AnimatePresence>
+                  <div className='grid grid-cols-3 gap-2 mt-6'>
+                    {sightings.map((sighting, index) => (
+                      <img
+                        key={sighting._id}
+                        src={sighting.imageUrl}
+                        alt="Sighting"
+                        className={`w-full h-20 object-cover rounded-md cursor-pointer ${index === currentSightingIndex ? 'border-2 border-green-500' : ''}`}
+                        onClick={() => setCurrentSightingIndex(index)}
+                      />
+                    ))}
+                  </div>
                 </div>
               </DrawerDescription>
               <DrawerClose />
