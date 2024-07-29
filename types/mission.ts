@@ -6,6 +6,14 @@ export interface Species {
   imageUrl: string;
 }
 
+export interface Sighting {
+  _id: string;
+  species: string;
+  imageUrl: string;
+  date: string;
+}
+
+
 export interface Mission {
   _id: string;
   name: string;

@@ -6,7 +6,7 @@ import ProtectedRoute from '@/components/ProtectedRoute';
 import LogoutButton from '@/components/LogoutButton';
 import EditProfileForm from '@/components/EditProfileForm';
 import api from '@/services/api';
-import { Species } from '@/types/mission';
+import { Species, Sighting } from '@/types/mission';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
 import {
@@ -15,8 +15,10 @@ import {
   DrawerContent,
   DrawerDescription,
   DrawerTitle,
+  DrawerFooter,
 } from "@/components/ui/drawer";
 import { Button } from "@/components/ui/button";
+import { Progress } from "@/components/ui/progress";
 
 const UserProfile: React.FC = () => {
   const { user, loading, refetch } = useCurrentUser();
@@ -25,8 +27,14 @@ const UserProfile: React.FC = () => {
   const [unlockedSpecies, setUnlockedSpecies] = useState<string[]>([]);
   const [selectedSpecies, setSelectedSpecies] = useState<Species | null>(null);
   const [showSpeciesDrawer, setShowSpeciesDrawer] = useState(false);
+  const [showAddSightingDrawer, setShowAddSightingDrawer] = useState(false);
   const [showPokedexDrawer, setShowPokedexDrawer] = useState(false);
   const [missionName, setMissionName] = useState<string>('');
+  const [file, setFile] = useState<File | null>(null);
+  const [loadingSighting, setLoadingSighting] = useState(false);
+  const [progress, setProgress] = useState(0);
+  const [mission, setMission] = useState<any>(null);
+  const [sightings, setSightings] = useState<Sighting[]>([]);
 
   const fetchAllSpecies = async () => {
     try {
@@ -41,15 +49,28 @@ const UserProfile: React.FC = () => {
     try {
       const response = await api.get(`/users/${user?._id}`);
       const unlockedSpeciesIds = response.data.sightings.map((sighting: any) => sighting.species.toString());
-      setUnlockedSpecies(unlockedSpeciesIds);
+
+      // Filtrar especies desbloqueadas para eliminar duplicados
+      const uniqueUnlockedSpeciesIds = Array.from(new Set(unlockedSpeciesIds)) as string[];
+      setUnlockedSpecies(uniqueUnlockedSpeciesIds);
 
       if (response.data.missions.length > 0) {
         const missionId = response.data.missions[0];
         const missionResponse = await api.get(`/missions/${missionId}`);
         setMissionName(missionResponse.data.name);
+        setMission(missionResponse.data);
       }
     } catch (error) {
       console.error('Failed to fetch unlocked species:', error);
+    }
+  };
+
+  const fetchSightingsForSpecies = async (speciesId: string) => {
+    try {
+      const response = await api.get(`/users/${user?._id}/sightings/${speciesId}`);
+      setSightings(response.data);
+    } catch (error) {
+      console.error('Failed to fetch sightings for species:', error);
     }
   };
 
@@ -65,9 +86,15 @@ const UserProfile: React.FC = () => {
     setIsEditing(false);
   };
 
-  const handleSpeciesClick = (species: Species) => {
+  const handleSpeciesClick = async (species: Species) => {
     setSelectedSpecies(species);
+    await fetchSightingsForSpecies(species._id);
     setShowSpeciesDrawer(true);
+  };
+
+  const handleAddSightingClick = () => {
+    setShowSpeciesDrawer(false);
+    setShowAddSightingDrawer(true);
   };
 
   const handleDrawerClose = (isOpen: boolean) => {
@@ -81,6 +108,52 @@ const UserProfile: React.FC = () => {
       setShowPokedexDrawer(false);
     }
   };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      setFile(e.target.files[0]);
+    }
+  };
+
+  const handleSightingSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (!file || !selectedSpecies || !user) return;
+
+    setLoadingSighting(true);
+
+    const formData = new FormData();
+    formData.append('speciesId', selectedSpecies._id);
+    formData.append('userId', user._id);
+    formData.append('file', file);
+
+    try {
+      await api.patch(`/missions/${mission._id}/sightings`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+        onUploadProgress: (progressEvent) => {
+          if (progressEvent.total) {
+            const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+            setProgress(percentCompleted);
+          }
+        }
+      });
+      fetchUnlockedSpecies();
+      setShowAddSightingDrawer(false);
+    } catch (error) {
+      console.error('Failed to report sighting:', error);
+    } finally {
+      setLoadingSighting(false);
+      setProgress(0);
+      setFile(null);
+    }
+  };
+
+  const isUserParticipating = user && mission?.participants.some((participant: any) => {
+    const participantId = typeof participant === 'string' ? participant : participant._id;
+    return participantId.toString() === user._id.toString();
+  });
 
   if (loading) return <div>Loading...</div>;
   if (!user) return <div>No user data</div>;
@@ -107,7 +180,6 @@ const UserProfile: React.FC = () => {
               </motion.div>
               <h2 className="text-2xl font-bold">{user.username}</h2>
               <p className="px-5 opacity-70 font-light">{user.description}</p>
-              {/* <p className="px-5 opacity-70 font-light">{user.roles.length > 0 ? user.roles[0] : 'Sin rol'}</p> */}
               {user.nucleus && (
                 <div className="flex items-center gap-2 justify-between">
                   <Image
@@ -129,45 +201,48 @@ const UserProfile: React.FC = () => {
                 <LogoutButton />
               </div>
             </div>
-            <div className="m-6 space-y-2">
-              <p className="text-white">Progreso misión {missionName}: {progressPercentage}%</p>
-              <div className="w-full h-2 bg-neutral-700 rounded-full overflow-hidden">
-                <motion.div
-                  className="h-full bg-green-400 rounded-full"
-                  initial={{ width: 0 }}
-                  animate={{ width: `${progressPercentage}%` }}
-                  transition={{ duration: 1.5 }}
-                />
-              </div>
-              <div className="flex  flex-wrap justify-center pt-3 gap-2">
-                {unlockedSpecies.map((speciesId) => {
-                  const species = allSpecies.find((s) => s._id === speciesId);
-                  return species ? (
-                    <motion.div
-                      key={species._id}
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
-                      onClick={() => handleSpeciesClick(species)}
-                      className="cursor-pointer"
-                    >
-                      <img
-                        src={species.imageUrl}
-                        alt={species.name}
-                        className="w-12 h-12 rounded-full object-cover border-2 border-green-500"
-                      />
-                    </motion.div>
-                  ) : null;
-                })}
-              </div>
-              <div className="flex justify-center mt-4">
-                <div
-                  onClick={() => setShowPokedexDrawer(true)}
-                  className='pt-3 opacity-85 hover:cursor-pointer hover:opacity-100'
-                >
-                  Ver todas las medallas
+            {isUserParticipating && (
+              <div className="m-6 space-y-2">
+                <p className="text-white">Progreso misión {missionName}: {progressPercentage}%</p>
+                <div className="w-full h-2 bg-neutral-700 rounded-full overflow-hidden">
+                  <motion.div
+                    className="h-full bg-green-400 rounded-full"
+                    initial={{ width: 0 }}
+                    animate={{ width: `${progressPercentage}%` }}
+                    transition={{ duration: 1.5 }}
+                  />
+                </div>
+                <div className="relative flex flex-wrap justify-center pt-3 gap-2  max-h-24 overflow-hidden">
+                  <div className='bottom-0 left-0 w-full h-10 absolute bg-gradient-to-b from-transparent to-neutral-900' />
+                  {unlockedSpecies.map((speciesId) => {
+                    const species = allSpecies.find((s) => s._id === speciesId);
+                    return species ? (
+                      <motion.div
+                        key={species._id}
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        onClick={() => handleSpeciesClick(species)}
+                        className="cursor-pointer"
+                      >
+                        <img
+                          src={species.imageUrl}
+                          alt={species.name}
+                          className="w-12 h-12 rounded-full object-cover border-2 border-green-500"
+                        />
+                      </motion.div>
+                    ) : null;
+                  })}
+                </div>
+                <div className="flex justify-center mt-4">
+                  <div
+                    onClick={() => setShowPokedexDrawer(true)}
+                    className='pt-3 opacity-85 hover:cursor-pointer hover:opacity-100'
+                  >
+                    Ver todas las medallas
+                  </div>
                 </div>
               </div>
-            </div>
+            )}
             <ul className="relative z-10 bg-neutral-950 mx-5 py-2 flex justify-around rounded-full shadow-md">
               <li className="flex flex-col items-center">
                 <p>{user.level}</p>
@@ -186,22 +261,93 @@ const UserProfile: React.FC = () => {
 
           {selectedSpecies && (
             <Drawer open={showSpeciesDrawer} onOpenChange={handleDrawerClose}>
-              <DrawerContent className='bg-white/5 border-none backdrop-blur-md rounded-t-3xl outline-none'>
+              <DrawerContent className='bg-white/5 border-none backdrop-blur-md rounded-t-3xl outline-none max-h-[100dvh]'>
                 <DrawerTitle>
-                  <h1 className="w-full text-center text-xl font-bold my-2 text-white">{selectedSpecies.name}</h1>
+                  <h1 className="w-full text-center text-xl font-bold mt-2 text-white">{selectedSpecies.name}</h1>
+                    <p className="text-white/70 font-normal text-xs text-center"><b></b> {selectedSpecies.scientificName}</p>
                 </DrawerTitle>
-                <DrawerDescription>
+                <DrawerDescription className='overflow-y-auto'>
                   <div className='p-4'>
                     <img
                       src={selectedSpecies.imageUrl}
                       alt={selectedSpecies.name}
-                      className="w-full max-h-[65dvh] object-cover rounded-md"
+                      className="w-full max-h-[50dvh] object-cover rounded-md"
                     />
-                    {/* <p className="mt-4 text-white">{selectedSpecies.description}</p> */}
-                    <p className="mt-2 text-white"><b>Nombre Científico:</b> {selectedSpecies.scientificName}</p>
+                    {isUserParticipating && !unlockedSpecies.includes(selectedSpecies._id) && (
+                      <section className='p-4 mb-4'>
+                        <div className='flex justify-center'>
+                          <Button
+                            className="bg-gradient-to-br from-yellow-600/70  to-transparent backdrop-blur-md p-2 rounded-md w-full"
+                            onClick={handleAddSightingClick}
+                          >
+                            Reportar Avistamiento
+                          </Button>
+                        </div>
+                      </section>
+                    )}
+                    {sightings.length > 0 && (
+                      <div className='mt-4'>
+                        <Button
+                            className="bg-gradient-to-br from-green-600/70  mb-2 to-transparent backdrop-blur-md p-2 rounded-md w-full"
+                            onClick={handleAddSightingClick}
+                          >
+                            Reportar otro avistamiento
+                          </Button>
+                        <h3 className="text-md font-semibold text-white">Tus avistamientos:</h3>
+                        <div className='grid grid-cols-3 gap-2 mt-2'>
+                          {sightings.map((sighting) => (
+                            <img
+                              key={sighting._id}
+                              src={sighting.imageUrl}
+                              alt="Sighting"
+                              className="w-full h-20 object-cover rounded-md"
+                            />
+                          ))}
+                        </div>
+                      </div>
+                    )}
                   </div>
                 </DrawerDescription>
                 <DrawerClose />
+              </DrawerContent>
+            </Drawer>
+          )}
+
+          {selectedSpecies && (
+            <Drawer open={showAddSightingDrawer} onOpenChange={handleDrawerClose}>
+              <DrawerContent className='bg-white/5 border-none backdrop-blur-md rounded-t-3xl outline-none'>
+                <DrawerTitle>
+                  <h1 className="w-full text-center text-xl font-bold my-2 text-white">Reportar Avistamiento</h1>
+                </DrawerTitle>
+                <DrawerDescription>
+                  <div className='p-4'>
+                    <form onSubmit={handleSightingSubmit}>
+                      <div className="mb-4">
+                        <label className="block text-gray-300 mb-2">Subir Imagen:</label>
+                        <input
+                          type="file"
+                          accept="image/*"
+                          onChange={handleFileChange}
+                          required
+                          className="w-full p-2 border border-white/30 rounded-md bg-transparent text-white"
+                        />
+                      </div>
+                      {loadingSighting && (
+                        <div className="mb-4">
+                          <Progress value={progress} className="w-full bg-green-600 h-2" />
+                        </div>
+                      )}
+                      <DrawerFooter className="flex justify-end p-0 py-4">
+                        <button type="submit" className="bg-gradient-to-br from-green-600/60 to-transparent  text-white px-4 py-2 rounded-md" disabled={loadingSighting}>
+                          {loadingSighting ? `subiendo... ${progress}%` : 'Subir'}
+                        </button>
+                        <DrawerClose asChild>
+                          <button className="text-white px-4 py-2 rounded" onClick={() => setShowAddSightingDrawer(false)}>Cancel</button>
+                        </DrawerClose>
+                      </DrawerFooter>
+                    </form>
+                  </div>
+                </DrawerDescription>
               </DrawerContent>
             </Drawer>
           )}
@@ -219,7 +365,7 @@ const UserProfile: React.FC = () => {
                       className={`border w-10 h-10 ${unlockedSpecies.includes(species._id) ? 'border-green-500' : 'border-gray-700'} text-white rounded-full shadow-lg overflow-hidden`}
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
-                      onClick={() => unlockedSpecies.includes(species._id) && handleSpeciesClick(species)}
+                      onClick={() => handleSpeciesClick(species)}
                     >
                       <img
                         src={species.imageUrl}
