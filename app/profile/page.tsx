@@ -387,11 +387,11 @@ const UserProfile: React.FC = () => {
           )}
 
           <Drawer open={showPokedexDrawer} onOpenChange={handlePokedexDrawerClose}>
-            <DrawerContent className='bg-white/5 border-none backdrop-blur-md rounded-t-3xl outline-none'>
+            <DrawerContent className='bg-white/5 border-none backdrop-blur-md rounded-t-3xl outline-none max-h-[100dvh]'>
               <DrawerTitle>
                 <h1 className="w-full text-center text-xl font-bold my-2 text-white">Medallas</h1>
               </DrawerTitle>
-              <DrawerDescription>
+              <DrawerDescription className='overflow-y-auto'>
                 <div className="flex flex-wrap gap-2 p-4 items-center justify-center">
                   {allSpecies.map((species) => (
                     <motion.div
