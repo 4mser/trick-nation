@@ -115,7 +115,7 @@ const PinFormDrawer: React.FC<PinFormDrawerProps> = ({ userLocation, userId, onP
               </div>
               {loading && (
                 <div className="mb-4">
-                  <Progress value={progress} className="w-full bg-yellow-600 h-2" />
+                  <Progress value={progress} className="w-full bg-neutral-700  h-2" />
                 </div>
               )}
               <DrawerFooter className="flex justify-end p-0 py-4">

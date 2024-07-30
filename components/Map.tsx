@@ -504,17 +504,23 @@ const Map: React.FC = () => {
             <img src="../assets/map-icons/totem.svg" alt="Add Totem" className='w-full filter hue-rotate-[210deg] h-full object-contain' />
           </div>
         </button>
+
+        {/* ranking button */}
         <button
           className='absolute right-[49px] bottom-[59px] bg-black/50 flex justify-center items-center w-9 h-9 rounded-full p-2'
         >
           <img src="../assets/map-icons/ranking.svg" alt="Ranking" className='w-full h-full object-contain opacity-80' />
         </button>
+
+        {/* power button */}
         <button
           className={`absolute right-[3.8rem] bottom-3 flex justify-center items-center w-9 h-9 rounded-full p-2 ${isDebugMode ? "bg-yellow-500" : "bg-black/50"}`}
           onClick={toggleDebugMode}
         >
           <img src="../assets/map-icons/rayo.svg" alt="Debug Mode" className="w-full h-full object-contain opacity-80" />
         </button>
+
+        {/* location button */}
         <button
           onClick={centerMapOnUserLocation}
           className="absolute right-0 bottom-[73px] bg-black/50 flex justify-center items-center w-9 h-9 rounded-full p-1.5"
