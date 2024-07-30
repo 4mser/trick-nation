@@ -268,7 +268,7 @@ const UserProfile: React.FC = () => {
                 </div>
               </div>
             )}
-            <ul className="relative z-10 bg-neutral-950 mx-5 py-2 flex justify-around rounded-full shadow-md">
+            <ul className="relative z-10 bg-neutral-950 mt-3 mx-5 py-2 flex justify-around rounded-full shadow-md">
               <li className="flex flex-col items-center">
                 <p>{user.level}</p>
                 <p className="text-xs opacity-50">Nivel</p>

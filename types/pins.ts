@@ -8,6 +8,7 @@ export interface Pin {
   discoveredByUserId: {
     _id: string;
     username: string;
+    profilePictureUrl: string;
   };
   createdAt: string;
   imageUrl: string;
