@@ -30,6 +30,7 @@ const Map: React.FC = () => {
   const [selectedPin, setSelectedPin] = useState<Pin | null>(null);
   const [selectedTotem, setSelectedTotem] = useState<Totem | null>(null);
   const totemMarkersRef = useRef<{ [id: string]: mapboxgl.Marker }>({});
+  const [explorationRadiusEnabled, setExplorationRadiusEnabled] = useState(false);
 
   const raycaster = new THREE.Raycaster();
   const mouse = new THREE.Vector2();
@@ -380,7 +381,7 @@ const Map: React.FC = () => {
         });
 
         mapboxMap.on('load', () => {
-          if (userLocation) {
+          if (userLocation && explorationRadiusEnabled) {
             addExplorationCircleToMap(mapboxMap, userLocation, EXPLORATION_RADIUS_METERS);
           }
 
@@ -410,7 +411,7 @@ const Map: React.FC = () => {
         console.error('Error al obtener la ubicación del usuario:', error);
       }
     );
-  }, [createTotemMarkerElement]);
+  }, [createTotemMarkerElement, explorationRadiusEnabled]);
 
   useEffect(() => {
     if (map && userLocation) {
@@ -430,7 +431,7 @@ const Map: React.FC = () => {
   }, [map, userLocation, createMarkerElement]);
 
   useEffect(() => {
-    if (map && userLocation) {
+    if (map && userLocation && explorationRadiusEnabled) {
       if (map.isStyleLoaded()) {
         addExplorationCircleToMap(map, userLocation, EXPLORATION_RADIUS_METERS);
       } else {
@@ -439,14 +440,14 @@ const Map: React.FC = () => {
         });
       }
     }
-  }, [map, userLocation]);
+  }, [map, userLocation, explorationRadiusEnabled]);
 
   useEffect(() => {
     if (map && userLocation) {
       pins.forEach((pin) => {
         const coordinates: [number, number] = [pin.location.coordinates[0], pin.location.coordinates[1]];
         const distance = calculateDistance(userLocation as [number, number], coordinates);
-        if (distance <= EXPLORATION_RADIUS_METERS) {
+        if (!explorationRadiusEnabled || distance <= EXPLORATION_RADIUS_METERS) {
           new mapboxgl.Marker({
             element: createPinMarkerElement(pin),
           })
@@ -455,7 +456,7 @@ const Map: React.FC = () => {
         }
       });
     }
-  }, [map, pins, userLocation, createPinMarkerElement]);
+  }, [map, pins, userLocation, createPinMarkerElement, explorationRadiusEnabled]);
 
   useEffect(() => {
     fetchPins();
