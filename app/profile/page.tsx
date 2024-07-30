@@ -420,7 +420,7 @@ const UserProfile: React.FC = () => {
                 <h1 className="w-full text-center text-xl font-bold my-2 text-white">Galería de Avistamientos</h1>
               </DrawerTitle>
               <DrawerDescription className='overflow-y-auto pb-10'>
-                <div className="flex flex-col items-center">
+                <div className="flex flex-col">
                   <AnimatePresence mode='wait'>
                     <motion.img
                       key={sightings[currentSightingIndex]?._id}
@@ -434,7 +434,7 @@ const UserProfile: React.FC = () => {
                       className="w-full max-h-[50dvh] object-cover"
                     />
                   </AnimatePresence>
-                  <div className='grid grid-cols-3 gap-2 mt-6'>
+                  <div className='grid grid-cols-3 gap-2 p-4'>
                     {sightings.map((sighting, index) => (
                       <img
                         key={sighting._id}

@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
+import Link from 'next/link';
 import api from '@/services/api';
 import { useAuth } from '@/context/auth-context';
 import { Mission, Species } from '@/types/mission';
@@ -300,17 +301,19 @@ const MissionDetail: React.FC<MissionDetailProps> = ({ missionId }) => {
                   <ol className="list-decimal list-inside">
                     {ranking.map((entry, index) => (
                       <li key={entry.user._id} className="mb-2 flex justify-between items-center">
-                        <div className="flex items-center">
-                          <span className="mr-2">{index + 1}.</span>
-                          <Image
-                            src={entry.user.profilePictureUrl || '/profile.jpeg'}
-                            alt="Profile Picture"
-                            width={40}
-                            height={40}
-                            className="rounded-full w-10 h-10 object-cover"
-                          />
-                          <span className="ml-2 text-white/80">{entry.user.username}</span>
-                        </div>
+                        <Link href={`/users/${entry.user._id}`}>
+                          <div className="flex items-center cursor-pointer">
+                            <span className="mr-2">{index + 1}.</span>
+                            <Image
+                              src={entry.user.profilePictureUrl || '/profile.jpeg'}
+                              alt="Profile Picture"
+                              width={40}
+                              height={40}
+                              className="rounded-full w-10 h-10 object-cover"
+                            />
+                            <span className="ml-2 text-white/80">{entry.user.username}</span>
+                          </div>
+                        </Link>
                         <span>{entry.speciesCount} especies</span>
                       </li>
                     ))}

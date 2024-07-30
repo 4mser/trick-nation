@@ -12,6 +12,7 @@ export interface User {
   roles: string[];
   nucleus: string;
   currentCrewId?: string;
+  missions: string[];
   unlockedTricks?: { _id: string; name: string }[]; // Agregar los trucos desbloqueados
   onboardingCompleted: boolean;
   sightings: { species: string; imageUrl: string; date: Date }[]; // Agregar sightings

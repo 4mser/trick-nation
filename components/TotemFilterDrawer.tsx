@@ -36,6 +36,14 @@ const TotemFilterDrawer: React.FC<TotemFilterDrawerProps> = ({ onApplyFilters })
     );
   };
 
+  const handleToggleAll = () => {
+    if (selectedCategories.length === categoriesList.length) {
+      setSelectedCategories([]);
+    } else {
+      setSelectedCategories(categoriesList.map(category => category.name));
+    }
+  };
+
   useEffect(() => {
     onApplyFilters(selectedCategories); // Apply filters on initial render with all categories selected
   }, []); // Empty dependency array to run only once on mount
@@ -46,23 +54,35 @@ const TotemFilterDrawer: React.FC<TotemFilterDrawerProps> = ({ onApplyFilters })
     }
   }, [drawerOpen, selectedCategories, onApplyFilters]);
 
+  const allSelected = selectedCategories.length === categoriesList.length;
+
   return (
     <Drawer open={drawerOpen} onOpenChange={setDrawerOpen}>
       <DrawerTrigger asChild>
-        <Button className='absolute right-3 top-4 w-14 h-14 rounded-full overflow-hidden flex justify-center items-center bg-gradient-to-tr from-green-500 to-blue-400 p-[2px] outline-none'>
-          <div className='flex justify-center items-center w-full h-full p-1  bg-black/30 backdrop-blur-3xl rounded-full'>
+        <Button className='absolute right-3 top-4 w-12 h-12 rounded-full overflow-hidden flex justify-center items-center bg-gradient-to-tr from-green-500 to-blue-400 p-[2px] outline-none'>
+          <div className='flex justify-center items-center w-full h-full p-1  bg-black/50 backdrop-blur-md rounded-full'>
             <img src="/assets/categories/todo.svg" alt="Filter Totems" className='w-full h-full object-cover' />
           </div>
         </Button>
       </DrawerTrigger>
-      <DrawerContent className=" bg-white/5 border-none backdrop-blur-md rounded-t-3xl outline-none">
+      <DrawerContent className=" bg-white/5 border-none backdrop-blur-md rounded-t-3xl outline-none max-h-[100dvh]">
         <DrawerHeader>
           <DrawerTitle className="text-white text-center">Categorías</DrawerTitle>
         </DrawerHeader>
-        <DrawerDescription asChild>
+        <DrawerDescription asChild className='overflow-y-auto'>
           <div>
             <form className="text-sm mb-6">
               <div className="px-3 flex flex-col gap-4">
+                <div key="toggle-all" className="flex items-center  custom-switch justify-between">
+                  <div className='flex items-center'>
+                    <img src="/assets/categories/todo.svg" alt="Todo" className={`h-6 w-6 mr-2 ${allSelected ? 'category-selected' : 'category-not-selected'}`} />
+                    <label className={`text-white/80 ${allSelected ? 'category-selected' : 'category-not-selected'}`}>Todo</label>
+                  </div>
+                  <CustomSwitch
+                    checked={allSelected}
+                    onChange={handleToggleAll}
+                  />
+                </div>
                 {categoriesList.map((category) => {
                   const isSelected = selectedCategories.includes(category.name);
                   return (

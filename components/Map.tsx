@@ -500,7 +500,7 @@ const Map: React.FC = () => {
           className='absolute right-28 bottom-3 w-14 h-14 rounded-full overflow-hidden flex justify-center items-center bg-gradient-to-tr from-green-500 to-green-800 p-[2px]'
           onClick={handleAddTotem}
         >
-          <div className='flex justify-center items-center w-full h-full p-2.5 bg-black/30 backdrop-blur-3xl rounded-full'>
+          <div className='flex justify-center items-center w-full h-full p-2.5 bg-black/30 backdrop-blur-md rounded-full'>
             <img src="../assets/map-icons/totem.svg" alt="Add Totem" className='w-full filter hue-rotate-[210deg] h-full object-contain' />
           </div>
         </button>
