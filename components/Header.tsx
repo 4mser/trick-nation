@@ -19,7 +19,7 @@ const Header: React.FC = () => {
   const secondHalfLinks = bottombarLinks.slice(2);
 
   return (
-    <section className="fixed bottom-0 z-20 w-full bg-neutral-950 border-t border-white/10 text-white">
+    <section className="fixed bottom-0 z-20 w-full bg-neutral-950/70 backdrop-blur-md border-t border-white/10 text-white overflow-hidden">
       <div className="flex items-center justify-around gap-3">
         {/* Primeros dos enlaces */}
         {firstHalfLinks.map((link) => {
@@ -33,7 +33,7 @@ const Header: React.FC = () => {
               key={link.label}
               className={`relative flex flex-col items-center gap-[2px]  p-3 py-2 w-16 ${isActive ? "opacity-100" : "opacity-70"}`}
             >
-              <div className={`h-1 absolute top-0 bg-gradient-to-tr rounded-full from-yellow-500 to-yellow-800 shadow-custom-2 transition-all duration-300 ease-in-out ${pathname !== link.route ? 'w-0 ' : 'w-full'}`} />
+              <div className={`h-1 absolute  top-0 bg-gradient-to-tr rounded-full from-yellow-500 to-yellow-800 shadow-custom-2 transition-all duration-300 ease-in-out ${pathname !== link.route ? 'w-0 ' : 'w-full shadow-custom'}`} />
               <img
                 src={link.imgURL}
                 alt={link.label}
@@ -71,7 +71,7 @@ const Header: React.FC = () => {
               key={link.label}
               className={`relative flex flex-col items-center gap-[2px]  p-3 py-2 w-16 ${isActive ? "opacity-100" : "opacity-70"}`}
             >
-              <div className={`h-1 absolute top-0 bg-gradient-to-tr rounded-full from-yellow-500 to-yellow-800 shadow-custom-2 transition-all duration-300 ease-in-out ${pathname !== link.route ? 'w-0 ' : 'w-full'}`} />
+              <div className={`h-1 absolute top-0 bg-gradient-to-tr rounded-full from-yellow-500 to-yellow-800 shadow-custom-2 transition-all duration-300 ease-in-out ${pathname !== link.route ? 'w-0 ' : 'w-full shadow-custom'}`} />
               <img
                 src={link.imgURL}
                 alt={link.label}
