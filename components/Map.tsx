@@ -34,6 +34,7 @@ const Map: React.FC = () => {
   const [selectedPin, setSelectedPin] = useState<Pin | null>(null);
   const [selectedTotem, setSelectedTotem] = useState<Totem | null>(null);
   const totemMarkersRef = useRef<{ [id: string]: mapboxgl.Marker }>({});
+  const pinMarkersRef = useRef<{ [id: string]: mapboxgl.Marker }>({});
   const [explorationRadiusEnabled, setExplorationRadiusEnabled] = useState(false);
 
   const raycaster = new THREE.Raycaster();
@@ -408,6 +409,24 @@ const Map: React.FC = () => {
           fetchTotems();
         });
 
+        mapboxMap.on('move', () => {
+          const zoom = mapboxMap.getZoom();
+          if (zoom >= 10) {
+            // Mostrar tótems si el zoom es mayor o igual a 10
+            Object.values(totemMarkersRef.current).forEach(marker => marker.addTo(mapboxMap));
+          } else {
+            // Ocultar tótems si el zoom es menor a 10
+            Object.values(totemMarkersRef.current).forEach(marker => marker.remove());
+          }
+          if (zoom >= 17) {
+            // Mostrar pines si el zoom es mayor o igual a 15
+            Object.values(pinMarkersRef.current).forEach(marker => marker.addTo(mapboxMap));
+          } else {
+            // Ocultar pines si el zoom es menor a 15
+            Object.values(pinMarkersRef.current).forEach(marker => marker.remove());
+          }
+        });
+
         return () => {
           mapboxMap.remove();
         };
@@ -453,11 +472,12 @@ const Map: React.FC = () => {
         const coordinates: [number, number] = [pin.location.coordinates[0], pin.location.coordinates[1]];
         const distance = calculateDistance(userLocation as [number, number], coordinates);
         if (!explorationRadiusEnabled || distance <= EXPLORATION_RADIUS_METERS) {
-          new mapboxgl.Marker({
+          const marker = new mapboxgl.Marker({
             element: createPinMarkerElement(pin),
           })
             .setLngLat(coordinates)
             .addTo(map);
+          pinMarkersRef.current[pin._id] = marker;
         }
       });
     }
@@ -576,4 +596,3 @@ const Map: React.FC = () => {
 };
 
 export default Map;
-
