@@ -14,12 +14,16 @@ import PinFormDrawer from "./PinFormDrawer";
 import PinDetailModal from "./PinDetailModal";
 import TotemFilterDrawer from './TotemFilterDrawer';
 
+import { Button } from "./ui/button";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "./ui/dropdown-menu";
+
 const MAPBOX_TOKEN = process.env.NEXT_PUBLIC_MAPBOX_TOKEN || '';
 const EXPLORATION_RADIUS_METERS = 100;
 
 const Map: React.FC = () => {
   const { user } = useAuth();
   const [map, setMap] = useState<mapboxgl.Map | null>(null);
+  const [mapStyle, setMapStyle] = useState('mapbox://styles/mapbox/standard'); // Estado para el estilo del mapa
   const mapNode = useRef<HTMLDivElement | null>(null);
   const [userLocation, setUserLocation] = useState<[number, number] | null>(null);
   const markerRef = useRef<Marker | null>(null);
@@ -46,6 +50,7 @@ const Map: React.FC = () => {
     markerElement.style.width = '18px';
     markerElement.style.height = '18px';
     markerElement.style.borderRadius = '50%';
+    markerElement.style.boxShadow = '0 0px 10px 5px rgba(234, 179, 8, 0.6)'
     markerElement.style.backgroundColor = 'rgb(234, 179, 8)';
     return markerElement;
   }, []);
@@ -350,7 +355,7 @@ const Map: React.FC = () => {
         const mapboxMap = new mapboxgl.Map({
           container: node,
           accessToken: MAPBOX_TOKEN,
-          style: 'mapbox://styles/mapbox/standard', // Changing to a lighter style
+          style: mapStyle, // Usar el estado para el estilo del mapa
           center: [longitude, latitude],
           zoom: 17,
         });
@@ -411,7 +416,7 @@ const Map: React.FC = () => {
         console.error('Error al obtener la ubicación del usuario:', error);
       }
     );
-  }, [createTotemMarkerElement, explorationRadiusEnabled]);
+  }, [createTotemMarkerElement, explorationRadiusEnabled, mapStyle]);
 
   useEffect(() => {
     if (map && userLocation) {
@@ -466,6 +471,13 @@ const Map: React.FC = () => {
     setIsDebugMode((prev) => !prev);
   }, []);
 
+  const changeMapStyle = (style: string) => {
+    if (map) {
+      map.setStyle(style);
+      setMapStyle(style);
+    }
+  };
+
   return (
     <section className="max-h-[100dvh] overflow-hidden">
       {showTotemForm && user && user._id && (
@@ -489,13 +501,39 @@ const Map: React.FC = () => {
         />
       )}
       <div ref={mapNode} style={{ width: '100%', height: '100dvh' }} />
-        <TotemFilterDrawer onApplyFilters={handleApplyFilters} /> {/* Add the new drawer */}
+      <TotemFilterDrawer onApplyFilters={handleApplyFilters} />
+      {/* Botón para cambiar el estilo del mapa */}
+      <div className="absolute right-16 top-2 w-fit p-2">
+          <DropdownMenu >
+            <DropdownMenuTrigger asChild className="">
+              <Button className='w-12 h-12 rounded-full overflow-hidden flex justify-center items-center bg-gradient-to-tr from-blue-500 to-blue-800 p-[2px]'>
+                <div className='flex justify-center items-center w-full h-full p-2.5 bg-black/40 backdrop-blur-md rounded-full'>
+                  <img src="../assets/map-icons/mapStyle.svg" alt="Change Map Style" className='w-full h-full object-contain' />
+                </div>
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="dark bg-black/40 backdrop-blur-md">
+            <DropdownMenuLabel>Estilo del Mapa</DropdownMenuLabel>
+            <DropdownMenuSeparator />
+              <DropdownMenuItem onClick={() => changeMapStyle('mapbox://styles/mapbox/standard')}>
+                3D
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => changeMapStyle('mapbox://styles/mapbox/dark-v11')}>
+                Oscuro
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => changeMapStyle('mapbox://styles/mapbox/streets-v12')}>
+                Claro
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
       <section className='fixed z-50 bottom-14 w-fit right-3 h-fit'>
         <PinFormDrawer
           userLocation={userLocation as [number, number]}
           userId={user ? user._id : ''}
           onPinCreated={fetchPins}
         />
+        
         {/* Solo activar para subir totems */}
         <button
           className='absolute right-28 bottom-3 w-14 h-14 rounded-full overflow-hidden flex justify-center items-center bg-gradient-to-tr from-green-500 to-green-800 p-[2px]'
@@ -533,9 +571,9 @@ const Map: React.FC = () => {
           />
         </button>
       </section>
-      
     </section>
   );
 };
 
 export default Map;
+

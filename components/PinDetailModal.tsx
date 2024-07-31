@@ -92,7 +92,7 @@ const PinDetailModal: React.FC<PinDetailDrawerProps> = ({ pin, onClose }) => {
           <DrawerTitle className="text-white text-center">{pin.name}</DrawerTitle>
           <DrawerDescription>
             <p className='mb-2 text-xs'>{new Date(pin.createdAt).toLocaleString()}</p>
-            <p className='mb-2 text-xs'>Time left: {timeLeft}</p>
+            <p className='mb-2 text-xs'>Tiempo restante: {timeLeft}</p>
             <div className="relative w-full">
               {pin.imageUrl && (
                 <img
@@ -110,10 +110,11 @@ const PinDetailModal: React.FC<PinDetailDrawerProps> = ({ pin, onClose }) => {
                     alt="Profile Picture"
                     width={40}
                     height={40}
-                    className="rounded-full w-10 h-10 object-cover"
+                    className="rounded-full w-10 h-10 object-cover z-10"
                   />
-                  <span className="ml-2 text-white/80">{pin.discoveredByUserId.username}</span>
+                  <span className="ml-2 text-white/80 z-10">{pin.discoveredByUserId.username}</span>
                 </div>
+                <div className='absolute bottom-0 left-0 w-full h-20 bg-gradient-to-b from-transparent to-neutral-950' />
               </Link>
             </div>
             {isCreator && (
