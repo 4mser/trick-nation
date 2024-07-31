@@ -24,4 +24,6 @@ export interface Mission {
   endDate?: Date;
   species: Species[];
   participants: string[];
+  description: string;
+  rewards: string[]
 }

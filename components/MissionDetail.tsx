@@ -1,4 +1,4 @@
-'use client';
+// MissionDetail.tsx
 
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
@@ -19,6 +19,7 @@ import { Progress } from "@/components/ui/progress";
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import { User } from '@/types/user';
+import MissionFormModal from './MissionFormModal';
 
 interface MissionDetailProps {
   missionId: string;
@@ -30,6 +31,7 @@ const MissionDetail: React.FC<MissionDetailProps> = ({ missionId }) => {
   const [showSpeciesDrawer, setShowSpeciesDrawer] = useState(false);
   const [showAddSightingDrawer, setShowAddSightingDrawer] = useState(false);
   const [showRankingDrawer, setShowRankingDrawer] = useState(false);
+  const [showMissionForm, setShowMissionForm] = useState(false); // Estado para mostrar el modal de edición de misión
   const { user } = useAuth();
   const [selectedSpecies, setSelectedSpecies] = useState<Species | null>(null);
   const [file, setFile] = useState<File | null>(null);
@@ -173,7 +175,9 @@ const MissionDetail: React.FC<MissionDetailProps> = ({ missionId }) => {
 
           <div className='p-4'>
             <h1 className="text-2xl font-bold mb-2">{mission.name}</h1>
+            <p>{mission.description}</p>
             <p className="mb-2">Dificultad: {mission.difficulty}</p>
+            <p>Recompensas: {mission.rewards}</p>
           </div>
           {!isUserParticipating && user && (
             <button
@@ -193,6 +197,12 @@ const MissionDetail: React.FC<MissionDetailProps> = ({ missionId }) => {
                 onClick={() => setShowAddSpeciesModal(true)}
               >
                 + 
+              </button>
+              <button
+                className="fixed hover:scale-105 z-10  bottom-28 shadow-lg right-4 bg-gradient-to-br from-yellow-600/70 border-2 border-yellow-500/80 to-transparent backdrop-blur-md  text-yellow-500 p-2 text-2xl  rounded-full w-12 h-12 flex justify-center items-center mb-4"
+                onClick={() => setShowMissionForm(true)} // Abrir el modal de edición de misión
+              >
+                ✎
               </button>
               <h2 className="text-xl font-bold mb-2 px-4">Especies</h2>
               <div className="grid grid-cols-3 md:grid-cols-2 gap-2 p-4">
@@ -324,6 +334,14 @@ const MissionDetail: React.FC<MissionDetailProps> = ({ missionId }) => {
               <DrawerClose />
             </DrawerContent>
           </Drawer>
+          {showMissionForm && mission && (
+            <MissionFormModal
+              onClose={() => setShowMissionForm(false)}
+              userId={user?._id || ''} // Manejar el posible null
+              onMissionCreated={fetchMission}
+              missionToEdit={mission} // Pasar la misión a editar
+            />
+          )}
         </>
       )}
     </div>
