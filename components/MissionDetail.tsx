@@ -195,11 +195,11 @@ const MissionDetail: React.FC<MissionDetailProps> = ({ missionId }) => {
                 + 
               </button>
               <h2 className="text-xl font-bold mb-2 px-4">Especies</h2>
-              <div className="grid grid-cols-3 md:grid-cols-2 gap-4 p-4">
+              <div className="grid grid-cols-3 md:grid-cols-2 gap-2 p-4">
                 {mission.species.map((species) => (
                   <motion.div
                     key={species._id}
-                    className="bg-gradient-to-br  border-yellow-400/10 from-yellow-600/20 to-transparent text-white rounded-sm shadow-lg cursor-pointer overflow-hidden"
+                    className="bg-gradient-to-br  border-yellow-400/10 from-yellow-600/20 to-transparent text-white rounded shadow-lg cursor-pointer overflow-hidden"
                     onClick={() => handleSpeciesClick(species)}
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
@@ -207,10 +207,10 @@ const MissionDetail: React.FC<MissionDetailProps> = ({ missionId }) => {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.3 }}
                   >
-                    <img src={species.imageUrl} alt={species.name} className="w-full h-32 object-cover" />
+                    <img src={species.imageUrl} alt={species.name} className="w-full h-28 object-cover" />
                     <div className='p-2'>
                       <h3 className="text-sm font-semibold text-yellow-500/80">{species.name}</h3>
-                      <p className="text-xs opacity-70">{species.scientificName}</p>
+                      <p className="text-xs font-light opacity-70">{species.scientificName}</p>
                     </div>
                   </motion.div>
                 ))}
